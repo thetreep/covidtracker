@@ -43,7 +43,7 @@ func NewHandler(configs ...Configurer) (http.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("graphQL schema created")
+	logger.Debug("graphQL schema created")
 
 	return handler.New(&handler.Config{
 		Schema: &schema,
