@@ -10,7 +10,6 @@ import (
 	"github.com/thetreep/covidtracker/graphql"
 	"github.com/thetreep/covidtracker/http"
 	"github.com/thetreep/covidtracker/job"
-	"github.com/thetreep/covidtracker/logger"
 	"github.com/thetreep/covidtracker/mongo"
 )
 
@@ -24,7 +23,7 @@ func main() {
 	mongo := mongo.NewClient(mongoURL)
 	err := mongo.Open()
 	if err != nil {
-		logger.Fatal(err)
+		log.Fatal(err)
 	}
 	defer mongo.Close()
 

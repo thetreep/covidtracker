@@ -1,12 +1,13 @@
 package graphql
 
 import (
-	"log"
+	"context"
 	"net/http"
 
+	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
 
-	"github.com/graphql-go/graphql"
+	"github.com/thetreep/covidtracker/logger"
 )
 
 type Configurer interface {
@@ -43,7 +44,7 @@ func NewHandler(configs ...Configurer) (http.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
-	logger.Debug("graphQL schema created")
+	logger.Debug(context.Background, "graphQL schema created")
 
 	return handler.New(&handler.Config{
 		Schema: &schema,
