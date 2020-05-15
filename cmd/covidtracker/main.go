@@ -15,7 +15,7 @@ import (
 
 func main() {
 	//TODO set env variable
-	mongoURL := os.Getenv("THETREEP_BILLING_MONGO_URL")
+	mongoURL := os.Getenv("THETREEP_COVID_TRACKER_MONGO_URL")
 	if mongoURL == "" {
 		log.Fatal("missing 'THETREEP_BILLING_MONGO_URL' env variable")
 	}
