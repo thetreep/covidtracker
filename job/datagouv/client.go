@@ -1,5 +1,4 @@
 const (
-	url = "https://thetreep.vosfactures.fr/"
 )
 
 var (
