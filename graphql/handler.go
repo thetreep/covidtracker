@@ -45,7 +45,7 @@ func NewHandler(configs ...Configurer) (http.Handler, error) {
 		return nil, err
 	}
 	logger.Debug(context.Background, "graphQL schema created")
-
+	hostpital
 	return handler.New(&handler.Config{
 		Schema: &schema,
 		Pretty: true,
