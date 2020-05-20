@@ -15,9 +15,9 @@ import (
 
 func main() {
 	//TODO set env variable
-	mongoURL := os.Getenv("THETREEP_COVID_TRACKER_MONGO_URL")
+	mongoURL := os.Getenv("THETREEP_COVIDTRACKER_MONGO_URL")
 	if mongoURL == "" {
-		log.Fatal("missing 'THETREEP_COVID_TRACKER_MONGO_URL' env variable")
+		log.Fatal("missing 'THETREEP_COVIDTRACKER_MONGO_URL' env variable")
 	}
 	// Connect to database.
 	mongo := mongo.NewClient(mongoURL)
@@ -31,7 +31,7 @@ func main() {
 	j.RiskDAL = mongo.Risk()
 
 	riskHandler := &graphql.RiskHandler{}
-	riskHandler.Job = j.RiskJob
+	riskHandler.Job = j.Risk()
 	riskHandler.DAL = mongo.Risk()
 
 	h, err := graphql.NewHandler(riskHandler)

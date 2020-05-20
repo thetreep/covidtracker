@@ -74,7 +74,7 @@ func (s *Server) auth() adapter {
 			}
 
 			//TODO set env variable
-			if tokenStr != os.Getenv("THETREEP_COVID_TRACKER_SECRET") {
+			if tokenStr != os.Getenv("THETREEP_COVIDTRACKER_SECRET") {
 				Error(r.Context(), w, covidtracker.ErrInvalidAuthenticationToken, http.StatusUnauthorized)
 				return
 			}

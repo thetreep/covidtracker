@@ -23,7 +23,7 @@ var (
 func init() {
 	DefaultLogger.Level = logrus.DebugLevel
 	//TODO create and set env variable
-	if lvl := os.Getenv("THETREEP_COVID_TRACKER_LOG_LEVEL"); lvl != "" {
+	if lvl := os.Getenv("THETREEP_COVIDTRACKER_LOG_LEVEL"); lvl != "" {
 		parsed, err := logrus.ParseLevel(lvl)
 		if err != nil {
 			fmt.Printf("invalid loging level %q\n", lvl)
