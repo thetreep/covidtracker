@@ -30,7 +30,7 @@ jobs:
           command: |
             docker create -v /go/src/github.com/thetreep/covidtracker --name sources golang:1.14 /bin/true
             docker cp /go/src/github.com/thetreep/covidtracker sources:/go/src/github.com/thetreep
-            docker run --rm --volumes-from sources -w /go/src/github.com/thetreep/covidtracker golang:1.14 go build -o ./cmd/covidtracker/covidtracker
+            docker -e GO111MODULE="off" run --rm --volumes-from sources -w /go/src/github.com/thetreep/covidtracker golang:1.14 go build -o ./cmd/covidtracker/covidtracker
             docker cp sources:/go/src/github.com/thetreep/covidtracker/covidtracker /go/src/github.com/thetreep/covidtracker/covidtracker
       - run:
           name: building docker image
