@@ -47,7 +47,6 @@ jobs:
             - docker-cache
   deploy_prod:
     working_directory: /go/src/github.com/thetreep/covidtracker
-    context: TheTreep
     docker:
       - image: google/cloud-sdk
     steps:
@@ -82,6 +81,7 @@ workflows:
                 - master
                 - prod
       - deploy_prod:
+          context: TheTreep
           requires:
             - build_docker_image
           filters:
