@@ -8,7 +8,7 @@ type Case struct {
 	NoticeDate time.Time `bson:"noticeDate" json:"noticeDate"`
 
 	//HospServiceCountReport is the number of hospital services reporting at least one case
-	HospServiceCountRelated int32 `bson:"hospServiceCountRelated" json:"hospServiceCountRelated"`
+	HospServiceCountRelated int `bson:"hospServiceCountRelated" json:"hospServiceCountRelated"`
 }
 
 type CaseID string

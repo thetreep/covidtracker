@@ -34,7 +34,7 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 	}
 
 	var (
-		result []*covidtracker.Hospitalization
+		result []*covidtracker.Screening
 		atoi   = strconv.Atoi
 	)
 
@@ -47,8 +47,8 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 			return nil, err
 		}
 
-		entry := &covidtracker.Hospitalization{
-			AgeGroup: line[clageCovid],
+		entry := &covidtracker.Screening{
+			AgeGroup: covidtracker.AgeGroup(line[clageCovid]),
 		}
 
 		entry.Department, err = atoi(line[dep])
@@ -74,4 +74,6 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 
 		result = append(result, entry)
 	}
+
+	return result, nil
 }

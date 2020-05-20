@@ -30,8 +30,8 @@ func main() {
 	j := job.NewJob()
 	j.RiskDAL = mongo.Risk()
 
-	riskHandler := &graphql.RiskHandler()
-	riskHandler.Job = j
+	riskHandler := &graphql.RiskHandler{}
+	riskHandler.Job = j.RiskJob
 	riskHandler.DAL = mongo.Risk()
 
 	h, err := graphql.NewHandler(riskHandler)

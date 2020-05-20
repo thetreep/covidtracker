@@ -56,7 +56,7 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 		}
 
 		entry := &covidtracker.Emergency{
-			AgeGroup: line[sursaudClAgeCorona],
+			AgeGroup: covidtracker.AgeGroup(line[sursaudClAgeCorona]),
 		}
 		entry.Department, err = atoi(line[dep])
 		if s.handleParsingErr(err, "emergency", "dep") != nil {

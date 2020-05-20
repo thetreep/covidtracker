@@ -13,13 +13,13 @@ type Hospitalization struct {
 	Sex string `bson:"sex" json:"sex"`
 
 	//Count is the number of patient hospitalized
-	Count int32 `bson:"count" json:"count"`
+	Count int `bson:"count" json:"count"`
 	//CriticalCount is the number of patient in resuscitation or critical care
-	CriticalCount int32 `bson:"critical" json:"critical"`
+	CriticalCount int `bson:"critical" json:"critical"`
 	//ReturnHomeCount is the number of patient that returned home
-	ReturnHomeCount int32 `bson:"returnHome" json:"returnHome"`
+	ReturnHomeCount int `bson:"returnHome" json:"returnHome"`
 	//DeathCount is the number of deaths
-	DeathCount int32 `bson:"deaths" json:"deaths"`
+	DeathCount int `bson:"deaths" json:"deaths"`
 }
 
 type HospID string

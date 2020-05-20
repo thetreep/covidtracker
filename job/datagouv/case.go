@@ -27,7 +27,7 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 	}
 
 	var (
-		result []*covidtracker.Hospitalization
+		result []*covidtracker.Case
 		atoi   = strconv.Atoi
 	)
 
@@ -40,7 +40,7 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 			return nil, err
 		}
 
-		entry := &covidtracker.Hospitalization{}
+		entry := &covidtracker.Case{}
 
 		entry.Department, err = atoi(line[dep])
 		if s.handleParsingErr(err, "covid_case", "nbTest") != nil {
@@ -57,4 +57,5 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 
 		result = append(result, entry)
 	}
+	return result, nil
 }

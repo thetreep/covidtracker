@@ -7,11 +7,11 @@ type Screening struct {
 	Department int       `bson:"dep" json:"dep"`
 	NoticeDate time.Time `bson:"noticeDate" json:"noticeDate"`
 
-	AgeGroup string `bson:"ageGroup" json:"ageGroup"`
+	AgeGroup AgeGroup `bson:"ageGroup" json:"ageGroup"`
 
-	Count         int32 `bson:"count" json:"count"`
-	PositiveCount int32 `bson:"positiveCount" json:"positiveCount"`
-	PositiveRate  int32 `bson:"positiveRate" json:"positiveRate"`
+	Count         int `bson:"count" json:"count"`
+	PositiveCount int `bson:"positiveCount" json:"positiveCount"`
+	PositiveRate  int `bson:"positiveRate" json:"positiveRate"`
 }
 
 type ScreeningID string
