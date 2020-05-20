@@ -5,9 +5,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/graphql-go/handler"
-
-	"github.com/thetreep/covidtracker/graphql"
+	"github.com/thetreep/covidtracker"
 )
 
 // DefaultAddr is the default bind address.
@@ -18,7 +16,7 @@ type Server struct {
 	ln net.Listener
 
 	// Handler to serve
-	Handler *handler.Handler
+	Handler http.Handler
 
 	// Bind address to open.
 	Addr string
