@@ -51,7 +51,7 @@ func (c *Client) Open() error {
 	// Mongo client is up and server is reachable
 	c.mongo = mClient
 
-	mongoDatabase := os.Getenv("THETREEP_COVIDTRACKER_DATABASE")
+	mongoDatabase := os.Getenv("THETREEP_COVID_TRACKER_DATABASE")
 	if mongoDatabase == "" {
 		mongoDatabase = "thetreep-covidtracker"
 	}
