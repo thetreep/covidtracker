@@ -7,7 +7,7 @@ import (
 //Hospitalization defines the usefull data about hospitalization
 type Hospitalization struct {
 	ID         HospID    `bson:"_id" json:"id"`
-	Department uint8     `bson:"dep" json:"dep"`
+	Department int       `bson:"dep" json:"dep"`
 	NoticeDate time.Time `bson:"noticeDate" json:"noticeDate"`
 
 	Sex string `bson:"sex" json:"sex"`
@@ -29,5 +29,5 @@ type HospService interface {
 }
 
 type HospDAL interface {
-	Get(dep uint8, date time.Time) ([]*Hospitalization, error)
+	Get(dep int, date time.Time) ([]*Hospitalization, error)
 }

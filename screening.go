@@ -4,7 +4,7 @@ import "time"
 
 type Screening struct {
 	ID         HospID    `bson:"_id" json:"id"`
-	Department uint8     `bson:"dep" json:"dep"`
+	Department int       `bson:"dep" json:"dep"`
 	NoticeDate time.Time `bson:"noticeDate" json:"noticeDate"`
 
 	AgeGroup string `bson:"ageGroup" json:"ageGroup"`
@@ -21,5 +21,5 @@ type ScreeningService interface {
 }
 
 type ScreeningDAL interface {
-	Get(dep uint8, date time.Time) ([]*Screening, error)
+	Get(dep int, date time.Time) ([]*Screening, error)
 }

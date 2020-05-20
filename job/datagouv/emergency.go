@@ -35,7 +35,6 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 	)
 
 	//TODO add limits to avoid duplicate
-
 	url := "https://www.data.gouv.fr/fr/datasets/r/eceb9fb4-3ebc-4da3-828d-f5939712600a"
 	reader, err := s.getCSV(url)
 	if err != nil {

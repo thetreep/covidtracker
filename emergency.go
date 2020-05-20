@@ -5,7 +5,7 @@ import "time"
 //Emergency regroups the stats about visit at emergency room
 type Emergency struct {
 	ID         EmergencyID `bson:"_id" json:"id"`
-	Department uint8       `bson:"dep" json:"dep"`
+	Department int         `bson:"dep" json:"dep"`
 	NoticeDate time.Time   `bson:"noticeDate" json:"noticeDate"`
 
 	AgeGroup string `bson:"ageGroup" json:"ageGroup"`
@@ -30,5 +30,5 @@ type EmergencyService interface {
 }
 
 type EmergencyDAL interface {
-	Get(dep uint8, date time.Time) ([]*Emergency, error)
+	Get(dep int, date time.Time) ([]*Emergency, error)
 }
