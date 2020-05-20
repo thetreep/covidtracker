@@ -46,7 +46,7 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		if s.handleParsingErr(err, "indicator", "dep") != nil {
 			continue
 		}
-		entry.ExtractDate, err = time.Parse("2006-02-01", line[extractDate])
+		entry.ExtractDate, err = time.Parse("01/02/2006", line[extractDate])
 		if s.handleParsingErr(err, "indicator", "extractDate") != nil {
 			continue
 		}
