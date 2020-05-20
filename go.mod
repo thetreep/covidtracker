@@ -11,3 +11,5 @@ require (
 	github.com/thetreep/toolbox v0.0.0-20200519135852-f98c1ce884cc // indirect
 	go.mongodb.org/mongo-driver v1.3.3
 )
+
+replace github.com/thetreep/toolbox => ../toolbox
