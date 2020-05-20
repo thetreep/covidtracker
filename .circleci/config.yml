@@ -58,9 +58,6 @@ jobs:
           name: Load docker image from cache
           command: docker load --input docker-cache/built-image.tar
       - run:
-          name: Load docker image for cron from cache
-          command: docker load --input docker-cache-cron/built-image.tar
-      - run:
           name: Auth gCloud SDK
           command: bash .circleci/gcloud-auth.sh
       - run:
