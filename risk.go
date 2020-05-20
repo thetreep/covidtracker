@@ -11,9 +11,18 @@ type Risk struct {
 	ConfidenceLevel float64       `bson:"confidenceLevel" json:"confidenceLevel"`
 	RiskLevel       float64       `bson:"riskLevel" json:"riskLevel"`
 	BySegments      []RiskSegment `bson:"bySegments" json:"bySegments"`
-	Pluses          []string      `bson:"pluses" json:"pluses"`
-	Minuses         []string      `bson:"minuses" json:"minuses"`
-	Advices         []string      `bson:"advices" json:"advices"`
+	Report          Report        `bson:"report" json:"report"`
+}
+
+type Report struct {
+	Minuses []Statement `bson:"minuses" json:"minuses"`
+	Pluses  []Statement `bson:"pluses" json:"pluses"`
+	Advices []Statement `bson:"advices" json:"advices"`
+}
+
+type Statement struct {
+	Value    string `bson:"value" json:"value"`
+	Category string `bson:"category" json:"category"`
 }
 
 //RiskID identifies a Risk
@@ -23,7 +32,7 @@ type RiskID string
 type RiskSegment struct {
 	ID RiskSegID `bson:"_id" json:"id"`
 
-	*Segment `bson:"seg" json:"seg"`
+	*Segment `bson:"segment" json:"segment"`
 
 	RiskLevel       float64 `bson:"riskLevel" json:"riskLevel"`
 	ConfidenceLevel float64 `bson:"confidenceLevel" json:"confidenceLevel"`
@@ -40,7 +49,7 @@ type RiskDAL interface {
 
 //RiskJob defines the job to implements risk data logic
 type RiskJob interface {
-	ComputeRisk() (*Risk, error)
+	ComputeRisk(segs []Segment, protects []Protection) (*Risk, error)
 }
 
 //RiskAPI defines the api to get risk data

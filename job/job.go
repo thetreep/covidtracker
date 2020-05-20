@@ -12,7 +12,7 @@ type Job struct {
 	Now func() time.Time
 
 	RiskDAL covidtracker.RiskDAL
-	RiskJob *RiskJob
+	RiskJob RiskJob
 }
 
 // NewJob creates a new job
@@ -21,3 +21,6 @@ func NewJob() *Job {
 	j.RiskJob.job = j
 	return j
 }
+
+// Risk returns the risk job associated with the client
+func (j *Job) Risk() covidtracker.RiskJob { return &j.RiskJob }
