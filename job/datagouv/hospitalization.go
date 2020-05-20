@@ -10,7 +10,7 @@ import (
 
 var _ covidtracker.HospService = &Service{}
 
-func (s *Service) RefreshHosp() ([]*covidtracker.Hospitalization, error) {
+func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, error) {
 
 	//TODO add limits to avoid duplicate
 	//header
@@ -56,7 +56,7 @@ func (s *Service) RefreshHosp() ([]*covidtracker.Hospitalization, error) {
 		if s.handleParsingErr(err, "hospitaization", "hosp") != nil {
 			continue
 		}
-		entry.Critical, err = atoi(line[rea])
+		entry.CriticalCount, err = atoi(line[rea])
 		if s.handleParsingErr(err, "hospitaization", "rea") != nil {
 			continue
 		}

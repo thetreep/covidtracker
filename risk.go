@@ -40,7 +40,7 @@ type RiskDAL interface {
 
 //RiskJob defines the job to implements risk data logic
 type RiskJob interface {
-	ComputeRisk(segs []Segment, protects []Protection) (*Risk, error)
+	ComputeRisk() (*Risk, error)
 }
 
 //RiskAPI defines the api to get risk data

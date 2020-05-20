@@ -27,7 +27,7 @@ func (s *Service) getCSV(url string) (*csv.Reader, error) {
 func (s *Service) handleParsingErr(err error, name, col string) error {
 	if err != nil {
 		//TODO use logger of service
-		fmt.Println("%s : cannot parse %q column (%v)", name, col, err)
+		fmt.Printf("%s : cannot parse %q column (%v)", name, col, err)
 	}
 	return err
 }

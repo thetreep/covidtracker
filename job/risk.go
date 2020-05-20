@@ -11,6 +11,6 @@ type RiskJob struct {
 
 var _ covidtracker.RiskJob = &RiskJob{}
 
-func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtracker.Protection) (*covidtracker.Risk, error) {
+func (j *RiskJob) ComputeRisk() (*covidtracker.Risk, error) {
 	return nil, nil
 }

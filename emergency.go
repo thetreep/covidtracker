@@ -8,7 +8,7 @@ type Emergency struct {
 	Department int         `bson:"dep" json:"dep"`
 	NoticeDate time.Time   `bson:"noticeDate" json:"noticeDate"`
 
-	AgeGroup string `bson:"ageGroup" json:"ageGroup"`
+	AgeGroup AgeGroup `bson:"ageGroup" json:"ageGroup"`
 
 	//Count is the number of visits
 	Count int `bson:"count" json:"count"`
