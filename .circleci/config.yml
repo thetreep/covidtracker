@@ -4,6 +4,8 @@
 version: 2
 jobs:
   unit_tests:
+    environment:
+      GO111MODULE: "off"
     docker:
       - image: circleci/golang:1.14
     working_directory: /go/src/github.com/thetreep/covidtracker
@@ -12,6 +14,8 @@ jobs:
       - run: go get -v -t -d ./...
       - run: go test -v ./...
   build_docker_image:
+    environment:
+      GO111MODULE: "off"
     working_directory: /go/src/github.com/thetreep/covidtracker
     docker:
       - image: circleci/golang:1.14
