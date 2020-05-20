@@ -80,6 +80,7 @@ workflows:
           filters:
             branches:
               only:
+                - circleci-project-setup
                 - master
                 - prod
       - deploy_prod:
@@ -88,5 +89,6 @@ workflows:
           filters:
             branches:
               only:
+                - circleci-project-setup
                 - master
                 - prod
