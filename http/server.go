@@ -1,11 +1,10 @@
 package http
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"net/http"
-
-	"github.com/thetreep/covidtracker"
 )
 
 // DefaultAddr is the default bind address.
@@ -15,21 +14,29 @@ const DefaultAddr = ":3456"
 type Server struct {
 	ln net.Listener
 
-	// Handler to serve
 	Handler http.Handler
+
+	// Handlers to serve by map
+	Routing map[string]http.Handler
 
 	// Bind address to open.
 	Addr string
-
-	// jobs
-	RiskJob covidtracker.RiskJob
 }
 
 // NewServer returns a new instance of Server.
 func NewServer() *Server {
 	return &Server{
-		Addr: DefaultAddr,
+		Addr:    DefaultAddr,
+		Routing: make(map[string]http.Handler),
 	}
+}
+
+func (s *Server) AddHandler(h http.Handler, path string) error {
+	if _, exist := s.Routing[path]; exist {
+		return fmt.Errorf("route %q has already an handler")
+	}
+	s.Routing[path] = h
+	return nil
 }
 
 // Open opens a socket and serves the HTTP server.
@@ -43,7 +50,7 @@ func (s *Server) Open() error {
 	log.Printf("starting operation api-server listening on %q", s.Addr)
 
 	// Start HTTP server.
-	go http.Serve(s.ln, adapt(s.Handler, s.cors(), s.log(), s.auth()))
+	go http.Serve(s.ln, adapt(s.Handler, s.routing(), s.cors(), s.log(), s.auth(), s.ping()))
 	return nil
 }
 

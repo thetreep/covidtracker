@@ -30,18 +30,20 @@ func main() {
 	j := job.NewJob()
 	j.RiskDAL = mongo.Risk()
 
+	pingHandler := &graphql.PingHandler{}
+
 	riskHandler := &graphql.RiskHandler{}
 	riskHandler.Job = j.Risk()
 	riskHandler.DAL = mongo.Risk()
 
-	h, err := graphql.NewHandler(riskHandler)
+	gql, err := graphql.NewHandler(pingHandler, riskHandler)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// start http server
 	s := http.NewServer()
-	s.Handler = h
+	s.AddHandler(gql, "/graphql")
 	if err := s.Open(); err != nil {
 		log.Fatal(err)
 	}
