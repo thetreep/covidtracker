@@ -7,8 +7,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/thetreep/covidtracker/graphql"
 	"github.com/thetreep/covidtracker/http"
+	"github.com/thetreep/covidtracker/http/graphql"
 	"github.com/thetreep/covidtracker/job"
 	"github.com/thetreep/covidtracker/mongo"
 )

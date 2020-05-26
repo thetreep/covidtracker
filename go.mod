@@ -8,6 +8,8 @@ require (
 	github.com/graphql-go/handler v0.2.3
 	github.com/machinebox/graphql v0.2.2
 	github.com/matryer/is v1.3.0 // indirect
+	github.com/mitchellh/mapstructure v1.3.1
+	github.com/pkg/errors v0.8.1
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f
 	github.com/sirupsen/logrus v1.6.0
 	github.com/stretchr/objx v0.2.0 // indirect
