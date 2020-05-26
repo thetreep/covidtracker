@@ -3,6 +3,11 @@ module github.com/thetreep/covidtracker
 go 1.12
 
 require (
+<<<<<<< HEAD
+	github.com/graphql-go/graphql v0.7.9 // indirect
+	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2 // indirect
+)
+=======
 	github.com/google/uuid v1.1.1
 	github.com/graphql-go/graphql v0.7.9
 	github.com/graphql-go/handler v0.2.3
@@ -17,3 +22,6 @@ require (
 	go.mongodb.org/mongo-driver v1.3.3
 	golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
 )
+
+replace github.com/thetreep/toolbox => ../toolbox
+>>>>>>> ccfc810cd5a538a8079267fa6bd124c5e5c9a47b
