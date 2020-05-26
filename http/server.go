@@ -33,7 +33,7 @@ func NewServer() *Server {
 
 func (s *Server) AddHandler(h http.Handler, path string) error {
 	if _, exist := s.Routing[path]; exist {
-		return fmt.Errorf("route %q has already an handler")
+		return fmt.Errorf("route %q has already an handler", path)
 	}
 	s.Routing[path] = h
 	return nil
