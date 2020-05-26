@@ -151,7 +151,6 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 				return nil, err
 			}
 
-			//TODO save in DB
 			if err := h.DAL.Insert(r); err != nil {
 				return r, gqlerrors.NewError(
 					"cannot insert to database",
