@@ -1,11 +1,11 @@
 package graphql
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/graphql/gqlerrors"
-	"github.com/mitchellh/mapstructure"
 	"golang.org/x/net/context"
 
 	"github.com/thetreep/covidtracker"
@@ -125,9 +125,9 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 			for _, i := range segsI {
 				if m, ok := i.(map[string]interface{}); ok {
 					var seg covidtracker.Segment
-					config := &mapstructure.DecoderConfig{TagName: "json", Result: &seg}
-					decoder, _ := mapstructure.NewDecoder(config)
-					decoder.Decode(m)
+					if err := convert(m, &seg); err != nil {
+						return nil, err
+					}
 					segs = append(segs, seg)
 				}
 			}
@@ -139,9 +139,9 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 			for _, i := range protectsI {
 				if m, ok := i.(map[string]interface{}); ok {
 					var prot covidtracker.Protection
-					config := &mapstructure.DecoderConfig{TagName: "json", Result: &prot}
-					decoder, _ := mapstructure.NewDecoder(config)
-					decoder.Decode(m)
+					if err := convert(m, &prot); err != nil {
+						return nil, err
+					}
 					protects = append(protects, prot)
 				}
 			}
@@ -167,4 +167,15 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 		},
 	}
 
+}
+
+func convert(m map[string]interface{}, output interface{}) error {
+	str, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+	if err := json.Unmarshal(str, &output); err != nil {
+		return err
+	}
+	return nil
 }
