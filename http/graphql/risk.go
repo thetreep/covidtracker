@@ -158,7 +158,7 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 					"",
 					nil,
 					[]int{},
-					nil,
+					err,
 				)
 			}
 

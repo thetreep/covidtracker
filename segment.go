@@ -9,7 +9,6 @@ type Segment struct {
 	Departure      time.Time      `bson:"departure" json:"departure"`
 	Arrival        time.Time      `bson:"arrival" json:"arrival"`
 	Transportation Transportation `bson:"transportation" json:"transportation"`
-	RiskLevel      *float32       `bson:"riskLevel" json:"riskLevel,omitempty"`
 }
 
 type SegID string

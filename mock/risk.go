@@ -24,6 +24,12 @@ var (
 	_ covidtracker.RiskDAL = &Risk{}
 )
 
+func (r *Risk) Reset() {
+	r.InsertInvoked = false
+	r.ComputeRiskInvoked = false
+	r.GetInvoked = false
+	r.EstimateInvoked = false
+}
 func (r *Risk) ComputeRisk(segs []covidtracker.Segment, protects []covidtracker.Protection) (*covidtracker.Risk, error) {
 	r.ComputeRiskInvoked = true
 	return r.ComputeRiskFn(segs, protects)

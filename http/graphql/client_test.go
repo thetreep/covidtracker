@@ -79,6 +79,6 @@ func (e gqlErr) Error() string {
 }
 
 type gqlResp struct {
-	Data   map[string]interface{}
+	Data   map[string]interface{} `json:"data"`
 	Errors []gqlErr
 }
