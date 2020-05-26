@@ -15,9 +15,9 @@ In order to run the API server, you need a mongodb database
 
 Build and run the API server with
 
-    cd cmd/covid-tracker
+    cd cmd/covidtracker
     go build
-    ./covid-tracker
+    ./covidtracker
 
 or
 
