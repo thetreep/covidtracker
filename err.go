@@ -15,13 +15,15 @@ const (
 	ErrInvalidQueryParamsType     = Error("invalid query parameters type")
 	ErrNoAuthenticationToken      = Error("no authentication token provided")
 	ErrInvalidAuthenticationToken = Error("invalid authentication token provided")
-	ErrUnauthorizedUser           = Error("user is not authorized for back office actions")
 )
 
 //DB Errors
 var (
 	ErrDocRequired = func(doc string) error {
 		return Errorf("document %q is required", doc)
+	}
+	ErrMissingParams = func(doc string) error {
+		return Errorf("%q is missing", doc)
 	}
 )
 
