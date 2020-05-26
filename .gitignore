@@ -5,6 +5,9 @@
 *.so
 *.dylib
 
+# compiled
+cmd/covidtracker/covidtracker
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -14,3 +17,4 @@
 # Others
 .vscode
 .DS_Store
+*~
