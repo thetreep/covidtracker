@@ -28,7 +28,7 @@ func TestEstimate(t *testing.T) {
 
 	client := NewClient(ctx, server.URL)
 
-	template := `
+	tplFull := `
 	query ($segs: [segmentIn], $prots: [protectionIn]) {
 		risk(
 			segments:$segs,
@@ -51,8 +51,32 @@ func TestEstimate(t *testing.T) {
 		}
 	}`
 
+	tplReport := `
+	query ($segs: [segmentIn], $prots: [protectionIn]) {
+		risk(
+			segments:$segs,
+			protections:$prots
+		) {
+			report {
+				minuses {value}
+				pluses {value}
+				advices {value}
+			}
+		}
+	}`
+
+	tplRisk := `
+	query ($segs: [segmentIn], $prots: [protectionIn]) {
+		risk(
+			segments:$segs,
+			protections:$prots
+		) {
+			riskLevel
+		}
+	}`
+
 	t.Run("no segment provided", func(t *testing.T) {
-		got, err := client.Do(template, map[string]interface{}{
+		got, err := client.Do(tplFull, map[string]interface{}{
 			"segs":  []covidtracker.Segment{},
 			"prots": []covidtracker.Protection{},
 		})
@@ -71,7 +95,7 @@ func TestEstimate(t *testing.T) {
 			return nil, fmt.Errorf("computation error")
 		}
 
-		got, err := client.Do(template, map[string]interface{}{
+		got, err := client.Do(tplFull, map[string]interface{}{
 			"segs":  []covidtracker.Segment{{Origin: "paris", Destination: "lyon"}},
 			"prots": []covidtracker.Protection{},
 		})
@@ -86,7 +110,6 @@ func TestEstimate(t *testing.T) {
 	})
 
 	t.Run("computation OK", func(t *testing.T) {
-		risk.Reset()
 
 		risk.ComputeRiskFn = func(segs []covidtracker.Segment, protects []covidtracker.Protection) (*covidtracker.Risk, error) {
 			r := &covidtracker.Risk{
@@ -118,34 +141,57 @@ func TestEstimate(t *testing.T) {
 			return nil
 		}
 
-		got, err := client.Do(template, map[string]interface{}{
-			"segs":  []covidtracker.Segment{{Origin: "paris", Destination: "lyon"}},
-			"prots": []covidtracker.Protection{},
-		})
-		raw := []byte(`{
-			"data": {
-				"risk": {
-					"riskLevel":       0.5,
-					"confidenceLevel": 0.5,
-					"bySegments": [{
-						"segment": {
-							"origin": "paris",
-							"destination": "lyon"
-						},
-						"riskLevel":       0.5
-					}],
-					"report": {
-						"minuses": [{"value":"it's not good"}],
-						"pluses": [{"value":"it's pretty good"}],
-						"advices": [{"value":"a wise advice"}]
+		tcases := map[string]struct {
+			tpl    string
+			expRaw []byte
+		}{
+			"full query": {
+				tpl: tplFull,
+				expRaw: []byte(`{
+					"data": {
+						"risk": {
+							"riskLevel":       0.5,
+							"confidenceLevel": 0.5,
+							"bySegments": [{
+								"segment": {
+									"origin": "paris",
+									"destination": "lyon"
+								},
+								"riskLevel":       0.5
+							}],
+							"report": {
+								"minuses": [{"value":"it's not good"}],
+								"pluses": [{"value":"it's pretty good"}],
+								"advices": [{"value":"a wise advice"}]
+							}
+						}
 					}
-				}
-			}
-		}`)
-
-		expResult := &gqlResp{}
-		if err := json.Unmarshal(raw, expResult); err != nil {
-			t.Fatal(err)
+				}`),
+			},
+			"only risk": {
+				tpl: tplRisk,
+				expRaw: []byte(`{
+					"data": {
+						"risk": {
+							"riskLevel":       0.5
+						}
+					}
+				}`),
+			},
+			"only report": {
+				tpl: tplReport,
+				expRaw: []byte(`{
+					"data": {
+						"risk": {
+							"report": {
+								"minuses": [{"value":"it's not good"}],
+								"pluses": [{"value":"it's pretty good"}],
+								"advices": [{"value":"a wise advice"}]
+							}
+						}
+					}
+				}`),
+			},
 		}
 
 		expDB := []*covidtracker.Risk{{
@@ -167,11 +213,29 @@ func TestEstimate(t *testing.T) {
 			},
 		}}
 
-		test.Compare(t, err, nil, "unexpected error")
-		test.Compare(t, risk.ComputeRiskInvoked, true, "estimate invokation is expected")
-		test.Compare(t, risk.InsertInvoked, true, "insert invokation expected")
-		test.Compare(t, got, expResult, "unexpected result")
-		test.Compare(t, db, expDB, "unexpected inserted results")
+		for name, tcase := range tcases {
+			t.Logf("case %s... :", name)
+
+			db = []*covidtracker.Risk{}
+			risk.Reset()
+
+			got, err := client.Do(tcase.tpl, map[string]interface{}{
+				"segs":  []covidtracker.Segment{{Origin: "paris", Destination: "lyon"}},
+				"prots": []covidtracker.Protection{},
+			})
+
+			expResult := &gqlResp{}
+			if err := json.Unmarshal(tcase.expRaw, expResult); err != nil {
+				t.Fatal(err)
+			}
+
+			test.Compare(t, err, nil, name+": unexpected error")
+			test.Compare(t, risk.ComputeRiskInvoked, true, name+": estimate invokation is expected")
+			test.Compare(t, risk.InsertInvoked, true, name+": insert invokation expected")
+			test.Compare(t, got, expResult, name+": unexpected result")
+			test.Compare(t, db, expDB, name+": unexpected inserted results")
+		}
+
 	})
 
 }

@@ -11,8 +11,6 @@ import (
 var _ covidtracker.CaseService = &Service{}
 
 func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
-	//TODO add limits to avoid duplicate
-
 	//header
 	const (
 		dep = iota
