@@ -24,10 +24,11 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 		dc
 	)
 
-	reader, err := s.GetCSV(HospitalizationURL)
+	reader, close, err := s.GetCSV(HospitalizationURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Hospitalization
@@ -67,7 +68,7 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 		if s.handleParsingErr(err, "hospitalization", "dc") != nil {
 			continue
 		}
-		entry.NoticeDate, err = time.Parse("2006-02-01", line[jour])
+		entry.NoticeDate, err = time.Parse("2006-01-02", line[jour])
 		if s.handleParsingErr(err, "hospitalization", "jour") != nil {
 			continue
 		}

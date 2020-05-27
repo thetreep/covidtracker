@@ -28,7 +28,7 @@ func DatagouvServer(t *testing.T) *httptest.Server {
 			case string(datagouv.IndicatorURL):
 				file += "indicator.csv"
 			default:
-				t.Fatal("unexpected path %q", r.URL.Path)
+				t.Fatalf("unexpected path %q", r.URL.Path)
 			}
 			fmt.Fprint(w, fileContent(file))
 		}),
@@ -51,10 +51,10 @@ func assertRessourceExist(t *testing.T, url string) {
 	}
 	defer resp.Body.Close()
 
-	t.Logf("get %s returns %s", url, resp.Body.Status)
+	t.Logf("get %s returns %s", url, resp.Status)
 
 	if got, want := resp.StatusCode, http.StatusOK; resp.StatusCode != http.StatusOK {
-		t.Fatal("unexpected status code : got %s want %s", got, want)
+		t.Fatalf("unexpected status code : got %d want %d", got, want)
 	}
 }
 

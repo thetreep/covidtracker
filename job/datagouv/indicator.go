@@ -19,10 +19,11 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		indicSynthese
 	)
 
-	reader, err := s.GetCSV(IndicatorURL)
+	reader, close, err := s.GetCSV(IndicatorURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Indicator
@@ -45,7 +46,7 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		if s.handleParsingErr(err, "indicator", "dep") != nil {
 			continue
 		}
-		entry.ExtractDate, err = time.Parse("01/02/2006", line[extractDate])
+		entry.ExtractDate, err = time.Parse("2006-01-02", line[extractDate])
 		if s.handleParsingErr(err, "indicator", "extractDate") != nil {
 			continue
 		}

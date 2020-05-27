@@ -35,14 +35,20 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 	)
 
 	//TODO add limits to avoid duplicate
-	reader, err := s.GetCSV(EmergencyURL)
+	reader, close, err := s.GetCSV(EmergencyURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Emergency
-		atoi   = strconv.Atoi
+		atoi   = func(s string) (int, error) {
+			if s == "" {
+				return 0, nil
+			}
+			return strconv.Atoi(s)
+		}
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -81,7 +87,7 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 		if s.handleParsingErr(err, "emergency", "nbreActeCorona") != nil {
 			continue
 		}
-		entry.NoticeDate, err = time.Parse("2006-02-01", line[dateDePassage])
+		entry.NoticeDate, err = time.Parse("2006-01-02", line[dateDePassage])
 		if s.handleParsingErr(err, "emergency", "dateDePassage") != nil {
 			continue
 		}

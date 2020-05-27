@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/csv"
 	"fmt"
+	"io"
 	"net/http"
-	"path"
 )
 
 type Service struct {
@@ -27,21 +27,40 @@ const (
 	DatagouvBase = "https://www.data.gouv.fr"
 )
 
-func (s *Service) GetCSV(url Resource) (*csv.Reader, error) {
-	// Get the data
-	resp, err := http.Get(path.Join(s.BasePath, string(url)))
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
+func (s *Service) newReader(r io.Reader, res Resource) (*csv.Reader, error) {
 
-	return csv.NewReader(resp.Body), nil
+	reader := csv.NewReader(r)
+	switch res {
+	case EmergencyURL, IndicatorURL:
+		reader.Comma = ','
+	case CaseURL, HospitalizationURL, ScreeningURL:
+		reader.Comma = ';'
+	default:
+		return nil, fmt.Errorf("unsupported resource %q", res)
+	}
+
+	return reader, nil
+}
+
+func (s *Service) GetCSV(res Resource) (*csv.Reader, func() error, error) {
+	// Get the data
+	resp, err := http.Get(s.BasePath + string(res))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r, err := s.newReader(resp.Body, res)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return r, resp.Body.Close, nil
 }
 
 func (s *Service) handleParsingErr(err error, name, col string) error {
 	if err != nil {
 		//TODO use logger of service
-		fmt.Printf("%s : cannot parse %q column (%v)", name, col, err)
+		fmt.Printf("%s : cannot parse %q column (%v)\n", name, col, err)
 	}
 	return err
 }

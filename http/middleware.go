@@ -93,22 +93,17 @@ func (s *Server) auth() adapter {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-			//Get token and e-mail from header
-			tokenStr := r.Header.Get("api-secret"))
+			tokenStr := r.Header.Get("api-secret")
 			if tokenStr == "" {
-				Error(r.Context(), w, covidtracker.ErrSecretMissing, http.StatusBadRequest)
+				Error(r.Context(), w, covidtracker.ErrMissingAPISecret, http.StatusUnauthorized)
 				return
 			}
 
-			//TODO set env variable
 			if tokenStr != os.Getenv("THETREEP_COVIDTRACKER_SECRET") {
-				Error(r.Context(), w, covidtracker.ErrInvalidAuthenticationToken, http.StatusUnauthorized)
+				Error(r.Context(), w, covidtracker.ErrInvalidAPISecret, http.StatusUnauthorized)
 				return
 			}
 
-			//TODO retrieve user identity and apply to context
-			// ctx := context.WithValue(r.Context(), "user", user)
-			// h.ServeHTTP(w, r.WithContext(ctx))
 			h.ServeHTTP(w, r)
 		})
 	}
@@ -160,7 +155,7 @@ func addCorsHeader(w http.ResponseWriter) {
 	headers.Add("Access-Control-Allow-Origin", "*")
 	headers.Add("Access-Control-Max-Age", "86400")
 	headers.Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
-	headers.Add("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Methods, Api-Key, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Accept, Origin, Cache-Control, X-Requested-With, X-TheTreep-Login")
+	headers.Add("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Methods, Api-Secret, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Accept, Origin, Cache-Control, X-Requested-With")
 	headers.Add("Access-Control-Expose-Headers", "Content-Length")
 	headers.Add("Access-Control-Allow-Credentials", "true")
 }

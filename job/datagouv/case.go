@@ -18,10 +18,11 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		nb
 	)
 
-	reader, err := s.GetCSV(CaseURL)
+	reader, close, err := s.GetCSV(CaseURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Case
@@ -47,7 +48,7 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		if s.handleParsingErr(err, "covid_case", "txPos") != nil {
 			continue
 		}
-		entry.NoticeDate, err = time.Parse("2006-02-01", line[jour])
+		entry.NoticeDate, err = time.Parse("2006-01-02", line[jour])
 		if s.handleParsingErr(err, "covid_case", "jour") != nil {
 			continue
 		}
