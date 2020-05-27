@@ -6,7 +6,7 @@
 *.dylib
 
 # compiled
-cmd/covidtracker/covidtracker
+
 
 # Test binary, built with `go test -c`
 *.test
