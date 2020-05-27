@@ -94,9 +94,9 @@ func (s *Server) auth() adapter {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 			//Get token and e-mail from header
-			tokenStr := cleanAuthToken(r.Header.Get("Authorization")) // trim token type "Bearer" if present
+			tokenStr := r.Header.Get("api-secret"))
 			if tokenStr == "" {
-				Error(r.Context(), w, covidtracker.ErrNoAuthenticationToken, http.StatusBadRequest)
+				Error(r.Context(), w, covidtracker.ErrSecretMissing, http.StatusBadRequest)
 				return
 			}
 

@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/thetreep/covidtracker/datagouv"
+	"github.com/thetreep/covidtracker/job/datagouv"
 )
 
 func TestRefreshEmergency(t *testing.T) {
-	s := datagouv.Service{ctx: context.Background()}
+	s := datagouv.Service{Ctx: context.Background()}
 	t.Run("download file and parse", func(t *testing.T) {
 		ems, err := s.RefreshEmergency()
 		if err != nil {

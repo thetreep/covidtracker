@@ -24,12 +24,12 @@ const (
 	ScreeningURL       Resource = "/fr/datasets/r/b4ea7b4b-b7d1-4885-a099-71852291ff20"
 	IndicatorURL       Resource = "/fr/datasets/r/01151af0-3209-4e89-94ab-9b319001c159"
 
-	Datagouv = "https://www.data.gouv.fr"
+	DatagouvBase = "https://www.data.gouv.fr"
 )
 
 func (s *Service) GetCSV(url Resource) (*csv.Reader, error) {
 	// Get the data
-	resp, err := http.Get(path.Join(s.BasePath, url))
+	resp, err := http.Get(path.Join(s.BasePath, string(url)))
 	if err != nil {
 		return nil, err
 	}

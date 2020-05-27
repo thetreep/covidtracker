@@ -18,8 +18,7 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		nb
 	)
 
-	url := "https://www.data.gouv.fr/fr/datasets/r/41b9bd2a-b5b6-4271-8878-e45a8902ef00"
-	reader, err := s.GetCSV(url)
+	reader, err := s.GetCSV(CaseURL)
 	if err != nil {
 		return nil, err
 	}

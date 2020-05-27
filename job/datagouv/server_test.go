@@ -1,11 +1,14 @@
 package datagouv_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/thetreep/covidtracker/job/datagouv"
 )
 
 func DatagouvServer(t *testing.T) *httptest.Server {
@@ -14,15 +17,15 @@ func DatagouvServer(t *testing.T) *httptest.Server {
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			file := "./testdata/"
 			switch r.URL.Path {
-			case EmergencyURL:
+			case string(datagouv.EmergencyURL):
 				file += "emergency.csv"
-			case CaseURL:
+			case string(datagouv.CaseURL):
 				file += "case.csv"
-			case HospitalizationURL:
+			case string(datagouv.HospitalizationURL):
 				file += "hospitalization.csv"
-			case ScreeningURL:
+			case string(datagouv.ScreeningURL):
 				file += "screening.csv"
-			case IndicatorURL:
+			case string(datagouv.IndicatorURL):
 				file += "indicator.csv"
 			default:
 				t.Fatal("unexpected path %q", r.URL.Path)
@@ -40,11 +43,11 @@ func fileContent(filename string) string {
 	return string(content)
 }
 
-func assertRessourcexist(t *testing.T, url string) {
+func assertRessourceExist(t *testing.T, url string) {
 	t.Helper()
 	resp, err := http.Get(url)
 	if err != nil {
-		return t.Fatal(err)
+		t.Fatal(err)
 	}
 	defer resp.Body.Close()
 
@@ -53,5 +56,9 @@ func assertRessourcexist(t *testing.T, url string) {
 	if got, want := resp.StatusCode, http.StatusOK; resp.StatusCode != http.StatusOK {
 		t.Fatal("unexpected status code : got %s want %s", got, want)
 	}
+}
 
+func prettyPrint(i interface{}) string {
+	s, _ := json.MarshalIndent(i, "", "\t")
+	return string(s)
 }
