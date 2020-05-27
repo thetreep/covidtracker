@@ -2,12 +2,20 @@ package http_test
 
 import (
 	"bytes"
+	"encoding/json"
 	gohttp "net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
+	"github.com/thetreep/covidtracker"
 	"github.com/thetreep/covidtracker/http"
+	"github.com/thetreep/toolbox/test"
 )
+
+type ApiResponse struct {
+	Err string
+}
 
 func TestServer(t *testing.T) {
 
@@ -21,8 +29,45 @@ func TestServer(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		assertBody(t, resp, "OK")
+		assertString(t, resp, "OK")
 		assertStatus(t, resp, gohttp.StatusOK)
+	})
+
+	t.Run("missing api secret", func(t *testing.T) {
+		resp, err := gohttp.Get(tServer.URL + "/toto")
+		if err != nil {
+			t.Fatal(err)
+		}
+		assertJSON(t, resp, ApiResponse{Err: covidtracker.ErrMissingAPISecret.Error()})
+		assertStatus(t, resp, gohttp.StatusUnauthorized)
+	})
+
+	prvSecret := os.Getenv("THETREEP_COVIDTRACKER_SECRET")
+	defer os.Setenv("THETREEP_COVIDTRACKER_SECRET", prvSecret)
+
+	os.Setenv("THETREEP_COVIDTRACKER_SECRET", "a.wonderfull.secret")
+
+	t.Run("bad api secret", func(t *testing.T) {
+		req, err := gohttp.NewRequest(gohttp.MethodGet, tServer.URL+"/toto", nil)
+		req.Header.Add("api-secret", "toto")
+
+		resp, err := gohttp.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		assertJSON(t, resp, ApiResponse{Err: covidtracker.ErrInvalidAPISecret.Error()})
+		assertStatus(t, resp, gohttp.StatusUnauthorized)
+	})
+
+	t.Run("not found", func(t *testing.T) {
+		req, err := gohttp.NewRequest(gohttp.MethodGet, tServer.URL+"/toto", nil)
+		req.Header.Add("api-secret", "a.wonderfull.secret")
+
+		resp, err := gohttp.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		assertStatus(t, resp, gohttp.StatusNotFound)
 	})
 
 	//TODO test middlewares + routing
@@ -35,7 +80,17 @@ func assertStatus(t *testing.T, resp *gohttp.Response, expect int) {
 	}
 }
 
-func assertBody(t *testing.T, resp *gohttp.Response, expect string) {
+func assertJSON(t *testing.T, resp *gohttp.Response, want ApiResponse) {
+	t.Helper()
+
+	var got ApiResponse
+	if err := json.NewDecoder(resp.Body).Decode(&got); err != nil {
+		t.Fatal(err)
+	}
+	test.Compare(t, got, want, "unexpected json reponse")
+}
+
+func assertString(t *testing.T, resp *gohttp.Response, expect string) {
 	t.Helper()
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(resp.Body)
