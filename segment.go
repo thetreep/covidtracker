@@ -3,12 +3,12 @@ package covidtracker
 import "time"
 
 type Segment struct {
-	ID             SegID
-	Origin         string
-	Destination    string
-	DateTime       time.Time
-	Transportation Transportation
-	RiskLevel      float32
+	ID             SegID          `bson:"_id" json:"-"`
+	Origin         string         `bson:"origin" json:"origin"`
+	Destination    string         `bson:"destination" json:"destination"`
+	Departure      time.Time      `bson:"departure" json:"departure"`
+	Arrival        time.Time      `bson:"arrival" json:"arrival"`
+	Transportation Transportation `bson:"transportation" json:"transportation"`
 }
 
 type SegID string

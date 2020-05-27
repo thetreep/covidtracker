@@ -9,69 +9,77 @@ github.com/graphql-go/graphql
 github.com/graphql-go/graphql/gqlerrors
 github.com/graphql-go/graphql/language/ast
 github.com/graphql-go/graphql/language/kinds
-github.com/graphql-go/graphql/language/lexer
-github.com/graphql-go/graphql/language/location
 github.com/graphql-go/graphql/language/parser
 github.com/graphql-go/graphql/language/printer
 github.com/graphql-go/graphql/language/source
-github.com/graphql-go/graphql/language/typeInfo
 github.com/graphql-go/graphql/language/visitor
+github.com/graphql-go/graphql/language/location
+github.com/graphql-go/graphql/language/lexer
+github.com/graphql-go/graphql/language/typeInfo
 # github.com/graphql-go/handler v0.2.3
 github.com/graphql-go/handler
 # github.com/klauspost/compress v1.9.5
-github.com/klauspost/compress/fse
+github.com/klauspost/compress/zstd
 github.com/klauspost/compress/huff0
 github.com/klauspost/compress/snappy
-github.com/klauspost/compress/zstd
 github.com/klauspost/compress/zstd/internal/xxhash
+github.com/klauspost/compress/fse
 # github.com/konsorten/go-windows-terminal-sequences v1.0.3
 github.com/konsorten/go-windows-terminal-sequences
+# github.com/kr/pretty v0.2.0
+github.com/kr/pretty
+# github.com/kr/text v0.1.0
+github.com/kr/text
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
 # github.com/sirupsen/logrus v1.6.0
 github.com/sirupsen/logrus
+# github.com/thetreep/toolbox v0.0.0-20200519135852-f98c1ce884cc => ../toolbox
+github.com/thetreep/toolbox/test
 # github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c
 github.com/xdg/scram
 # github.com/xdg/stringprep v0.0.0-20180714160509-73f8eece6fdc
 github.com/xdg/stringprep
 # go.mongodb.org/mongo-driver v1.3.3
 go.mongodb.org/mongo-driver/bson
-go.mongodb.org/mongo-driver/bson/bsoncodec
-go.mongodb.org/mongo-driver/bson/bsonoptions
-go.mongodb.org/mongo-driver/bson/bsonrw
-go.mongodb.org/mongo-driver/bson/bsontype
 go.mongodb.org/mongo-driver/bson/primitive
-go.mongodb.org/mongo-driver/event
-go.mongodb.org/mongo-driver/internal
 go.mongodb.org/mongo-driver/mongo
 go.mongodb.org/mongo-driver/mongo/options
-go.mongodb.org/mongo-driver/mongo/readconcern
 go.mongodb.org/mongo-driver/mongo/readpref
-go.mongodb.org/mongo-driver/mongo/writeconcern
-go.mongodb.org/mongo-driver/tag
-go.mongodb.org/mongo-driver/version
-go.mongodb.org/mongo-driver/x/bsonx
+go.mongodb.org/mongo-driver/bson/bsoncodec
+go.mongodb.org/mongo-driver/bson/bsonrw
+go.mongodb.org/mongo-driver/bson/bsontype
 go.mongodb.org/mongo-driver/x/bsonx/bsoncore
+go.mongodb.org/mongo-driver/event
+go.mongodb.org/mongo-driver/mongo/readconcern
+go.mongodb.org/mongo-driver/mongo/writeconcern
+go.mongodb.org/mongo-driver/x/bsonx
 go.mongodb.org/mongo-driver/x/mongo/driver
-go.mongodb.org/mongo-driver/x/mongo/driver/address
 go.mongodb.org/mongo-driver/x/mongo/driver/auth
-go.mongodb.org/mongo-driver/x/mongo/driver/auth/internal/gssapi
 go.mongodb.org/mongo-driver/x/mongo/driver/connstring
 go.mongodb.org/mongo-driver/x/mongo/driver/description
-go.mongodb.org/mongo-driver/x/mongo/driver/dns
 go.mongodb.org/mongo-driver/x/mongo/driver/mongocrypt
 go.mongodb.org/mongo-driver/x/mongo/driver/mongocrypt/options
 go.mongodb.org/mongo-driver/x/mongo/driver/operation
 go.mongodb.org/mongo-driver/x/mongo/driver/session
 go.mongodb.org/mongo-driver/x/mongo/driver/topology
 go.mongodb.org/mongo-driver/x/mongo/driver/uuid
+go.mongodb.org/mongo-driver/tag
 go.mongodb.org/mongo-driver/x/mongo/driver/wiremessage
+go.mongodb.org/mongo-driver/bson/bsonoptions
+go.mongodb.org/mongo-driver/x/mongo/driver/address
+go.mongodb.org/mongo-driver/x/mongo/driver/auth/internal/gssapi
+go.mongodb.org/mongo-driver/internal
+go.mongodb.org/mongo-driver/x/mongo/driver/dns
+go.mongodb.org/mongo-driver/version
 # golang.org/x/crypto v0.0.0-20190530122614-20be4c3c3ed5
 golang.org/x/crypto/pbkdf2
+# golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
+golang.org/x/net/context
 # golang.org/x/sync v0.0.0-20190423024810-112230192c58
 golang.org/x/sync/semaphore
 # golang.org/x/sys v0.0.0-20190531175056-4c3a928424d2
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
-golang.org/x/text/transform
 golang.org/x/text/unicode/norm
+golang.org/x/text/transform
