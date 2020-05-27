@@ -19,8 +19,8 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		indicSynthese
 	)
 
-	url := "https://www.data.gouv.fr/fr/datasets/r/01151af0-3209-4e89-94ab-9b319001c159"
-	reader, err := s.getCSV(url)
+	url := ""
+	reader, err := s.getCSV(IndicatorURL)
 	if err != nil {
 		return nil, err
 	}

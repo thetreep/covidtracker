@@ -24,8 +24,7 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 		dc
 	)
 
-	url := "https://www.data.gouv.fr/fr/datasets/r/6fadff46-9efd-4c53-942a-54aca783c30c"
-	reader, err := s.getCSV(url)
+	reader, err := s.getCSV(HospitalizationURL)
 	if err != nil {
 		return nil, err
 	}
