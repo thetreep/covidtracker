@@ -38,7 +38,9 @@ func (s *Server) routing() adapter {
 					return
 				}
 			}
-			http.NotFound(w, r)
+			// h.ServeHTTP(w, r)
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(`{}` + "\n"))
 		})
 	}
 }
@@ -64,8 +66,11 @@ func (s *Server) ping() adapter {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.URL.Path == "/ping" {
+				w.WriteHeader(http.StatusOK)
 				w.Write([]byte("OK"))
+				return
 			}
+			h.ServeHTTP(w, r)
 		})
 	}
 }
