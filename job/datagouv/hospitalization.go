@@ -49,27 +49,27 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 		}
 
 		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "hospitaization", "dep") != nil {
+		if s.handleParsingErr(err, "hospitalization", "dep") != nil {
 			continue
 		}
 		entry.Count, err = atoi(line[hosp])
-		if s.handleParsingErr(err, "hospitaization", "hosp") != nil {
+		if s.handleParsingErr(err, "hospitalization", "hosp") != nil {
 			continue
 		}
 		entry.CriticalCount, err = atoi(line[rea])
-		if s.handleParsingErr(err, "hospitaization", "rea") != nil {
+		if s.handleParsingErr(err, "hospitalization", "rea") != nil {
 			continue
 		}
 		entry.ReturnHomeCount, err = atoi(line[rad])
-		if s.handleParsingErr(err, "hospitaization", "rad") != nil {
+		if s.handleParsingErr(err, "hospitalization", "rad") != nil {
 			continue
 		}
 		entry.DeathCount, err = atoi(line[dc])
-		if s.handleParsingErr(err, "hospitaization", "dc") != nil {
+		if s.handleParsingErr(err, "hospitalization", "dc") != nil {
 			continue
 		}
 		entry.NoticeDate, err = time.Parse("2006-02-01", line[jour])
-		if s.handleParsingErr(err, "hospitaization", "jour") != nil {
+		if s.handleParsingErr(err, "hospitalization", "jour") != nil {
 			continue
 		}
 
