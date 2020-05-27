@@ -15,6 +15,8 @@ const (
 	ErrInvalidQueryParamsType     = Error("invalid query parameters type")
 	ErrNoAuthenticationToken      = Error("no authentication token provided")
 	ErrInvalidAuthenticationToken = Error("invalid authentication token provided")
+	ErrMissingAPISecret           = Error("api-secret is missing")
+	ErrInvalidAPISecret           = Error("api-secret is wrong")
 )
 
 //DB Errors
@@ -33,7 +35,7 @@ type Error string
 // Error returns the error message.
 func (e Error) Error() string { return string(e) }
 
-// Create a billing Error
+// Errorf creates an Error
 func Errorf(pattern string, params ...interface{}) Error {
 	return Error(fmt.Sprintf(pattern, params...))
 }

@@ -93,22 +93,17 @@ func (s *Server) auth() adapter {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-			//Get token and e-mail from header
-			tokenStr := cleanAuthToken(r.Header.Get("Authorization")) // trim token type "Bearer" if present
+			tokenStr := r.Header.Get("api-secret")
 			if tokenStr == "" {
-				Error(r.Context(), w, covidtracker.ErrNoAuthenticationToken, http.StatusBadRequest)
+				Error(r.Context(), w, covidtracker.ErrMissingAPISecret, http.StatusUnauthorized)
 				return
 			}
 
-			//TODO set env variable
 			if tokenStr != os.Getenv("THETREEP_COVIDTRACKER_SECRET") {
-				Error(r.Context(), w, covidtracker.ErrInvalidAuthenticationToken, http.StatusUnauthorized)
+				Error(r.Context(), w, covidtracker.ErrInvalidAPISecret, http.StatusUnauthorized)
 				return
 			}
 
-			//TODO retrieve user identity and apply to context
-			// ctx := context.WithValue(r.Context(), "user", user)
-			// h.ServeHTTP(w, r.WithContext(ctx))
 			h.ServeHTTP(w, r)
 		})
 	}
