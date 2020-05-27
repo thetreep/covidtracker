@@ -51,8 +51,3 @@ type RiskDAL interface {
 type RiskJob interface {
 	ComputeRisk(segs []Segment, protects []Protection) (*Risk, error)
 }
-
-//RiskAPI defines the api to get risk data
-type RiskAPI interface {
-	Get(query interface{}) ([]*Risk, error)
-}

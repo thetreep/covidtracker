@@ -19,8 +19,6 @@ import (
 
 type adapter func(http.Handler) http.Handler
 
-//TODO set all middleware functions as Server receivers ?
-
 func adapt(h http.Handler, adapters ...adapter) http.Handler {
 	// reverse order to apply adapters in order they are specified in parameters
 	// (the first adapter is the first one that need to be executed)
@@ -29,6 +27,20 @@ func adapt(h http.Handler, adapters ...adapter) http.Handler {
 		h = adapter(h)
 	}
 	return h
+}
+
+func (s *Server) routing() adapter {
+	return func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			for path, handler := range s.Routing {
+				if path == r.URL.Path {
+					handler.ServeHTTP(w, r)
+					return
+				}
+			}
+			http.NotFound(w, r)
+		})
+	}
 }
 
 func (s *Server) requestId() adapter {
@@ -44,6 +56,16 @@ func (s *Server) requestId() adapter {
 			r.WithContext(context.WithValue(r.Context(), logger.ContextKeyRequestURI, r.RequestURI))
 			w.Header().Set("X-Request-Id", requestID)
 			h.ServeHTTP(w, r)
+		})
+	}
+}
+
+func (s *Server) ping() adapter {
+	return func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/ping" {
+				w.Write([]byte("OK"))
+			}
 		})
 	}
 }

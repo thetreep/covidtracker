@@ -17,3 +17,4 @@ cmd/covidtracker/covidtracker
 # Others
 .vscode
 .DS_Store
+*~
