@@ -24,7 +24,7 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 		dc
 	)
 
-	reader, err := s.getCSV(HospitalizationURL)
+	reader, err := s.GetCSV(HospitalizationURL)
 	if err != nil {
 		return nil, err
 	}

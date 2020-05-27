@@ -35,7 +35,7 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 	)
 
 	//TODO add limits to avoid duplicate
-	reader, err := s.getCSV(EmergencyURL)
+	reader, err := s.GetCSV(EmergencyURL)
 	if err != nil {
 		return nil, err
 	}

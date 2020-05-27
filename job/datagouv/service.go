@@ -27,7 +27,7 @@ const (
 	Datagouv = "https://www.data.gouv.fr"
 )
 
-func (s *Service) getCSV(url Resource) (*csv.Reader, error) {
+func (s *Service) GetCSV(url Resource) (*csv.Reader, error) {
 	// Get the data
 	resp, err := http.Get(path.Join(s.BasePath, url))
 	if err != nil {

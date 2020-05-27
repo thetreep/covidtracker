@@ -20,7 +20,7 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 	)
 
 	url := ""
-	reader, err := s.getCSV(IndicatorURL)
+	reader, err := s.GetCSV(IndicatorURL)
 	if err != nil {
 		return nil, err
 	}

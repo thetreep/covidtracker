@@ -9,21 +9,11 @@ import (
 )
 
 func TestRefreshCase(t *testing.T) {
-	s := datagouv.Service{ctx: context.Background()}
 	t.Run("file exist and format ok", func(t *testing.T) {
-		s.BasePath = datagouv.Datagouv
-		cases, err := s.RefreshCase()
-		if err != nil {
-			t.Fatal(err)
-		}
-		if len(cases) == 0 {
-			t.Fatal("unexpected empty cases")
-		}
+		s := datagouv.Service{ctx: context.Background(), BasePath: datagouv.Datagouv}
 	})
 
 	t.Run("parsing", func(t *testing.T) {
-		s.BasePath = datagouv.Datagouv
-
 		ts := DatagouvServer(t)
 		defer ts.Close()
 
@@ -37,6 +27,10 @@ func TestRefreshCase(t *testing.T) {
 
 		expected := []*covidtracker.Case{
 			{},
+			{},
+			{},
+			{},
 		}
+
 	})
 }
