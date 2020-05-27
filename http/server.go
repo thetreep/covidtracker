@@ -50,8 +50,12 @@ func (s *Server) Open() error {
 	log.Printf("starting operation api-server listening on %q", s.Addr)
 
 	// Start HTTP server.
-	go http.Serve(s.ln, adapt(s.Handler, s.routing(), s.cors(), s.log(), s.auth(), s.ping()))
+	go http.Serve(s.ln, s.Handlers())
 	return nil
+}
+
+func (s *Server) Handlers() http.Handler {
+	return adapt(s.Handler, s.ping(), s.cors(), s.log(), s.auth(), s.routing())
 }
 
 // Close closes the socket.
