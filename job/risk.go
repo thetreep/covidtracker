@@ -29,7 +29,7 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 		return nil, fmt.Errorf("cannot aggregate risk of %d segments: %s", len(segs), err)
 	}
 	if err := j.computeReport(r, protects); err != nil {
-		return nil, fmt.Errorf("cannot compute report: %s", len(segs), err)
+		return nil, fmt.Errorf("cannot compute report: %s", err)
 	}
 	return r, nil
 }
