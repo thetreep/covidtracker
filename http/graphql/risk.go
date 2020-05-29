@@ -46,8 +46,8 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 		graphql.InputObjectConfig{
 			Name: "protectionIn",
 			Fields: graphql.InputObjectConfigFieldMap{
-				"type": &graphql.InputObjectFieldConfig{Type: graphql.String},
-				"name": &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"type":     &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"quantity": &graphql.InputObjectFieldConfig{Type: graphql.Int},
 			},
 		},
 	)
@@ -71,13 +71,7 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 			"condidenceLevel": &graphql.Field{Type: graphql.Float},
 		},
 	})
-	// protect := graphql.NewObject(graphql.ObjectConfig{
-	// 	Name: "protection",
-	// 	Fields: graphql.Fields{
-	// 		"type": &graphql.Field{Type: graphql.String},
-	// 		"name": &graphql.Field{Type: graphql.String},
-	// 	},
-	// })
+
 	statement := graphql.NewObject(graphql.ObjectConfig{
 		Name: "statement",
 		Fields: graphql.Fields{

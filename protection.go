@@ -1,9 +1,10 @@
 package covidtracker
 
 type Protection struct {
-	ID   ProtectionID
-	Type ProtectionType
-	Name string
+	ID       ProtectionID
+	Type     ProtectionType
+	Name     string
+	Quantity int
 }
 
 type ProtectionID string
