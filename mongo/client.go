@@ -36,7 +36,15 @@ func NewClient(mongoURI string) *Client {
 
 // Open opens and initializes the Mongo database.
 func (c *Client) Open() error {
-	mClient, err := mongo.NewClient(options.Client().ApplyURI(c.MongoURI))
+	opts := options.Client().ApplyURI(c.MongoURI).SetServerSelectionTimeout(10 * time.Second).SetSocketTimeout(10 * time.Second)
+	if user, pwd := os.Getenv("THETREEP_COVIDTRACKER_MONGO_USER"), os.Getenv("THETREEP_COVIDTRACKER_MONGO_PASSWORD"); user != "" || pwd != "" {
+		opts.SetAuth(options.Credential{
+			AuthMechanism: "SCRAM-SHA-256",
+			Username:      user,
+			Password:      pwd,
+		})
+	}
+	mClient, err := mongo.NewClient(opts)
 	if err != nil {
 		return fmt.Errorf("error while creating mongo client: %s", err)
 	}
