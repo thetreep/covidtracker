@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/graphql-go/graphql"
+	"github.com/graphql-go/graphql/gqlerrors"
 	"github.com/graphql-go/handler"
 
 	"github.com/thetreep/covidtracker/logger"
@@ -47,6 +48,10 @@ func NewHandler(configs ...Configurer) (http.Handler, error) {
 	logger.Debug(context.Background(), "graphQL schema created")
 
 	return handler.New(&handler.Config{
+		FormatErrorFn: func(err error) gqlerrors.FormattedError {
+			logger.Info(context.Background(), "error occured: %s", err)
+			return gqlerrors.FormatError(err)
+		},
 		Schema: &schema,
 		Pretty: true,
 	}), nil
