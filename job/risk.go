@@ -35,9 +35,11 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 }
 
 func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidtracker.Protection) (covidtracker.RiskSegment, error) {
-	var riskLevel float64
-	var maskProtect float64
-	var gelProtect float64
+	var (
+		riskLevel   float64
+		maskProtect float64
+		gelProtect  float64
+	)
 
 	// basic coef for mask protection
 	for _, prot := range protects {
