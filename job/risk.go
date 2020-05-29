@@ -60,40 +60,40 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 	// @todo: use real values here !
 	switch seg.Transportation {
 	case covidtracker.Aircraft:
-		riskLevel = 0.40
-		maskProtect *= 0.9
+		riskLevel = 0.55
+		maskProtect *= 0.8
 		gelProtect *= 0.05
 	case covidtracker.TER:
-		riskLevel = 0.35
-		maskProtect *= 0.9
+		riskLevel = 0.45
+		maskProtect *= 0.8
 		gelProtect *= 0.1
 	case covidtracker.TGV:
-		riskLevel = 0.32
-		maskProtect *= 0.9
+		riskLevel = 0.4
+		maskProtect *= 0.8
 		gelProtect *= 0.1
 	case covidtracker.CarSolo:
 		riskLevel = 0.01
 		maskProtect *= 0.0
 		gelProtect *= 0.1
 	case covidtracker.CarDuo:
-		riskLevel = 0.4
+		riskLevel = 0.6
 		maskProtect *= 0.7
 		gelProtect *= 0.1
 	case covidtracker.CarGroup:
-		riskLevel = 0.5
+		riskLevel = 0.7
 		maskProtect *= 0.8
 		gelProtect *= 0.1
 	case covidtracker.TaxiSolo:
-		riskLevel = 0.32
+		riskLevel = 0.45
 		maskProtect *= 0.7
 		gelProtect *= 0.1
 	case covidtracker.TaxiGroup:
-		riskLevel = 0.4
+		riskLevel = 0.6
 		maskProtect *= 0.8
 		gelProtect *= 0.1
 	case covidtracker.PublicTransports:
-		riskLevel = 0.4
-		maskProtect *= 0.9
+		riskLevel = 0.6
+		maskProtect *= 0.8
 		gelProtect *= 0.2
 	case covidtracker.Scooter:
 		riskLevel = 0.01
