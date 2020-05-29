@@ -35,15 +35,20 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 	)
 
 	//TODO add limits to avoid duplicate
-	url := "https://www.data.gouv.fr/fr/datasets/r/eceb9fb4-3ebc-4da3-828d-f5939712600a"
-	reader, err := s.getCSV(url)
+	reader, close, err := s.GetCSV(EmergencyURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Emergency
-		atoi   = strconv.Atoi
+		atoi   = func(s string) (int, error) {
+			if s == "" {
+				return 0, nil
+			}
+			return strconv.Atoi(s)
+		}
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -82,7 +87,7 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 		if s.handleParsingErr(err, "emergency", "nbreActeCorona") != nil {
 			continue
 		}
-		entry.NoticeDate, err = time.Parse("2006-02-01", line[dateDePassage])
+		entry.NoticeDate, err = time.Parse("2006-01-02", line[dateDePassage])
 		if s.handleParsingErr(err, "emergency", "dateDePassage") != nil {
 			continue
 		}

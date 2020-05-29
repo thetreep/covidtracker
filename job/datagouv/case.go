@@ -18,11 +18,11 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		nb
 	)
 
-	url := "https://www.data.gouv.fr/fr/datasets/r/b4ea7b4b-b7d1-4885-a099-71852291ff20"
-	reader, err := s.getCSV(url)
+	reader, close, err := s.GetCSV(CaseURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Case
@@ -48,7 +48,7 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		if s.handleParsingErr(err, "covid_case", "txPos") != nil {
 			continue
 		}
-		entry.NoticeDate, err = time.Parse("2006-02-01", line[jour])
+		entry.NoticeDate, err = time.Parse("2006-01-02", line[jour])
 		if s.handleParsingErr(err, "covid_case", "jour") != nil {
 			continue
 		}

@@ -19,11 +19,11 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		indicSynthese
 	)
 
-	url := "https://www.data.gouv.fr/fr/datasets/r/01151af0-3209-4e89-94ab-9b319001c159"
-	reader, err := s.getCSV(url)
+	reader, close, err := s.GetCSV(IndicatorURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Indicator
@@ -46,7 +46,7 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		if s.handleParsingErr(err, "indicator", "dep") != nil {
 			continue
 		}
-		entry.ExtractDate, err = time.Parse("01/02/2006", line[extractDate])
+		entry.ExtractDate, err = time.Parse("2006-01-02", line[extractDate])
 		if s.handleParsingErr(err, "indicator", "extractDate") != nil {
 			continue
 		}

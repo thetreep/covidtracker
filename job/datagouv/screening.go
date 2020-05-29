@@ -27,11 +27,11 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 		nbPosF
 	)
 
-	url := "https://www.data.gouv.fr/fr/datasets/r/b4ea7b4b-b7d1-4885-a099-71852291ff20"
-	reader, err := s.getCSV(url)
+	reader, close, err := s.GetCSV(ScreeningURL)
 	if err != nil {
 		return nil, err
 	}
+	defer close()
 
 	var (
 		result []*covidtracker.Screening
@@ -52,7 +52,7 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 		}
 
 		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "emergency", "dep") != nil {
+		if s.handleParsingErr(err, "screening", "dep") != nil {
 			continue
 		}
 		entry.Count, err = atoi(line[nbTest])
@@ -67,7 +67,7 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 		if s.handleParsingErr(err, "screening", "txPos") != nil {
 			continue
 		}
-		entry.NoticeDate, err = time.Parse("2006-02-01", line[jour])
+		entry.NoticeDate, err = time.Parse("2006-01-02", line[jour])
 		if s.handleParsingErr(err, "screening", "jour") != nil {
 			continue
 		}

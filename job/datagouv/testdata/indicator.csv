@@ -1,0 +1,5 @@
+date,code_departement,nom_departement,nom_region,indicateur_synthese
+2020-05-03,15,Cantal,Auvergne-Rhône-Alpes,orange
+2020-05-04,88,Vosges,Grand Est,rouge
+2020-05-07,59,Nord,Hauts-de-France,rouge
+2020-05-07,78,Yvelines,Île-de-France,rouge

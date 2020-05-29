@@ -6,6 +6,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/graphql-go/graphql v0.7.9
 	github.com/graphql-go/handler v0.2.3
+	github.com/kr/pretty v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.6.0
 	github.com/stretchr/objx v0.1.1 // indirect
