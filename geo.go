@@ -44,16 +44,16 @@ type AdminLevels struct {
 	Level6 string `json:"level6"`
 }
 
+var regex = regexp.MustCompile(`^(([0-8][0-9])|(9[0-5])|(2[ab]))[0-9]{3}$`)
+
+//Check checks format / value of Geo
 func (g Geo) Check() error {
 
-	regPostCode := `^(([0-8][0-9])|(9[0-5])|(2[ab]))[0-9]{3}$`
-
-	match, err := regexp.Match(regPostCode, []byte(g.Properties.GeoCoding.PostCode))
-	if err != nil {
-		return err
+	if regex == nil {
+		return fmt.Errorf("postal code regexp cannot be created")
 	}
 
-	if !match {
+	if !regex.MatchString(g.Properties.GeoCoding.PostCode) {
 		return fmt.Errorf("postal code %q is invalid", g.Properties.GeoCoding.PostCode)
 	}
 
