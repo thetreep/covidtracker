@@ -204,10 +204,28 @@ func (j *RiskJob) aggregateReport(risk *covidtracker.Risk, protects []covidtrack
 		return fmt.Errorf("invalid risk for segments, no segment found")
 	}
 	risk.Report = covidtracker.Report{}
+
+	// aggregate and remove duplicates
+	pluses, minuses, advices := make(map[covidtracker.Statement]struct{}), make(map[covidtracker.Statement]struct{}), make(map[covidtracker.Statement]struct{})
 	for _, seg := range risk.BySegments {
-		risk.Report.Pluses = append(risk.Report.Pluses, seg.Report.Pluses...)
-		risk.Report.Minuses = append(risk.Report.Minuses, seg.Report.Minuses...)
-		risk.Report.Advices = append(risk.Report.Advices, seg.Report.Advices...)
+		for _, p := range seg.Report.Pluses {
+			pluses[p] = struct{}{}
+		}
+		for _, m := range seg.Report.Minuses {
+			minuses[m] = struct{}{}
+		}
+		for _, a := range seg.Report.Advices {
+			advices[a] = struct{}{}
+		}
+	}
+	for p := range pluses {
+		risk.Report.Pluses = append(risk.Report.Pluses, p)
+	}
+	for m := range minuses {
+		risk.Report.Minuses = append(risk.Report.Minuses, m)
+	}
+	for a := range advices {
+		risk.Report.Advices = append(risk.Report.Advices, a)
 	}
 	var (
 		hasMask bool
