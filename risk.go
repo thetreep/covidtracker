@@ -36,6 +36,7 @@ type RiskSegment struct {
 
 	RiskLevel       float64 `bson:"riskLevel" json:"riskLevel"`
 	ConfidenceLevel float64 `bson:"confidenceLevel" json:"confidenceLevel"`
+	Report          Report  `bson:"report" json:"report"`
 }
 
 //RiskSegID identifies a RiskSegment
