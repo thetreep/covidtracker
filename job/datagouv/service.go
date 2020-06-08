@@ -6,13 +6,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/thetreep/covidtracker"
 )
 
 type Service struct {
-	Ctx context.Context
-
+	Ctx      context.Context
 	BasePath string
-	//TODO define logger
+
+	log covidtracker.Logfer
 }
 
 type Resource string
@@ -26,6 +28,10 @@ const (
 
 	DatagouvBase = "https://www.data.gouv.fr"
 )
+
+func NewService(ctx context.Context, l covidtracker.Logfer) *Service {
+	return &Service{Ctx: ctx, log: l}
+}
 
 func (s *Service) newReader(r io.Reader, res Resource) (*csv.Reader, error) {
 

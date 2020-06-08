@@ -30,4 +30,6 @@ type HospService interface {
 
 type HospDAL interface {
 	Get(dep int, date time.Time) ([]*Hospitalization, error)
+	GetRange(dep int, begin, end time.Time) ([]*Hospitalization, error)
+	CreateNew([]*Hospitalization) error
 }

@@ -31,4 +31,6 @@ type EmergencyService interface {
 
 type EmergencyDAL interface {
 	Get(dep int, date time.Time) ([]*Emergency, error)
+	GetRange(dep int, begin, end time.Time) ([]*Emergency, error)
+	CreateNew([]*Emergency) error
 }

@@ -21,7 +21,12 @@ type Client struct {
 	Ctx context.Context
 
 	// DAL
-	risk RiskDAL
+	risk            RiskDAL
+	covCase         CaseDAL
+	emergency       EmergencyDAL
+	hospitalization HospDAL
+	indic           IndicDAL
+	screening       ScreeningDAL
 
 	mongo    *mongo.Client
 	database *mongo.Database

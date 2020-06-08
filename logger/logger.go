@@ -7,6 +7,7 @@ import (
 	"runtime/debug"
 
 	"github.com/sirupsen/logrus"
+	"github.com/thetreep/covidtracker"
 )
 
 const (
@@ -16,9 +17,13 @@ const (
 	ContextKeyRequestLogin = contextKeyPrefix + "request_login"
 )
 
+type Logger struct{}
+
 var (
 	DefaultLogger = logrus.New()
 )
+
+var _ covidtracker.Logfer = &Logger{}
 
 func init() {
 	DefaultLogger.Level = logrus.DebugLevel
@@ -35,11 +40,11 @@ func init() {
 	DefaultLogger.Formatter = &logrus.JSONFormatter{}
 }
 
-func HasErr(ctx context.Context, err error) bool {
-	return HasErrWithFields(ctx, nil, err)
+func (l *Logger) HasErr(ctx context.Context, err error) bool {
+	return l.HasErrWithFields(ctx, nil, err)
 }
 
-func HasErrWithFields(ctx context.Context, fields map[string]interface{}, err error) bool {
+func (l *Logger) HasErrWithFields(ctx context.Context, fields map[string]interface{}, err error) bool {
 	if err != nil {
 		if fields == nil {
 			fields = make(map[string]interface{})
@@ -60,35 +65,35 @@ func HasErrWithFields(ctx context.Context, fields map[string]interface{}, err er
 	return false
 }
 
-func Debug(ctx context.Context, str string, vars ...interface{}) {
-	DebugWithFields(ctx, nil, str, vars...)
+func (l *Logger) Debug(ctx context.Context, str string, vars ...interface{}) {
+	l.DebugWithFields(ctx, nil, str, vars...)
 }
 
-func DebugWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
-	entry(ctx, fields, false).Debugf(str, vars...)
+func (l *Logger) DebugWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
+	l.entry(ctx, fields, false).Debugf(str, vars...)
 }
 
-func Info(ctx context.Context, str string, vars ...interface{}) {
-	InfoWithFields(ctx, nil, str, vars...)
+func (l *Logger) Info(ctx context.Context, str string, vars ...interface{}) {
+	l.InfoWithFields(ctx, nil, str, vars...)
 }
 
-func InfoWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
-	entry(ctx, fields, false).Infof(str, vars...)
+func (l *Logger) InfoWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
+	l.entry(ctx, fields, false).Infof(str, vars...)
 }
 
-func Warn(ctx context.Context, str string, vars ...interface{}) {
-	WarnWithFields(ctx, nil, str, vars...)
+func (l *Logger) Warn(ctx context.Context, str string, vars ...interface{}) {
+	l.WarnWithFields(ctx, nil, str, vars...)
 }
 
-func WarnWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
-	entry(ctx, fields, false).Warnf(str, vars...)
+func (l *Logger) WarnWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
+	l.entry(ctx, fields, false).Warnf(str, vars...)
 }
 
-func Error(ctx context.Context, str string, vars ...interface{}) {
-	ErrorWithFields(ctx, nil, str, vars...)
+func (l *Logger) Error(ctx context.Context, str string, vars ...interface{}) {
+	l.ErrorWithFields(ctx, nil, str, vars...)
 }
 
-func ErrorWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
+func (l *Logger) ErrorWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
 	if fields == nil {
 		fields = make(map[string]interface{})
 	}
@@ -103,18 +108,18 @@ func ErrorWithFields(ctx context.Context, fields map[string]interface{}, str str
 		fields["tags"] = "error"
 	}
 
-	entry(ctx, fields, true).Errorf(str, vars...)
+	l.entry(ctx, fields, true).Errorf(str, vars...)
 }
 
-func Panic(ctx context.Context, str string, vars ...interface{}) {
-	PanicWithFields(ctx, nil, str, vars...)
+func (l *Logger) Panic(ctx context.Context, str string, vars ...interface{}) {
+	l.PanicWithFields(ctx, nil, str, vars...)
 }
 
-func PanicWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
-	entry(ctx, fields, true).Panicf(str, vars...)
+func (l *Logger) PanicWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
+	l.entry(ctx, fields, true).Panicf(str, vars...)
 }
 
-func entry(ctx context.Context, fields map[string]interface{}, includeStack bool) *logrus.Entry {
+func (l *Logger) entry(ctx context.Context, fields map[string]interface{}, includeStack bool) *logrus.Entry {
 	entry := DefaultLogger.WithFields(fields)
 	if id := ctx.Value(ContextKeyRequestId); id != nil {
 		entry = entry.WithField("RequestID", id)
