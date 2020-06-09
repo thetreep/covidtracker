@@ -1,8 +1,6 @@
 package mock
 
 import (
-	"fmt"
-
 	"github.com/thetreep/covidtracker"
 )
 
@@ -27,9 +25,7 @@ func (h *Hotel) Reset() {
 }
 
 func (h *Hotel) HotelsByPrefix(prefix string) ([]*covidtracker.Hotel, error) {
-	fmt.Println("mock")
 	h.HotelsByPrefixInvoked = true
-	fmt.Println("mock2")
 	return h.HotelsByPrefixFn(prefix)
 }
 
