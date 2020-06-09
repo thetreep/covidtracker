@@ -18,7 +18,7 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		nb
 	)
 
-	reader, close, err := s.GetCSV(CaseURL)
+	reader, close, err := s.GetCSV(CaseID)
 	if err != nil {
 		return nil, err
 	}

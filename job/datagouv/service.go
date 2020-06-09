@@ -1,14 +1,117 @@
 package datagouv
 
 import (
+	"bytes"
 	"context"
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 
+	"github.com/pkg/errors"
 	"github.com/thetreep/covidtracker"
 )
+
+type (
+	ResourceID string
+	DatasetID  string
+)
+
+const (
+	DatagouvBase = "https://www.data.gouv.fr"
+
+	EmergencyID       ResourceID = "emergency"
+	CaseID            ResourceID = "service-with-case"
+	HospitalizationID ResourceID = "hospitalization"
+	ScreeningID       ResourceID = "screening"
+	IndicatorID       ResourceID = "indicator"
+
+	EmergencyDataset DatasetID = "donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19"
+	HospDataset      DatasetID = "donnees-hospitalieres-relatives-a-lepidemie-de-covid-19"
+	ScreeningDataset DatasetID = "donnees-relatives-aux-tests-de-depistage-de-covid-19-realises-en-laboratoire-de-ville"
+	IndicDataset     DatasetID = "indicateurs-dactivite-epidemique-covid-19-par-departement"
+)
+
+var (
+	caseRegex      = regexp.MustCompile(`donnees-hospitalieres-etablissements-covid19-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}.csv`)
+	emerRegex      = regexp.MustCompile(`sursaud-covid19-quotidien-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}-departement.csv`)
+	hospRegex      = regexp.MustCompile(`donnees-hospitalieres-covid19-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}.csv`)
+	indicRegex     = regexp.MustCompile(`donnees-carte-synthese-tricolore.csv`)
+	screeningRegex = regexp.MustCompile(`donnees-tests-covid19-labo-quotidien-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}.csv`)
+)
+
+type Dataset struct {
+	Acronym     interface{}   `json:"acronym"`
+	Archived    interface{}   `json:"archived"`
+	Badges      []interface{} `json:"badges"`
+	CreatedAt   string        `json:"created_at"`
+	Deleted     interface{}   `json:"deleted"`
+	Description string        `json:"description"`
+	Extras      struct {
+	} `json:"extras"`
+	Frequency     string      `json:"frequency"`
+	FrequencyDate interface{} `json:"frequency_date"`
+	ID            string      `json:"id"`
+	LastModified  string      `json:"last_modified"`
+	LastUpdate    string      `json:"last_update"`
+	License       string      `json:"license"`
+	Metrics       struct {
+		Discussions int `json:"discussions"`
+		Followers   int `json:"followers"`
+		Issues      int `json:"issues"`
+		Reuses      int `json:"reuses"`
+		Views       int `json:"views"`
+	} `json:"metrics"`
+	Organization struct {
+		Acronym       interface{} `json:"acronym"`
+		Class         string      `json:"class"`
+		ID            string      `json:"id"`
+		Logo          string      `json:"logo"`
+		LogoThumbnail string      `json:"logo_thumbnail"`
+		Name          string      `json:"name"`
+		Page          string      `json:"page"`
+		Slug          string      `json:"slug"`
+		URI           string      `json:"uri"`
+	} `json:"organization"`
+	Owner            interface{}   `json:"owner"`
+	Page             string        `json:"page"`
+	Private          bool          `json:"private"`
+	Resources        []Resource    `json:"resources"`
+	Slug             string        `json:"slug"`
+	Spatial          interface{}   `json:"spatial"`
+	Tags             []interface{} `json:"tags"`
+	TemporalCoverage interface{}   `json:"temporal_coverage"`
+	Title            string        `json:"title"`
+	URI              string        `json:"uri"`
+}
+
+type Resource struct {
+	Checksum struct {
+		Type  string `json:"type"`
+		Value string `json:"value"`
+	} `json:"checksum"`
+	CreatedAt   string      `json:"created_at"`
+	Description interface{} `json:"description"`
+	Extras      struct {
+	} `json:"extras"`
+	Filesize     int    `json:"filesize"`
+	Filetype     string `json:"filetype"`
+	Format       string `json:"format"`
+	ID           string `json:"id"`
+	LastModified string `json:"last_modified"`
+	Latest       string `json:"latest"`
+	Metrics      struct {
+		Views int `json:"views"`
+	} `json:"metrics"`
+	Mime       string      `json:"mime"`
+	PreviewURL interface{} `json:"preview_url"`
+	Published  string      `json:"published"`
+	Title      string      `json:"title"`
+	Type       string      `json:"type"`
+	URL        string      `json:"url"`
+}
 
 type Service struct {
 	Ctx      context.Context
@@ -17,45 +120,25 @@ type Service struct {
 	log covidtracker.Logfer
 }
 
-type Resource string
-
-const (
-	EmergencyURL       Resource = "/fr/datasets/r/eceb9fb4-3ebc-4da3-828d-f5939712600a"
-	CaseURL            Resource = "/fr/datasets/r/41b9bd2a-b5b6-4271-8878-e45a8902ef00"
-	HospitalizationURL Resource = "/fr/datasets/r/6fadff46-9efd-4c53-942a-54aca783c30c"
-	ScreeningURL       Resource = "/fr/datasets/r/b4ea7b4b-b7d1-4885-a099-71852291ff20"
-	IndicatorURL       Resource = "/fr/datasets/r/01151af0-3209-4e89-94ab-9b319001c159"
-
-	DatagouvBase = "https://www.data.gouv.fr"
-)
-
 func NewService(ctx context.Context, l covidtracker.Logfer) *Service {
 	return &Service{Ctx: ctx, log: l}
 }
 
-func (s *Service) newReader(r io.Reader, res Resource) (*csv.Reader, error) {
+func (s *Service) GetCSV(id ResourceID) (*csv.Reader, func() error, error) {
 
-	reader := csv.NewReader(r)
-	switch res {
-	case EmergencyURL, IndicatorURL:
-		reader.Comma = ','
-	case CaseURL, HospitalizationURL, ScreeningURL:
-		reader.Comma = ';'
-	default:
-		return nil, fmt.Errorf("unsupported resource %q", res)
+	//get dataset resource URL
+	res, err := s.getResourceURL(id)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	return reader, nil
-}
-
-func (s *Service) GetCSV(res Resource) (*csv.Reader, func() error, error) {
-	// Get the data
+	// download the resource file
 	resp, err := http.Get(s.BasePath + string(res))
 	if err != nil {
 		return nil, nil, err
 	}
 
-	r, err := s.newReader(resp.Body, res)
+	r, err := s.newReader(resp.Body, id)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -63,10 +146,75 @@ func (s *Service) GetCSV(res Resource) (*csv.Reader, func() error, error) {
 	return r, resp.Body.Close, nil
 }
 
+func (s *Service) getResourceURL(resource ResourceID) (string, error) {
+
+	var (
+		id  DatasetID
+		rgx *regexp.Regexp
+	)
+
+	switch resource {
+	case EmergencyID:
+		id = EmergencyDataset
+		rgx = emerRegex
+	case CaseID:
+		id = HospDataset
+		rgx = caseRegex
+	case HospitalizationID:
+		id = HospDataset
+		rgx = hospRegex
+	case ScreeningID:
+		id = ScreeningDataset
+		rgx = screeningRegex
+	case IndicatorID:
+		id = IndicDataset
+		rgx = indicRegex
+	}
+
+	res, err := http.Get(s.BasePath + "/api/1/datasets/" + string(id))
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+
+	//format response
+	var buf bytes.Buffer
+	if _, err := io.Copy(&buf, res.Body); err != nil {
+		return "", errors.Wrap(err, "reading body")
+	}
+	dataset := &Dataset{}
+	if err := json.NewDecoder(&buf).Decode(&dataset); err != nil {
+		return "", errors.Wrap(err, "decoding response")
+	}
+
+	// try to find the corresponding resource
+	for _, r := range dataset.Resources {
+		if rgx.MatchString(r.Title) {
+			return r.Latest, nil
+		}
+	}
+
+	return "", fmt.Errorf("no resource %q found (dataset=%q)", resource, id)
+}
+
+func (s *Service) newReader(r io.Reader, res ResourceID) (*csv.Reader, error) {
+
+	reader := csv.NewReader(r)
+	switch res {
+	case EmergencyID, IndicatorID:
+		reader.Comma = ','
+	case CaseID, HospitalizationID, ScreeningID:
+		reader.Comma = ';'
+	default:
+		return nil, fmt.Errorf("unsupported dataset %s", res)
+	}
+
+	return reader, nil
+}
+
 func (s *Service) handleParsingErr(err error, name, col string) error {
 	if err != nil {
-		//TODO use logger of service
-		fmt.Printf("%s : cannot parse %q column (%v)\n", name, col, err)
+		s.log.Warn(s.Ctx, "%s : cannot parse %q column (%v)\n", name, col, err)
 	}
 	return err
 }

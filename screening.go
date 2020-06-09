@@ -23,5 +23,5 @@ type ScreeningService interface {
 type ScreeningDAL interface {
 	Get(dep int, date time.Time) ([]*Screening, error)
 	GetRange(dep int, begin, end time.Time) ([]*Screening, error)
-	CreateNew(scrs []*Screening) error
+	Upsert(scrs []*Screening) error
 }

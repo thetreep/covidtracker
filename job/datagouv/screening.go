@@ -27,7 +27,7 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 		nbPosF
 	)
 
-	reader, close, err := s.GetCSV(ScreeningURL)
+	reader, close, err := s.GetCSV(ScreeningID)
 	if err != nil {
 		return nil, err
 	}

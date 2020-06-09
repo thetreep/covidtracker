@@ -11,9 +11,6 @@ import (
 )
 
 func TestRefreshCase(t *testing.T) {
-	t.Run("file exist", func(t *testing.T) {
-		assertRessourceExist(t, datagouv.DatagouvBase+string(datagouv.CaseURL))
-	})
 
 	t.Run("parsing", func(t *testing.T) {
 		ts := DatagouvServer(t)
@@ -28,7 +25,6 @@ func TestRefreshCase(t *testing.T) {
 		if len(cases) == 0 {
 			t.Fatal("unexpected empty cases")
 		}
-		// pretty.Log(cases)
 
 		timeFn := func(s string) time.Time {
 			t, _ := time.Parse("2006-01-02", s)

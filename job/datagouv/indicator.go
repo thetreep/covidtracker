@@ -12,14 +12,16 @@ var _ covidtracker.IndicService = &Service{}
 
 func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 
-	//Header of csv emergency file
+	//Header of csv indicator file
 	const (
 		extractDate = iota
 		departement
+		depName
+		region
 		indicSynthese
 	)
 
-	reader, close, err := s.GetCSV(IndicatorURL)
+	reader, close, err := s.GetCSV(IndicatorID)
 	if err != nil {
 		return nil, err
 	}

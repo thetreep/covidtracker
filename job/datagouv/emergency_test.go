@@ -11,10 +11,6 @@ import (
 )
 
 func TestRefreshEmergency(t *testing.T) {
-	t.Run("file exist", func(t *testing.T) {
-		assertRessourceExist(t, datagouv.DatagouvBase+string(datagouv.EmergencyURL))
-	})
-
 	t.Run("parsing", func(t *testing.T) {
 		ts := DatagouvServer(t)
 		defer ts.Close()

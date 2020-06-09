@@ -31,8 +31,8 @@ func main() {
 	j.RiskDAL = mongo.Risk()
 
 	c := cron.New()
-	c.AddFunc("@every 1m", func() {
-		job.InvoiceJob.CheckInvoicement()
-	})
+	// c.AddFunc("@every xxx", func() {
+	// 	j.RefreshJob.Refresh(mongo.Case(), xxx)
+	// })
 
 }
