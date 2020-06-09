@@ -7,6 +7,7 @@ import (
 
 	"github.com/thetreep/covidtracker"
 	"github.com/thetreep/covidtracker/job/datagouv"
+	"github.com/thetreep/covidtracker/logger"
 	"github.com/thetreep/toolbox/test"
 )
 
@@ -19,7 +20,8 @@ func TestRefreshCase(t *testing.T) {
 			server.Close()
 		}()
 
-		s := datagouv.Service{Ctx: context.Background(), BasePath: api.URL}
+		s := datagouv.NewService(context.Background(), &logger.Logger{})
+		s.BasePath = api.URL
 
 		cases, err := s.RefreshCase()
 		if err != nil {
