@@ -7,14 +7,6 @@ import (
 	"github.com/thetreep/covidtracker/job/cds"
 )
 
-var (
-	Service cdsAPI
-)
-
-type cdsAPI interface {
-	HotelsByPrefix(p string) ([]covidtracker.Hotel, error)
-}
-
 type HotelJob struct {
 	job *Job
 }
