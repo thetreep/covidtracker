@@ -30,13 +30,13 @@ func (s *ScreeningDAL) Collection() *mongo.Collection {
 	return s.collection
 }
 
-func (s *ScreeningDAL) Get(dep int, date time.Time) (*covidtracker.Screening, error) {
+func (s *ScreeningDAL) Get(dep string, date time.Time) (*covidtracker.Screening, error) {
 	var result *covidtracker.Screening
 
 	err := s.collection.FindOne(s.client.Ctx, bson.M{"dep": dep, "noticeDate": dateFilter(date)}).Decode(&result)
 	switch err {
 	case mongo.ErrNoDocuments:
-		return nil, fmt.Errorf("no screening document found with dep=%d date=%s", dep, date.Format("2006-02-01"))
+		return nil, fmt.Errorf("no screening document found with dep=%s date=%s", dep, date.Format("2006-02-01"))
 	case nil:
 		return result, nil
 	default:
@@ -87,7 +87,7 @@ func (s *ScreeningDAL) Upsert(scrs ...*covidtracker.Screening) error {
 		} else { // existing, update only appropriate fields
 			scr.ID = existing.ID
 			if _, updErr := s.collection.UpdateOne(s.client.Ctx, bson.M{"_id": existing.ID}, bson.M{"$set": scr}); updErr != nil {
-				return errors.Wrapf(err, "updating case dep=%d date%s", scr.Department, scr.NoticeDate.Format("2006-02-01"))
+				return errors.Wrapf(err, "updating case dep=%s date%s", scr.Department, scr.NoticeDate.Format("2006-02-01"))
 			}
 		}
 

@@ -30,13 +30,13 @@ func (s *IndicDAL) Collection() *mongo.Collection {
 	return s.collection
 }
 
-func (s *IndicDAL) Get(dep int, date time.Time) (*covidtracker.Indicator, error) {
+func (s *IndicDAL) Get(dep string, date time.Time) (*covidtracker.Indicator, error) {
 	var result *covidtracker.Indicator
 
 	err := s.collection.FindOne(s.client.Ctx, bson.M{"dep": dep, "extractDate": dateFilter(date)}).Decode(&result)
 	switch err {
 	case mongo.ErrNoDocuments:
-		return nil, fmt.Errorf("no indicator document found with dep=%d date=%s", dep, date.Format("2006-02-01"))
+		return nil, fmt.Errorf("no indicator document found with dep=%s date=%s", dep, date.Format("2006-02-01"))
 	case nil:
 		return result, nil
 	default:
@@ -87,7 +87,7 @@ func (s *IndicDAL) Upsert(inds ...*covidtracker.Indicator) error {
 		} else { // existing, update only appropriate fields
 			ind.ID = existing.ID
 			if _, updErr := s.collection.UpdateOne(s.client.Ctx, bson.M{"_id": existing.ID}, bson.M{"$set": ind}); updErr != nil {
-				return errors.Wrapf(err, "updating case dep=%d date%s", ind.Department, ind.ExtractDate.Format("2006-02-01"))
+				return errors.Wrapf(err, "updating case dep=%s date%s", ind.Department, ind.ExtractDate.Format("2006-02-01"))
 			}
 		}
 

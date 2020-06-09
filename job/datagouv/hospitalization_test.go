@@ -12,10 +12,13 @@ import (
 
 func TestRefreshHospitalization(t *testing.T) {
 	t.Run("parsing", func(t *testing.T) {
-		ts := DatagouvServer(t)
-		defer ts.Close()
+		api, server := DatagouvServers(t)
+		defer func() {
+			api.Close()
+			server.Close()
+		}()
 
-		s := datagouv.Service{Ctx: context.Background(), BasePath: ts.URL}
+		s := datagouv.Service{Ctx: context.Background(), BasePath: api.URL}
 
 		hosp, err := s.RefreshHospitalization()
 		if err != nil {
@@ -32,8 +35,7 @@ func TestRefreshHospitalization(t *testing.T) {
 
 		expected := []*covidtracker.Hospitalization{
 			&covidtracker.Hospitalization{
-				ID:              "",
-				Department:      976,
+				Department:      "976",
 				Date:            timeFn("2020-05-26"),
 				Count:           26,
 				CriticalCount:   6,
@@ -41,8 +43,7 @@ func TestRefreshHospitalization(t *testing.T) {
 				DeathCount:      6,
 			},
 			&covidtracker.Hospitalization{
-				ID:              "",
-				Department:      22,
+				Department:      "22",
 				Date:            timeFn("2020-05-20"),
 				Count:           24,
 				CriticalCount:   2,
@@ -50,8 +51,7 @@ func TestRefreshHospitalization(t *testing.T) {
 				DeathCount:      18,
 			},
 			&covidtracker.Hospitalization{
-				ID:              "",
-				Department:      42,
+				Department:      "42",
 				Date:            timeFn("2020-05-17"),
 				Count:           127,
 				CriticalCount:   5,
@@ -59,8 +59,7 @@ func TestRefreshHospitalization(t *testing.T) {
 				DeathCount:      67,
 			},
 			&covidtracker.Hospitalization{
-				ID:              "",
-				Department:      1,
+				Department:      "01",
 				Date:            timeFn("2020-03-18"),
 				Count:           13,
 				CriticalCount:   0,
@@ -68,8 +67,7 @@ func TestRefreshHospitalization(t *testing.T) {
 				DeathCount:      0,
 			},
 			&covidtracker.Hospitalization{
-				ID:              "",
-				Department:      93,
+				Department:      "93",
 				Date:            timeFn("2020-03-18"),
 				Count:           184,
 				CriticalCount:   45,

@@ -1,10 +1,12 @@
-package refresher
+package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
+	"github.com/robfig/cron"
 	"github.com/thetreep/covidtracker/job"
 	"github.com/thetreep/covidtracker/job/datagouv"
 	"github.com/thetreep/covidtracker/logger"
@@ -29,9 +31,9 @@ func main() {
 	j := job.NewJob(datagouv.NewService(context.Background(), &logger.Logger{}))
 	j.RiskDAL = mongo.Risk()
 
-	// c := cron.New()
-	// c.AddFunc("@every xxx", func() {
-	// 	j.RefreshJob.Refresh(mongo.Case(), xxx)
-	// })
+	c := cron.New()
+	c.AddFunc("@midnight", func() {
+		fmt.Print(j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening()))
+	})
 
 }

@@ -30,13 +30,13 @@ func (s *EmergencyDAL) Collection() *mongo.Collection {
 	return s.collection
 }
 
-func (s *EmergencyDAL) Get(dep int, date time.Time) (*covidtracker.Emergency, error) {
+func (s *EmergencyDAL) Get(dep string, date time.Time) (*covidtracker.Emergency, error) {
 	var result *covidtracker.Emergency
 
 	err := s.collection.FindOne(s.client.Ctx, bson.M{"dep": dep, "passageDate": dateFilter(date)}).Decode(&result)
 	switch err {
 	case mongo.ErrNoDocuments:
-		return nil, fmt.Errorf("no emergency document found with dep=%d date=%s", dep, date.Format("2006-02-01"))
+		return nil, fmt.Errorf("no emergency document found with dep=%s date=%s", dep, date.Format("2006-02-01"))
 	case nil:
 		return result, nil
 	default:
@@ -87,7 +87,7 @@ func (s *EmergencyDAL) Upsert(ems ...*covidtracker.Emergency) error {
 		} else { // existing, update only appropriate fields
 			em.ID = existing.ID
 			if _, updErr := s.collection.UpdateOne(s.client.Ctx, bson.M{"_id": existing.ID}, bson.M{"$set": em}); updErr != nil {
-				return errors.Wrapf(err, "updating case dep=%d date%s", em.Department, em.PassageDate.Format("2006-02-01"))
+				return errors.Wrapf(err, "updating case dep=%s date%s", em.Department, em.PassageDate.Format("2006-02-01"))
 			}
 		}
 

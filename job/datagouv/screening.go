@@ -12,7 +12,7 @@ import (
 var _ covidtracker.ScreeningService = &Service{}
 
 func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
-	//TODO add limits to avoid duplicate
+	s.log.Debug(s.Ctx, "refreshing screening data...")
 
 	//header
 	const (
@@ -49,12 +49,10 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 			return nil, err
 		}
 
-		entry := &covidtracker.Screening{}
-
-		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "screening", "dep") != nil {
-			continue
+		entry := &covidtracker.Screening{
+			Department: line[dep],
 		}
+
 		entry.Count, err = atoi(line[nbTest])
 		if s.handleParsingErr(err, "screening", "nbTest") != nil {
 			continue
@@ -92,6 +90,8 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 		}
 		return result[i].NoticeDate.After(result[j].NoticeDate)
 	})
+
+	s.log.Debug(s.Ctx, "got %d screening entries !", len(result))
 
 	return result, nil
 }

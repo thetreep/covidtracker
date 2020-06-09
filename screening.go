@@ -4,7 +4,7 @@ import "time"
 
 type Screening struct {
 	ID         ScreeningID `bson:"_id" json:"id"`
-	Department int         `bson:"dep" json:"dep"`
+	Department string      `bson:"dep" json:"dep"`
 	NoticeDate time.Time   `bson:"noticeDate" json:"noticeDate"`
 
 	Count         int `bson:"count" json:"count"`
@@ -19,7 +19,7 @@ type ScreeningService interface {
 }
 
 type ScreeningDAL interface {
-	Get(dep int, date time.Time) (*Screening, error)
+	Get(dep string, date time.Time) (*Screening, error)
 	GetRange(dep int, begin, end time.Time) ([]*Screening, error)
 	Upsert(...*Screening) error
 }

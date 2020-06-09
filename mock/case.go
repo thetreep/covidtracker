@@ -7,7 +7,7 @@ import (
 )
 
 type CaseDAL struct {
-	GetFn      func(dep int, date time.Time) (*covidtracker.Case, error)
+	GetFn      func(dep string, date time.Time) (*covidtracker.Case, error)
 	GetInvoked bool
 
 	GetRangeFn      func(dep int, start, end time.Time) ([]*covidtracker.Case, error)
@@ -19,7 +19,7 @@ type CaseDAL struct {
 
 var _ covidtracker.CaseDAL = &CaseDAL{}
 
-func (m *CaseDAL) Get(dep int, date time.Time) (*covidtracker.Case, error) {
+func (m *CaseDAL) Get(dep string, date time.Time) (*covidtracker.Case, error) {
 	m.GetInvoked = true
 	return m.GetFn(dep, date)
 }

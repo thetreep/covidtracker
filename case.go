@@ -4,10 +4,10 @@ import "time"
 
 type Case struct {
 	ID         CaseID    `bson:"_id" json:"id"`
-	Department int       `bson:"dep" json:"dep"`
+	Department string    `bson:"dep" json:"dep"`
 	NoticeDate time.Time `bson:"noticeDate" json:"noticeDate"`
 
-	//HospServiceCountReport is the number of hospital services reporting at least one case
+	//HospServiceCountRelated is the number of hospital services reporting at least one case
 	HospServiceCountRelated int `bson:"hospServiceCountRelated" json:"hospServiceCountRelated"`
 }
 
@@ -18,7 +18,7 @@ type CaseService interface {
 }
 
 type CaseDAL interface {
-	Get(dep int, date time.Time) (*Case, error)
+	Get(dep string, date time.Time) (*Case, error)
 	GetRange(dep int, begin, end time.Time) ([]*Case, error)
 	Upsert(...*Case) error
 }

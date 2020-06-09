@@ -12,10 +12,13 @@ import (
 
 func TestRefreshEmergency(t *testing.T) {
 	t.Run("parsing", func(t *testing.T) {
-		ts := DatagouvServer(t)
-		defer ts.Close()
+		api, server := DatagouvServers(t)
+		defer func() {
+			api.Close()
+			server.Close()
+		}()
 
-		s := datagouv.Service{Ctx: context.Background(), BasePath: ts.URL}
+		s := datagouv.Service{Ctx: context.Background(), BasePath: api.URL}
 
 		sos, err := s.RefreshEmergency()
 		if err != nil {
@@ -32,7 +35,7 @@ func TestRefreshEmergency(t *testing.T) {
 
 		expected := []*covidtracker.Emergency{
 			&covidtracker.Emergency{
-				Department:         62,
+				Department:         "62",
 				PassageDate:        timeFn("2020-05-25"),
 				Count:              113,
 				Cov19SuspCount:     1,
@@ -41,7 +44,7 @@ func TestRefreshEmergency(t *testing.T) {
 				SOSMedCov19SuspAct: 0,
 			},
 			&covidtracker.Emergency{
-				Department:         72,
+				Department:         "72",
 				PassageDate:        timeFn("2020-05-25"),
 				Count:              67,
 				Cov19SuspCount:     0,
@@ -50,7 +53,7 @@ func TestRefreshEmergency(t *testing.T) {
 				SOSMedCov19SuspAct: 0,
 			},
 			&covidtracker.Emergency{
-				Department:         976,
+				Department:         "976",
 				PassageDate:        timeFn("2020-05-25"),
 				Count:              2,
 				Cov19SuspCount:     0,
@@ -59,7 +62,7 @@ func TestRefreshEmergency(t *testing.T) {
 				SOSMedCov19SuspAct: 0,
 			},
 			&covidtracker.Emergency{
-				Department:         1,
+				Department:         "01",
 				PassageDate:        timeFn("2020-02-24"),
 				Count:              357,
 				Cov19SuspCount:     0,

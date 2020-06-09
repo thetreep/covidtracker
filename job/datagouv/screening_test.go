@@ -12,10 +12,13 @@ import (
 
 func TestRefreshScreening(t *testing.T) {
 	t.Run("parsing", func(t *testing.T) {
-		ts := DatagouvServer(t)
-		defer ts.Close()
+		api, server := DatagouvServers(t)
+		defer func() {
+			api.Close()
+			server.Close()
+		}()
 
-		s := datagouv.Service{Ctx: context.Background(), BasePath: ts.URL}
+		s := datagouv.Service{Ctx: context.Background(), BasePath: api.URL}
 
 		scrs, err := s.RefreshScreening()
 		if err != nil {
@@ -32,35 +35,35 @@ func TestRefreshScreening(t *testing.T) {
 
 		expected := []*covidtracker.Screening{
 			&covidtracker.Screening{
-				Department:    976,
+				Department:    "976",
 				NoticeDate:    timeFn("2020-05-23"),
 				Count:         0,
 				PositiveCount: 0,
 				PositiveRate:  0,
 			},
 			&covidtracker.Screening{
-				Department:    92,
+				Department:    "92",
 				NoticeDate:    timeFn("2020-04-27"),
 				Count:         47,
 				PositiveCount: 7,
 				PositiveRate:  13,
 			},
 			&covidtracker.Screening{
-				Department:    95,
+				Department:    "95",
 				NoticeDate:    timeFn("2020-03-26"),
 				Count:         28,
 				PositiveCount: 24,
 				PositiveRate:  16,
 			},
 			&covidtracker.Screening{
-				Department:    3,
+				Department:    "03",
 				NoticeDate:    timeFn("2020-03-24"),
 				Count:         0,
 				PositiveCount: 0,
 				PositiveRate:  0,
 			},
 			&covidtracker.Screening{
-				Department:    1,
+				Department:    "01",
 				NoticeDate:    timeFn("2020-03-10"),
 				Count:         12,
 				PositiveCount: 1,

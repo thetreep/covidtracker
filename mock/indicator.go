@@ -7,7 +7,7 @@ import (
 )
 
 type IndicDAL struct {
-	GetFn      func(dep int, date time.Time) (*covidtracker.Indicator, error)
+	GetFn      func(dep string, date time.Time) (*covidtracker.Indicator, error)
 	GetInvoked bool
 
 	GetRangeFn      func(dep int, start, end time.Time) ([]*covidtracker.Indicator, error)
@@ -19,7 +19,7 @@ type IndicDAL struct {
 
 var _ covidtracker.IndicDAL = &IndicDAL{}
 
-func (m *IndicDAL) Get(dep int, date time.Time) (*covidtracker.Indicator, error) {
+func (m *IndicDAL) Get(dep string, date time.Time) (*covidtracker.Indicator, error) {
 	m.GetInvoked = true
 	return m.GetFn(dep, date)
 }

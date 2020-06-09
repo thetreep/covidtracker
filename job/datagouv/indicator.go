@@ -3,7 +3,6 @@ package datagouv
 import (
 	"io"
 	"sort"
-	"strconv"
 	"time"
 
 	"github.com/thetreep/covidtracker"
@@ -12,6 +11,7 @@ import (
 var _ covidtracker.IndicService = &Service{}
 
 func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
+	s.log.Debug(s.Ctx, "refreshing indicator data...")
 
 	//Header of csv indicator file
 	const (
@@ -31,7 +31,6 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 	var (
 		result      []*covidtracker.Indicator
 		resultByKey = make(map[string]*covidtracker.Indicator)
-		atoi        = strconv.Atoi
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -44,12 +43,10 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		}
 
 		entry := &covidtracker.Indicator{
-			Color: line[indicSynthese],
+			Color:      line[indicSynthese],
+			Department: line[departement],
 		}
-		entry.Department, err = atoi(line[departement])
-		if s.handleParsingErr(err, "indicator", "dep") != nil {
-			continue
-		}
+
 		entry.ExtractDate, err = time.Parse("2006-01-02", line[extractDate])
 		if s.handleParsingErr(err, "indicator", "extractDate") != nil {
 			continue
@@ -71,6 +68,8 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		}
 		return result[i].ExtractDate.After(result[j].ExtractDate)
 	})
+
+	s.log.Debug(s.Ctx, "got %d screening data !", len(result))
 
 	return result, nil
 }

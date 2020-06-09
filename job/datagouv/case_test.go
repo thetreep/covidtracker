@@ -13,10 +13,13 @@ import (
 func TestRefreshCase(t *testing.T) {
 
 	t.Run("parsing", func(t *testing.T) {
-		ts := DatagouvServer(t)
-		defer ts.Close()
+		api, server := DatagouvServers(t)
+		defer func() {
+			api.Close()
+			server.Close()
+		}()
 
-		s := datagouv.Service{Ctx: context.Background(), BasePath: ts.URL}
+		s := datagouv.Service{Ctx: context.Background(), BasePath: api.URL}
 
 		cases, err := s.RefreshCase()
 		if err != nil {
@@ -34,24 +37,24 @@ func TestRefreshCase(t *testing.T) {
 		expected := []*covidtracker.Case{
 			&covidtracker.Case{
 				ID:                      "",
-				Department:              973,
+				Department:              "973",
 				NoticeDate:              timeFn("2020-05-19"),
 				HospServiceCountRelated: 3,
 			},
 			&covidtracker.Case{
 				ID:                      "",
-				Department:              85,
+				Department:              "85",
 				NoticeDate:              timeFn("2020-05-16"),
 				HospServiceCountRelated: 8,
 			},
 			&covidtracker.Case{
 				ID:                      "",
-				Department:              57,
+				Department:              "57",
 				NoticeDate:              timeFn("2020-05-13"),
 				HospServiceCountRelated: 30,
 			},
 			&covidtracker.Case{
-				Department:              67,
+				Department:              "67",
 				NoticeDate:              timeFn("2020-05-10"),
 				HospServiceCountRelated: 28,
 			},

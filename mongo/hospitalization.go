@@ -30,13 +30,13 @@ func (s *HospDAL) Collection() *mongo.Collection {
 	return s.collection
 }
 
-func (s *HospDAL) Get(dep int, date time.Time) (*covidtracker.Hospitalization, error) {
+func (s *HospDAL) Get(dep string, date time.Time) (*covidtracker.Hospitalization, error) {
 	var result *covidtracker.Hospitalization
 
 	err := s.collection.FindOne(s.client.Ctx, bson.M{"dep": dep, "date": dateFilter(date)}).Decode(&result)
 	switch err {
 	case mongo.ErrNoDocuments:
-		return nil, fmt.Errorf("no hospitalization document found with dep=%d date=%s", dep, date.Format("2006-02-01"))
+		return nil, fmt.Errorf("no hospitalization document found with dep=%s date=%s", dep, date.Format("2006-02-01"))
 	case nil:
 		return result, nil
 	default:
@@ -87,7 +87,7 @@ func (s *HospDAL) Upsert(hosps ...*covidtracker.Hospitalization) error {
 		} else { // existing, update only appropriate fields
 			h.ID = existing.ID
 			if _, updErr := s.collection.UpdateOne(s.client.Ctx, bson.M{"_id": existing.ID}, bson.M{"$set": h}); updErr != nil {
-				return errors.Wrapf(err, "updating case dep=%d date%s", h.Department, h.Date.Format("2006-02-01"))
+				return errors.Wrapf(err, "updating case dep=%s date%s", h.Department, h.Date.Format("2006-02-01"))
 			}
 		}
 

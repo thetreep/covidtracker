@@ -12,6 +12,8 @@ import (
 var _ covidtracker.CaseService = &Service{}
 
 func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
+	s.log.Debug(s.Ctx, "refreshing case data...")
+
 	//header
 	const (
 		dep = iota
@@ -40,12 +42,10 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 			return nil, err
 		}
 
-		entry := &covidtracker.Case{}
-
-		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "covid_case", "nbTest") != nil {
-			continue
+		entry := &covidtracker.Case{
+			Department: line[dep],
 		}
+
 		entry.HospServiceCountRelated, err = atoi(line[nb])
 		if s.handleParsingErr(err, "covid_case", "txPos") != nil {
 			continue
@@ -71,6 +71,8 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		}
 		return result[i].NoticeDate.After(result[j].NoticeDate)
 	})
+
+	s.log.Debug(s.Ctx, "got %d case entries !", len(result))
 
 	return result, nil
 }

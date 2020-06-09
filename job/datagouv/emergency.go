@@ -12,6 +12,7 @@ import (
 var _ covidtracker.EmergencyService = &Service{}
 
 func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
+	s.log.Debug(s.Ctx, "refreshing emergency data...")
 
 	//Header of csv emergency file
 	const (
@@ -62,12 +63,10 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 			return nil, err
 		}
 
-		entry := &covidtracker.Emergency{}
-
-		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "emergency", "dep") != nil {
-			continue
+		entry := &covidtracker.Emergency{
+			Department: line[dep],
 		}
+
 		entry.Count, err = atoi(line[nbrePassTot])
 		if s.handleParsingErr(err, "emergency", "nbrePassTot") != nil {
 			continue
@@ -115,6 +114,8 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 		}
 		return result[i].PassageDate.After(result[j].PassageDate)
 	})
+
+	s.log.Debug(s.Ctx, "got %d emergency entries !", len(result))
 
 	return result, nil
 }

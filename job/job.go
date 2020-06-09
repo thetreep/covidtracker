@@ -15,6 +15,8 @@ type Job struct {
 	RiskJob RiskJob
 
 	RefreshJob RefreshJob
+
+	logger covidtracker.Logfer
 }
 
 // NewJob creates a new job

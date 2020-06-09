@@ -7,7 +7,7 @@ import (
 )
 
 type HospDAL struct {
-	GetFn      func(dep int, date time.Time) (*covidtracker.Hospitalization, error)
+	GetFn      func(dep string, date time.Time) (*covidtracker.Hospitalization, error)
 	GetInvoked bool
 
 	GetRangeFn      func(dep int, start, end time.Time) ([]*covidtracker.Hospitalization, error)
@@ -19,7 +19,7 @@ type HospDAL struct {
 
 var _ covidtracker.HospDAL = &HospDAL{}
 
-func (m *HospDAL) Get(dep int, date time.Time) (*covidtracker.Hospitalization, error) {
+func (m *HospDAL) Get(dep string, date time.Time) (*covidtracker.Hospitalization, error) {
 	m.GetInvoked = true
 	return m.GetFn(dep, date)
 }

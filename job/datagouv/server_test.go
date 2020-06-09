@@ -12,36 +12,38 @@ import (
 	"github.com/thetreep/covidtracker/job/datagouv"
 )
 
-func DatagouvServer(t *testing.T) *httptest.Server {
+type DatagouvAPI struct{}
+
+func DatagouvServers(t *testing.T) (api *httptest.Server, opendata *httptest.Server) {
 	t.Helper()
-	return httptest.NewServer(
+
+	opendata = httptest.NewServer(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			file := "./testdata/"
-
-			//api datagouv
-			if strings.Contains(r.URL.Path, "/api/1/datasets/") {
-				n := strings.Replace(r.URL.Path, "/api/1/datasets/", "", -1)
-				switch n {
-				case string(datagouv.EmergencyDataset):
-					file += "emergency-dataset.json"
-				case string(datagouv.HospDataset):
-					file += "hospitalization-dataset.json"
-				case string(datagouv.ScreeningDataset):
-					file += "screening-dataset.json"
-				case string(datagouv.IndicDataset):
-					file += "indicator-dataset.json"
-				default:
-					t.Fatalf("unexpected path %q", r.URL.Path)
-				}
-				fmt.Fprint(w, strings.Replace(fileContent(file), "{{apiServerHost}}", r.URL.Host, -1))
-				return
-			}
-
 			//try to serve file
-			file += r.URL.Path
-			fmt.Fprint(w, fileContent(file))
+			fmt.Fprint(w, fileContent("./testdata/"+r.URL.Path))
 		}),
 	)
+
+	api = httptest.NewServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			file := "./testdata/"
+			n := strings.Replace(r.URL.Path, "/api/1/datasets/", "", -1)
+			switch n {
+			case string(datagouv.EmergencyDataset):
+				file += "emergency-dataset.json"
+			case string(datagouv.HospDataset):
+				file += "hospitalization-dataset.json"
+			case string(datagouv.ScreeningDataset):
+				file += "screening-dataset.json"
+			case string(datagouv.IndicDataset):
+				file += "indicator-dataset.json"
+			default:
+				t.Fatalf("unexpected path %q", r.URL.Path)
+			}
+			fmt.Fprint(w, strings.Replace(fileContent(file), "{{apiServerHost}}", opendata.URL, -1))
+		}),
+	)
+	return
 }
 
 func fileContent(filename string) string {

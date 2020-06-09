@@ -12,10 +12,13 @@ import (
 
 func TestRefreshIndicator(t *testing.T) {
 	t.Run("parsing", func(t *testing.T) {
-		ts := DatagouvServer(t)
-		defer ts.Close()
+		api, server := DatagouvServers(t)
+		defer func() {
+			api.Close()
+			server.Close()
+		}()
 
-		s := datagouv.Service{Ctx: context.Background(), BasePath: ts.URL}
+		s := datagouv.Service{Ctx: context.Background(), BasePath: api.URL}
 
 		inds, err := s.RefreshIndicator()
 		if err != nil {
@@ -33,22 +36,22 @@ func TestRefreshIndicator(t *testing.T) {
 		expected := []*covidtracker.Indicator{
 			{
 				ExtractDate: timeFn("2020-05-07"),
-				Department:  59,
+				Department:  "59",
 				Color:       "rouge",
 			},
 			{
 				ExtractDate: timeFn("2020-05-07"),
-				Department:  78,
+				Department:  "78",
 				Color:       "rouge",
 			},
 			{
 				ExtractDate: timeFn("2020-05-04"),
-				Department:  88,
+				Department:  "88",
 				Color:       "rouge",
 			},
 			{
 				ExtractDate: timeFn("2020-05-03"),
-				Department:  15,
+				Department:  "15",
 				Color:       "orange",
 			},
 		}

@@ -12,8 +12,8 @@ import (
 var _ covidtracker.HospService = &Service{}
 
 func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, error) {
+	s.log.Debug(s.Ctx, "refreshing hospitalization data...")
 
-	//TODO add limits to avoid duplicate
 	//header
 	const (
 		dep = iota
@@ -46,12 +46,10 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 			return nil, err
 		}
 
-		entry := &covidtracker.Hospitalization{}
-
-		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "hospitalization", "dep") != nil {
-			continue
+		entry := &covidtracker.Hospitalization{
+			Department: line[dep],
 		}
+
 		entry.Count, err = atoi(line[hosp])
 		if s.handleParsingErr(err, "hospitalization", "hosp") != nil {
 			continue
@@ -94,6 +92,8 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 		}
 		return result[i].Date.After(result[j].Date)
 	})
+
+	s.log.Debug(s.Ctx, "got %d hospitalization entries !", len(result))
 
 	return result, nil
 }

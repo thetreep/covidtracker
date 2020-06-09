@@ -121,11 +121,10 @@ type Service struct {
 }
 
 func NewService(ctx context.Context, l covidtracker.Logfer) *Service {
-	return &Service{Ctx: ctx, log: l}
+	return &Service{Ctx: ctx, BasePath: DatagouvBase, log: l}
 }
 
 func (s *Service) GetCSV(id ResourceID) (*csv.Reader, func() error, error) {
-
 	//get dataset resource URL
 	res, err := s.getResourceURL(id)
 	if err != nil {
@@ -133,7 +132,7 @@ func (s *Service) GetCSV(id ResourceID) (*csv.Reader, func() error, error) {
 	}
 
 	// download the resource file
-	resp, err := http.Get(s.BasePath + string(res))
+	resp, err := http.Get(string(res))
 	if err != nil {
 		return nil, nil, err
 	}
