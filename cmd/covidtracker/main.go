@@ -10,6 +10,7 @@ import (
 	"github.com/thetreep/covidtracker/http"
 	"github.com/thetreep/covidtracker/http/graphql"
 	"github.com/thetreep/covidtracker/job"
+	"github.com/thetreep/covidtracker/job/cds"
 	"github.com/thetreep/covidtracker/mongo"
 )
 
@@ -36,7 +37,11 @@ func main() {
 	riskHandler.Job = j.Risk()
 	riskHandler.DAL = mongo.Risk()
 
-	gql, err := graphql.NewHandler(pingHandler, riskHandler)
+	cds.Init()
+	HotelHandler := &graphql.HotelHandler{}
+	HotelHandler.Job = j.Hotels()
+
+	gql, err := graphql.NewHandler(pingHandler, riskHandler, HotelHandler)
 	if err != nil {
 		log.Fatal(err)
 	}
