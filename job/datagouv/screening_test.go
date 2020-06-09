@@ -32,17 +32,8 @@ func TestRefreshScreening(t *testing.T) {
 
 		expected := []*covidtracker.Screening{
 			&covidtracker.Screening{
-				Department:    1,
-				NoticeDate:    timeFn("2020-03-10"),
-				AgeGroup:      "0",
-				Count:         0,
-				PositiveCount: 0,
-				PositiveRate:  0,
-			},
-			&covidtracker.Screening{
-				Department:    3,
-				NoticeDate:    timeFn("2020-03-24"),
-				AgeGroup:      "C",
+				Department:    976,
+				NoticeDate:    timeFn("2020-05-23"),
 				Count:         0,
 				PositiveCount: 0,
 				PositiveRate:  0,
@@ -50,7 +41,6 @@ func TestRefreshScreening(t *testing.T) {
 			&covidtracker.Screening{
 				Department:    92,
 				NoticeDate:    timeFn("2020-04-27"),
-				AgeGroup:      "E",
 				Count:         47,
 				PositiveCount: 7,
 				PositiveRate:  13,
@@ -58,18 +48,23 @@ func TestRefreshScreening(t *testing.T) {
 			&covidtracker.Screening{
 				Department:    95,
 				NoticeDate:    timeFn("2020-03-26"),
-				AgeGroup:      "D",
-				Count:         18,
-				PositiveCount: 13,
-				PositiveRate:  13,
+				Count:         28,
+				PositiveCount: 24,
+				PositiveRate:  16,
 			},
 			&covidtracker.Screening{
-				Department:    976,
-				NoticeDate:    timeFn("2020-05-23"),
-				AgeGroup:      "E",
+				Department:    3,
+				NoticeDate:    timeFn("2020-03-24"),
 				Count:         0,
 				PositiveCount: 0,
 				PositiveRate:  0,
+			},
+			&covidtracker.Screening{
+				Department:    1,
+				NoticeDate:    timeFn("2020-03-10"),
+				Count:         12,
+				PositiveCount: 1,
+				PositiveRate:  1,
 			},
 		}
 		test.Compare(t, scrs, expected, "unexpected screenings")

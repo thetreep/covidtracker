@@ -25,7 +25,7 @@ func (j *RefreshJob) Refresh(caseD covidtracker.CaseDAL, emD covidtracker.Emerge
 		if err != nil {
 			return err
 		}
-		if err := caseD.Upsert(cases); err != nil {
+		if err := caseD.Upsert(cases...); err != nil {
 			return err
 		}
 	}
@@ -34,7 +34,7 @@ func (j *RefreshJob) Refresh(caseD covidtracker.CaseDAL, emD covidtracker.Emerge
 		if err != nil {
 			return err
 		}
-		if err := emD.Upsert(ems); err != nil {
+		if err := emD.Upsert(ems...); err != nil {
 			return err
 		}
 	}
@@ -43,7 +43,7 @@ func (j *RefreshJob) Refresh(caseD covidtracker.CaseDAL, emD covidtracker.Emerge
 		if err != nil {
 			return err
 		}
-		if err := hospD.Upsert(hosps); err != nil {
+		if err := hospD.Upsert(hosps...); err != nil {
 			return err
 		}
 	}
@@ -52,7 +52,7 @@ func (j *RefreshJob) Refresh(caseD covidtracker.CaseDAL, emD covidtracker.Emerge
 		if err != nil {
 			return err
 		}
-		if err := indicD.Upsert(indics); err != nil {
+		if err := indicD.Upsert(indics...); err != nil {
 			return err
 		}
 	}
@@ -61,7 +61,7 @@ func (j *RefreshJob) Refresh(caseD covidtracker.CaseDAL, emD covidtracker.Emerge
 		if err != nil {
 			return err
 		}
-		if err := scrD.Upsert(scrs); err != nil {
+		if err := scrD.Upsert(scrs...); err != nil {
 			return err
 		}
 	}

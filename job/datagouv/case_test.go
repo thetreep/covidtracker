@@ -33,15 +33,10 @@ func TestRefreshCase(t *testing.T) {
 
 		expected := []*covidtracker.Case{
 			&covidtracker.Case{
-				Department:              67,
-				NoticeDate:              timeFn("2020-05-10"),
-				HospServiceCountRelated: 28,
-			},
-			&covidtracker.Case{
 				ID:                      "",
-				Department:              57,
-				NoticeDate:              timeFn("2020-05-13"),
-				HospServiceCountRelated: 30,
+				Department:              973,
+				NoticeDate:              timeFn("2020-05-19"),
+				HospServiceCountRelated: 3,
 			},
 			&covidtracker.Case{
 				ID:                      "",
@@ -51,9 +46,14 @@ func TestRefreshCase(t *testing.T) {
 			},
 			&covidtracker.Case{
 				ID:                      "",
-				Department:              973,
-				NoticeDate:              timeFn("2020-05-19"),
-				HospServiceCountRelated: 3,
+				Department:              57,
+				NoticeDate:              timeFn("2020-05-13"),
+				HospServiceCountRelated: 30,
+			},
+			&covidtracker.Case{
+				Department:              67,
+				NoticeDate:              timeFn("2020-05-10"),
+				HospServiceCountRelated: 28,
 			},
 		}
 

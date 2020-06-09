@@ -2,6 +2,7 @@ package datagouv
 
 import (
 	"io"
+	"sort"
 	"strconv"
 	"time"
 
@@ -25,8 +26,9 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 	defer close()
 
 	var (
-		result []*covidtracker.Case
-		atoi   = strconv.Atoi
+		result      []*covidtracker.Case
+		resultByKey = make(map[string]*covidtracker.Case)
+		atoi        = strconv.Atoi
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -53,7 +55,22 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 			continue
 		}
 
-		result = append(result, entry)
+		//avoid duplicate
+		k := line[jour] + "_" + line[dep]
+		resultByKey[k] = entry
+
 	}
+
+	for _, e := range resultByKey {
+		result = append(result, e)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].NoticeDate.Equal(result[j].NoticeDate) {
+			return result[i].Department < result[j].Department
+		}
+		return result[i].NoticeDate.After(result[j].NoticeDate)
+	})
+
 	return result, nil
 }

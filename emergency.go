@@ -4,11 +4,9 @@ import "time"
 
 //Emergency regroups the stats about visit at emergency room
 type Emergency struct {
-	ID         EmergencyID `bson:"_id" json:"id"`
-	Department int         `bson:"dep" json:"dep"`
-	NoticeDate time.Time   `bson:"noticeDate" json:"noticeDate"`
-
-	AgeGroup AgeGroup `bson:"ageGroup" json:"ageGroup"`
+	ID          EmergencyID `bson:"_id" json:"id"`
+	Department  int         `bson:"dep" json:"dep"`
+	PassageDate time.Time   `bson:"passageDate" json:"passageDate"`
 
 	//Count is the number of visits
 	Count int `bson:"count" json:"count"`
@@ -30,7 +28,7 @@ type EmergencyService interface {
 }
 
 type EmergencyDAL interface {
-	Get(dep int, date time.Time) ([]*Emergency, error)
+	Get(dep int, date time.Time) (*Emergency, error)
 	GetRange(dep int, begin, end time.Time) ([]*Emergency, error)
-	Upsert([]*Emergency) error
+	Upsert(...*Emergency) error
 }

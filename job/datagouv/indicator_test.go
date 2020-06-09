@@ -32,16 +32,6 @@ func TestRefreshIndicator(t *testing.T) {
 
 		expected := []*covidtracker.Indicator{
 			{
-				ExtractDate: timeFn("2020-05-03"),
-				Department:  15,
-				Color:       "orange",
-			},
-			{
-				ExtractDate: timeFn("2020-05-04"),
-				Department:  88,
-				Color:       "rouge",
-			},
-			{
 				ExtractDate: timeFn("2020-05-07"),
 				Department:  59,
 				Color:       "rouge",
@@ -50,6 +40,16 @@ func TestRefreshIndicator(t *testing.T) {
 				ExtractDate: timeFn("2020-05-07"),
 				Department:  78,
 				Color:       "rouge",
+			},
+			{
+				ExtractDate: timeFn("2020-05-04"),
+				Department:  88,
+				Color:       "rouge",
+			},
+			{
+				ExtractDate: timeFn("2020-05-03"),
+				Department:  15,
+				Color:       "orange",
 			},
 		}
 

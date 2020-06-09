@@ -32,19 +32,8 @@ func TestRefreshEmergency(t *testing.T) {
 
 		expected := []*covidtracker.Emergency{
 			&covidtracker.Emergency{
-				Department:         1,
-				NoticeDate:         timeFn("2020-02-24"),
-				AgeGroup:           "0",
-				Count:              357,
-				Cov19SuspCount:     0,
-				Cov19SuspHosp:      0,
-				TotalSOSMedAct:     0,
-				SOSMedCov19SuspAct: 0,
-			},
-			&covidtracker.Emergency{
 				Department:         62,
-				NoticeDate:         timeFn("2020-05-25"),
-				AgeGroup:           "B",
+				PassageDate:        timeFn("2020-05-25"),
 				Count:              113,
 				Cov19SuspCount:     1,
 				Cov19SuspHosp:      0,
@@ -53,8 +42,7 @@ func TestRefreshEmergency(t *testing.T) {
 			},
 			&covidtracker.Emergency{
 				Department:         72,
-				NoticeDate:         timeFn("2020-05-25"),
-				AgeGroup:           "A",
+				PassageDate:        timeFn("2020-05-25"),
 				Count:              67,
 				Cov19SuspCount:     0,
 				Cov19SuspHosp:      0,
@@ -63,9 +51,17 @@ func TestRefreshEmergency(t *testing.T) {
 			},
 			&covidtracker.Emergency{
 				Department:         976,
-				NoticeDate:         timeFn("2020-05-25"),
-				AgeGroup:           "E",
+				PassageDate:        timeFn("2020-05-25"),
 				Count:              2,
+				Cov19SuspCount:     0,
+				Cov19SuspHosp:      0,
+				TotalSOSMedAct:     0,
+				SOSMedCov19SuspAct: 0,
+			},
+			&covidtracker.Emergency{
+				Department:         1,
+				PassageDate:        timeFn("2020-02-24"),
+				Count:              357,
 				Cov19SuspCount:     0,
 				Cov19SuspHosp:      0,
 				TotalSOSMedAct:     0,

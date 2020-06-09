@@ -2,6 +2,7 @@ package datagouv
 
 import (
 	"io"
+	"sort"
 	"strconv"
 	"time"
 
@@ -28,8 +29,9 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 	defer close()
 
 	var (
-		result []*covidtracker.Indicator
-		atoi   = strconv.Atoi
+		result      []*covidtracker.Indicator
+		resultByKey = make(map[string]*covidtracker.Indicator)
+		atoi        = strconv.Atoi
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -53,8 +55,22 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 			continue
 		}
 
-		result = append(result, entry)
+		//avoid duplicate
+		k := line[extractDate] + "_" + line[departement]
+		resultByKey[k] = entry
+
 	}
+
+	for _, e := range resultByKey {
+		result = append(result, e)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].ExtractDate.Equal(result[j].ExtractDate) {
+			return result[i].Department < result[j].Department
+		}
+		return result[i].ExtractDate.After(result[j].ExtractDate)
+	})
 
 	return result, nil
 }

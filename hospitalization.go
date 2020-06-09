@@ -8,9 +8,7 @@ import (
 type Hospitalization struct {
 	ID         HospID    `bson:"_id" json:"id"`
 	Department int       `bson:"dep" json:"dep"`
-	NoticeDate time.Time `bson:"noticeDate" json:"noticeDate"`
-
-	Sex string `bson:"sex" json:"sex"`
+	Date       time.Time `bson:"date" json:"date"`
 
 	//Count is the number of patient hospitalized
 	Count int `bson:"count" json:"count"`
@@ -29,7 +27,7 @@ type HospService interface {
 }
 
 type HospDAL interface {
-	Get(dep int, date time.Time) ([]*Hospitalization, error)
+	Get(dep int, date time.Time) (*Hospitalization, error)
 	GetRange(dep int, begin, end time.Time) ([]*Hospitalization, error)
-	Upsert([]*Hospitalization) error
+	Upsert(...*Hospitalization) error
 }

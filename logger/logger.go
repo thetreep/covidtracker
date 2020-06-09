@@ -59,7 +59,7 @@ func (l *Logger) HasErrWithFields(ctx context.Context, fields map[string]interfa
 		} else {
 			fields["tags"] = "error"
 		}
-		entry(ctx, fields, true).Warnf("error: %s", err) // Normally, all errors here should be at least with status Warn
+		l.entry(ctx, fields, true).Warnf("error: %s", err) // Normally, all errors here should be at least with status Warn
 		return true
 	}
 	return false

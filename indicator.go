@@ -16,7 +16,7 @@ type IndicService interface {
 }
 
 type IndicDAL interface {
-	Get(dep int, date time.Time) ([]*Indicator, error)
+	Get(dep int, date time.Time) (*Indicator, error)
 	GetRange(dep int, begin, end time.Time) ([]*Indicator, error)
-	Upsert([]*Indicator) error
+	Upsert(...*Indicator) error
 }
