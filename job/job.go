@@ -11,8 +11,9 @@ type Job struct {
 	Ctx context.Context
 	Now func() time.Time
 
-	RiskDAL covidtracker.RiskDAL
-	RiskJob RiskJob
+	RiskDAL       covidtracker.RiskDAL
+	RiskJob       RiskJob
+	ParametersDAL covidtracker.ParametersDAL
 }
 
 // NewJob creates a new job

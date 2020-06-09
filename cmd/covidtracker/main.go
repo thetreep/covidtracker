@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/thetreep/covidtracker"
 	"github.com/thetreep/covidtracker/http"
 	"github.com/thetreep/covidtracker/http/graphql"
 	"github.com/thetreep/covidtracker/job"
@@ -29,12 +30,17 @@ func main() {
 
 	j := job.NewJob()
 	j.RiskDAL = mongo.Risk()
+	j.ParametersDAL = mongo.Parameters()
 
 	pingHandler := &graphql.PingHandler{}
 
 	riskHandler := &graphql.RiskHandler{}
 	riskHandler.Job = j.Risk()
 	riskHandler.DAL = mongo.Risk()
+
+	if err := createDefaultParametersIfMissing(mongo.Parameters()); err != nil {
+		log.Fatal(err)
+	}
 
 	gql, err := graphql.NewHandler(pingHandler, riskHandler)
 	if err != nil {
@@ -63,4 +69,295 @@ func main() {
 	}
 	s.Close()
 
+}
+
+func createDefaultParametersIfMissing(dal covidtracker.ParametersDAL) error {
+	_, err := dal.GetDefault()
+	if err == nil {
+		return nil // default parameters are already existing
+	}
+	if err != covidtracker.ErrNoParametersDefined {
+		return err
+	}
+	defaultParams := &covidtracker.Parameters{
+		IsDefault: true,
+		ParametersByScope: map[covidtracker.ParameterScope]covidtracker.RiskParameter{
+			{Transportation: covidtracker.Aircraft, Duration: covidtracker.Long}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Segment avion long"},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.Aircraft, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.Aircraft, Duration: covidtracker.Short}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Segment avion court"},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TGV, Duration: covidtracker.Long}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Segment train long"},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TGV, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TGV, Duration: covidtracker.Short}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Segment train court"},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TER, Duration: covidtracker.Long}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Segment train long"},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TER, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TER, Duration: covidtracker.Short}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Segment train court"},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.CarSolo, Duration: covidtracker.Long}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Vous êtes seul(e) dans la voiture"},
+				Minuses:                []string{"Segment voiture long, il faudra probablement s'arrêter à une pompe à essence"},
+				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
+			},
+			{Transportation: covidtracker.CarSolo, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Vous êtes seul(e) dans la voiture"},
+				Minuses:                []string{},
+				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
+			},
+			{Transportation: covidtracker.CarSolo, Duration: covidtracker.Short}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Segment voiture court", "Vous êtes seul(e) dans la voiture"},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.CarDuo, Duration: covidtracker.Long}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Segment voiture long, il faudra probablement s'arrêter à une pompe à essence", "Vous êtes plusieurs dans voiture"},
+				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
+			},
+			{Transportation: covidtracker.CarDuo, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
+				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
+			},
+			{Transportation: covidtracker.CarDuo, Duration: covidtracker.Short}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Segment voiture court"},
+				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.CarGroup, Duration: covidtracker.Long}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Segment voiture long, il faudra probablement s'arrêter à une pompe à essence", "Vous êtes plusieurs dans voiture"},
+				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
+			},
+			{Transportation: covidtracker.CarGroup, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
+				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
+			},
+			{Transportation: covidtracker.CarGroup, Duration: covidtracker.Short}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{"Segment voiture court"},
+				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Long}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Short}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TaxiSolo, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.TaxiGroup, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{"Vous êtes plusieurs passagers dans le taxi"},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.Scooter, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+			{Transportation: covidtracker.Bike, Duration: covidtracker.Normal}: {
+				NbDirect:               5,
+				ProbaContagionDirect:   0.7,
+				NbContact:              2,
+				ProbaContagionContact:  0.5,
+				NbIndirect:             300,
+				ProbaContagionIndirect: 0.1,
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+			},
+		},
+	}
+	return dal.Insert(defaultParams)
 }
