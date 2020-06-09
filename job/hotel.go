@@ -13,10 +13,18 @@ type HotelJob struct {
 
 var _ covidtracker.HotelJob = &HotelJob{}
 
-func (j *HotelJob) HotelsByPrefix(prefix string) ([]covidtracker.Hotel, error) {
+func (j *HotelJob) HotelsByPrefix(prefix string) ([]*covidtracker.Hotel, error) {
 	hotels, err := cds.Service.HotelsByPrefix(prefix)
 	if err != nil {
 		return nil, fmt.Errorf("cannot get hotels: %s", err)
 	}
-	return hotels, nil
+	var hotelsFr []*covidtracker.Hotel
+	for _, h := range hotels {
+		// We skip hotels that are not in France
+		if h.Country != "FR" {
+			continue
+		}
+		hotelsFr = append(hotelsFr, h)
+	}
+	return hotelsFr, nil
 }

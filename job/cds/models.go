@@ -1,5 +1,7 @@
 package cds
 
+import "github.com/thetreep/covidtracker"
+
 type AuthentificationReq struct {
 	Username string `json:"Username,omitempty"`
 	Password string `json:"Password,omitempty"`
@@ -71,4 +73,19 @@ type hotelResultResp struct {
 	Message           string  `json:"Message"`
 	RequestedURI      string  `json:"RequestedUri"`
 	Result            int     `json:"Result"`
+}
+
+func (h hotel) ToHotel() *covidtracker.Hotel {
+	hotel := &covidtracker.Hotel{
+		Name:          h.HtlName,
+		Address:       h.HtlAddress1,
+		City:          h.HtlCity,
+		ZipCode:       h.HtlZipCode,
+		Country:       h.CntCd,
+		ImageURL:      h.ImageURL,
+		SanitaryInfos: h.AditionalInfoDescriptionListFr,
+		SanitaryNote:  h.SanitaryNote,
+		SanitaryNorm:  h.SanitaryNorm,
+	}
+	return hotel
 }
