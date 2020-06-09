@@ -15,6 +15,7 @@ type Job struct {
 	RiskJob RiskJob
 
 	RefreshJob RefreshJob
+	HotelJob   HotelJob
 
 	logger covidtracker.Logfer
 }
@@ -27,6 +28,7 @@ func NewJob(refresher covidtracker.Refresher) *Job {
 		job:       j,
 		Refresher: refresher,
 	}
+	j.HotelJob.job = j
 	return j
 }
 
@@ -35,3 +37,6 @@ func (j *Job) Risk() covidtracker.RiskJob { return &j.RiskJob }
 
 // Refresh returns the refresher job associated with the client
 func (j *Job) Refresh() covidtracker.RefreshJob { return &j.RefreshJob }
+
+// Hotels returns hotels search by the client
+func (j *Job) Hotels() covidtracker.HotelJob { return &j.HotelJob }

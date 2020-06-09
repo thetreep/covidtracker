@@ -1,0 +1,8 @@
+{
+    "Token": "my-cds-auth-token",
+    "AgentDutyCode": "CDS_HACKATHON",
+    "Login": "THETREEP",
+    "ApiHttpStatusCode": 200,
+    "RequestedUri": "http://bookings.cdsgroupe.com/hackathon/v1/Authenticate",
+    "Message": "Authorized : credentials are valid"
+}
