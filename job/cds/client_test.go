@@ -42,12 +42,13 @@ func TestHotelsByPrefix(t *testing.T) {
 			t.Fatalf("got %d, want %d", got, want)
 		}
 		fmt.Println(hotels[0])
-		exphotels := []covidtracker.Hotel{
-			covidtracker.Hotel{
+		exphotels := []*covidtracker.Hotel{
+			&covidtracker.Hotel{
 				Name:     "Ibis Budget Marseille Timone",
 				Address:  "69, Boulevard Sakakini",
 				City:     "Marseille",
 				ZipCode:  "13005",
+				Country:  "FR",
 				ImageURL: "https://bookings.cdsgroupe.com/photos/Search/FR/ACC/251/ACC2514.jpg",
 				SanitaryInfos: []string{
 					"Enregistrement & Règlement en ligne",

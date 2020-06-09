@@ -14,8 +14,7 @@ import (
 
 const (
 	authenticatePath  = "Authenticate"
-	searchPath        = "hotelSearch"
-	hotelByPrefixPath = "https://bookings.cdsgroupe.com/cds-api-test/v1/Hotels"
+	hotelByPrefixPath = "Hotels"
 )
 
 var (
@@ -28,9 +27,26 @@ var (
 	AgentDutyCode = os.Getenv("THETREEP_COVIDTRACKER_CDS_API_DUTY_CODE")
 )
 
+var (
+	Service cdsAPI
+)
+
+type cdsAPI interface {
+	HotelsByPrefix(p string) ([]*covidtracker.Hotel, error)
+}
+
+type tracedCDSService struct {
+	service cdsAPI
+}
+
 func Init() {
-	endpoint = testEndPoint
+	endpoint = prodEndPoint
 	Service = &tracedCDSService{service: newClient(nil)}
+}
+
+func (s *tracedCDSService) HotelsByPrefix(p string) ([]*covidtracker.Hotel, error) {
+	out, err := s.service.HotelsByPrefix(p)
+	return out, err
 }
 
 type Client struct {
@@ -52,7 +68,7 @@ func newClient(httpClient *http.Client) *Client {
 	return c
 }
 
-func (c *Client) HotelsByPrefix(p string) ([]covidtracker.Hotel, error) {
+func (c *Client) HotelsByPrefix(p string) ([]*covidtracker.Hotel, error) {
 	clientCode, user, pwd := AgentDutyCode, User, Password
 	err := c.authenticate(user, pwd)
 	if err != nil {
@@ -63,7 +79,7 @@ func (c *Client) HotelsByPrefix(p string) ([]covidtracker.Hotel, error) {
 		"prefix":        []string{p},
 	}
 
-	req, err := c.NewRequest("GET", "Hotels", nil, params)
+	req, err := c.NewRequest("GET", hotelByPrefixPath, nil, params)
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +89,9 @@ func (c *Client) HotelsByPrefix(p string) ([]covidtracker.Hotel, error) {
 	if err != nil {
 		return nil, fmt.Errorf("cannot search hotel: %s", err)
 	}
-	var hotels []covidtracker.Hotel
+	var hotels []*covidtracker.Hotel
 	for _, h := range resp.Hotels {
+		// We skip hotels that are not in France
 		if h.CntCd != "FR" {
 			continue
 		}
@@ -85,25 +102,10 @@ func (c *Client) HotelsByPrefix(p string) ([]covidtracker.Hotel, error) {
 	return hotels, nil
 }
 
-func (h hotel) ToHotel() covidtracker.Hotel {
-	hotel := covidtracker.Hotel{
-		Name:          h.HtlName,
-		Address:       h.HtlAddress1,
-		City:          h.HtlCity,
-		ZipCode:       h.HtlZipCode,
-		ImageURL:      h.ImageURL,
-		SanitaryInfos: h.AditionalInfoDescriptionListFr,
-		SanitaryNote:  h.SanitaryNote,
-		SanitaryNorm:  h.SanitaryNorm,
-	}
-	return hotel
-}
-
 //authenticate client to get a authToken from username/password credentials
 func (c *Client) authenticate(user, pwd string) error {
 	req, err := c.NewRequest("POST", "Authenticate", AuthentificationReq{Username: user, Password: pwd})
 	req.Header.Set("Content-Type", "application/json")
-	fmt.Println(req.URL)
 	var result AuthentificationResp
 	_, err = c.Do(req, &result)
 	if err != nil {

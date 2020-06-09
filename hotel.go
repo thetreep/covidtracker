@@ -6,6 +6,7 @@ type Hotel struct {
 	Address       string   `json:"address"`
 	City          string   `json:"city"`
 	ZipCode       string   `json:"zip_code"`
+	Country       string   `json:"country"`
 	ImageURL      string   `json:"ImageUrl"`
 	SanitaryInfos []string `json:"sanitary_infos"`
 	SanitaryNote  float64  `json:"sanitary_note"`
@@ -13,5 +14,5 @@ type Hotel struct {
 }
 
 type HotelJob interface {
-	HotelsByPrefix(prefix string) ([]Hotel, error)
+	HotelsByPrefix(prefix string) ([]*Hotel, error)
 }
