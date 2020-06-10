@@ -19,18 +19,21 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 		NoticeDate: time.Now(),
 	}
 	for i, seg := range segs {
+		//TODO get sanitory note if seg.HotelID != nil
 		segRisk, err := j.computeSegmentRisk(seg, protects)
 		if err != nil {
 			return nil, fmt.Errorf("cannot compute risk for segment %d: %s", i, err)
 		}
 		r.BySegments = append(r.BySegments, segRisk)
 	}
+
 	if err := j.aggregateSegmentRisk(r); err != nil {
 		return nil, fmt.Errorf("cannot aggregate risk of %d segments: %s", len(segs), err)
 	}
 	if err := j.aggregateReport(r, protects); err != nil {
 		return nil, fmt.Errorf("cannot compute report: %s", err)
 	}
+
 	return r, nil
 }
 
@@ -68,112 +71,114 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 	duration := seg.Arrival.Sub(seg.Departure)
 
 	// @todo: use real values here !
-	switch seg.Transportation {
-	case covidtracker.Aircraft:
-		if duration != 0 && duration <= 4*time.Hour {
-			addPlus(string(covidtracker.Aircraft), "Segment avion court")
-			riskLevel = 0.55
-			maskProtect *= 0.8
-			gelProtect *= 0.05
-		} else {
-			if duration != 0 {
-				addMinus(string(covidtracker.Aircraft), "Segment avion long")
+	if seg.Transportation != nil {
+		switch *seg.Transportation {
+		case covidtracker.Aircraft:
+			if duration != 0 && duration <= 4*time.Hour {
+				addPlus(string(covidtracker.Aircraft), "Segment avion court")
+				riskLevel = 0.55
+				maskProtect *= 0.8
+				gelProtect *= 0.05
+			} else {
+				if duration != 0 {
+					addMinus(string(covidtracker.Aircraft), "Segment avion long")
+				}
+				riskLevel = 0.65
+				maskProtect *= 0.75
+				gelProtect *= 0.10
 			}
-			riskLevel = 0.65
-			maskProtect *= 0.75
-			gelProtect *= 0.10
-		}
-	case covidtracker.TER, covidtracker.TGV:
-		if duration != 0 && duration <= 2*time.Hour {
-			riskLevel = 0.45
-			maskProtect *= 0.8
-			gelProtect *= 0.1
-			addPlus(string(covidtracker.Aircraft), "Segment train court")
-		} else {
-			riskLevel = 0.55
-			maskProtect *= 0.7
-			gelProtect *= 0.2
-			if duration != 0 {
-				addMinus(string(covidtracker.Aircraft), "Segment train long")
+		case covidtracker.TER, covidtracker.TGV:
+			if duration != 0 && duration <= 2*time.Hour {
+				riskLevel = 0.45
+				maskProtect *= 0.8
+				gelProtect *= 0.1
+				addPlus(string(covidtracker.Aircraft), "Segment train court")
+			} else {
+				riskLevel = 0.55
+				maskProtect *= 0.7
+				gelProtect *= 0.2
+				if duration != 0 {
+					addMinus(string(covidtracker.Aircraft), "Segment train long")
+				}
 			}
-		}
-	case covidtracker.CarSolo:
-		addPlus(string(covidtracker.Car), "Vous êtes seul(e) dans la voiture")
-		if duration != 0 && duration <= 3*time.Hour {
-			addPlus(string(covidtracker.Car), "Segment voiture court")
-			riskLevel = 0.01
-			maskProtect *= 0.0
-			gelProtect *= 0.1
-		} else {
-			if duration != 0 {
-				addMinus(string(covidtracker.Car), "Segment voiture long, il faudra probablement s'arrêter à une pompe à essence")
+		case covidtracker.CarSolo:
+			addPlus(string(covidtracker.Car), "Vous êtes seul(e) dans la voiture")
+			if duration != 0 && duration <= 3*time.Hour {
+				addPlus(string(covidtracker.Car), "Segment voiture court")
+				riskLevel = 0.01
+				maskProtect *= 0.0
+				gelProtect *= 0.1
+			} else {
+				if duration != 0 {
+					addMinus(string(covidtracker.Car), "Segment voiture long, il faudra probablement s'arrêter à une pompe à essence")
+				}
+				riskLevel = 0.30
+				maskProtect *= 0.75
+				gelProtect *= 0.5
 			}
-			riskLevel = 0.30
-			maskProtect *= 0.75
-			gelProtect *= 0.5
-		}
-	case covidtracker.CarDuo:
-		addMinus(string(covidtracker.Car), "Vous êtes plusieurs dans la voiture")
-		if duration != 0 && duration <= 3*time.Hour {
-			addPlus(string(covidtracker.Car), "Segment voiture court")
-			riskLevel = 0.6
-			maskProtect *= 0.7
-			gelProtect *= 0.1
-		} else {
-			if duration != 0 {
-				addMinus(string(covidtracker.Car), "Segment voiture long, il faudra probablement s'arrêter à une pompe à essence")
-			}
+		case covidtracker.CarDuo:
+			addMinus(string(covidtracker.Car), "Vous êtes plusieurs dans la voiture")
+			if duration != 0 && duration <= 3*time.Hour {
+				addPlus(string(covidtracker.Car), "Segment voiture court")
+				riskLevel = 0.6
+				maskProtect *= 0.7
+				gelProtect *= 0.1
+			} else {
+				if duration != 0 {
+					addMinus(string(covidtracker.Car), "Segment voiture long, il faudra probablement s'arrêter à une pompe à essence")
+				}
 
-			riskLevel = 0.8
-			maskProtect *= 0.8
-			gelProtect *= 0.2
-		}
-	case covidtracker.CarGroup:
-		addMinus(string(covidtracker.Car), "Vous êtes plusieurs dans la voiture")
-		if duration != 0 && duration <= 3*time.Hour {
-			addPlus(string(covidtracker.Car), "Segment voiture court")
-			riskLevel = 0.7
-			maskProtect *= 0.8
-			gelProtect *= 0.1
-		} else {
-			if duration != 0 {
-				addMinus(string(covidtracker.Car), "Segment voiture long, il faudra probablement s'arrêter à une pompe à essence")
+				riskLevel = 0.8
+				maskProtect *= 0.8
+				gelProtect *= 0.2
 			}
-			riskLevel = 0.7
-			maskProtect *= 0.8
+		case covidtracker.CarGroup:
+			addMinus(string(covidtracker.Car), "Vous êtes plusieurs dans la voiture")
+			if duration != 0 && duration <= 3*time.Hour {
+				addPlus(string(covidtracker.Car), "Segment voiture court")
+				riskLevel = 0.7
+				maskProtect *= 0.8
+				gelProtect *= 0.1
+			} else {
+				if duration != 0 {
+					addMinus(string(covidtracker.Car), "Segment voiture long, il faudra probablement s'arrêter à une pompe à essence")
+				}
+				riskLevel = 0.7
+				maskProtect *= 0.8
+				gelProtect *= 0.1
+			}
+		case covidtracker.TaxiSolo:
+			riskLevel = 0.45
+			maskProtect *= 0.7
 			gelProtect *= 0.1
-		}
-	case covidtracker.TaxiSolo:
-		riskLevel = 0.45
-		maskProtect *= 0.7
-		gelProtect *= 0.1
-	case covidtracker.TaxiGroup:
-		addMinus(string(covidtracker.TaxiGroup), "Vous êtes plusieurs passagers dans le taxi")
-		riskLevel = 0.6
-		maskProtect *= 0.8
-		gelProtect *= 0.1
-	case covidtracker.PublicTransports:
-		if duration != 0 && duration <= 20*time.Hour {
-			addPlus(string(covidtracker.PublicTransports), "Segment de transports en commun court")
-			riskLevel = 0.5
-			maskProtect *= 0.8
-			gelProtect *= 0.25
-		} else {
-			addMinus(string(covidtracker.PublicTransports), "Segment de transports en commun long")
+		case covidtracker.TaxiGroup:
+			addMinus(string(covidtracker.TaxiGroup), "Vous êtes plusieurs passagers dans le taxi")
 			riskLevel = 0.6
 			maskProtect *= 0.8
-			gelProtect *= 0.25
+			gelProtect *= 0.1
+		case covidtracker.PublicTransports:
+			if duration != 0 && duration <= 20*time.Hour {
+				addPlus(string(covidtracker.PublicTransports), "Segment de transports en commun court")
+				riskLevel = 0.5
+				maskProtect *= 0.8
+				gelProtect *= 0.25
+			} else {
+				addMinus(string(covidtracker.PublicTransports), "Segment de transports en commun long")
+				riskLevel = 0.6
+				maskProtect *= 0.8
+				gelProtect *= 0.25
+			}
+		case covidtracker.Scooter:
+			riskLevel = 0.01
+			maskProtect *= 0.1
+			gelProtect *= 0.05
+		case covidtracker.Bike:
+			riskLevel = 0.005
+			maskProtect *= 0.1
+			gelProtect *= 0.05
+		default:
+			return risk, fmt.Errorf("invalid transportation mode %q", *seg.Transportation)
 		}
-	case covidtracker.Scooter:
-		riskLevel = 0.01
-		maskProtect *= 0.1
-		gelProtect *= 0.05
-	case covidtracker.Bike:
-		riskLevel = 0.005
-		maskProtect *= 0.1
-		gelProtect *= 0.05
-	default:
-		return risk, fmt.Errorf("invalid transportation mode %q", seg.Transportation)
 	}
 	if duration > 4*time.Hour {
 		addAdvice(string(covidtracker.Mask), "Votre voyage est long, emportez plusieurs masques")
