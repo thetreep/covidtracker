@@ -1,4 +1,4 @@
-package insee
+package covidtracker
 
 import "fmt"
 
