@@ -71,7 +71,7 @@ func main() {
 
 }
 
-func createDefaultParametersIfMissing(dal covidtracker.ParametersDAL) error {
+func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error {
 	_, err := dal.GetDefault()
 	if err == nil {
 		return nil // default parameters are already existing
@@ -79,7 +79,7 @@ func createDefaultParametersIfMissing(dal covidtracker.ParametersDAL) error {
 	if err != covidtracker.ErrNoParametersDefined {
 		return err
 	}
-	defaultParams := &covidtracker.Parameters{
+	defaultParams := &covidtracker.RiskParameters{
 		IsDefault: true,
 		ParametersByScope: map[covidtracker.ParameterScope]covidtracker.RiskParameter{
 			{Transportation: covidtracker.Aircraft, Duration: covidtracker.Long}: {

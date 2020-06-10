@@ -13,7 +13,7 @@ type Job struct {
 
 	RiskDAL       covidtracker.RiskDAL
 	RiskJob       RiskJob
-	ParametersDAL covidtracker.ParametersDAL
+	ParametersDAL covidtracker.RiskParametersDAL
 }
 
 // NewJob creates a new job

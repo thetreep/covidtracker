@@ -21,12 +21,12 @@ const (
 	Bike             Transportation = "bike"
 )
 
-func (t *Transportation) ToDuration(departure, arrival time.Time) TransportationDuration {
+func (t *Transportation) Duration(departure, arrival time.Time) TransportationDuration {
 	if t == nil || departure.IsZero() || arrival.IsZero() {
 		return Normal
 	}
 	duration := arrival.Sub(departure)
-	if duration == 0 {
+	if duration <= 0 {
 		return Normal
 	}
 	switch *t {

@@ -8,25 +8,25 @@ import (
 )
 
 // Ensure ParametersService implements covidtracker.ParametersService and Accessor
-var _ covidtracker.ParametersDAL = &ParametersDAL{}
-var _ Accessor = &ParametersDAL{}
+var _ covidtracker.RiskParametersDAL = &RiskParametersDAL{}
+var _ Accessor = &RiskParametersDAL{}
 
-type ParametersDAL struct {
+type RiskParametersDAL struct {
 	client     *Client
 	collection *mongo.Collection
 }
 
-func (s *ParametersDAL) Client() *Client {
+func (s *RiskParametersDAL) Client() *Client {
 	return s.client
 }
 
-func (s *ParametersDAL) Collection() *mongo.Collection {
+func (s *RiskParametersDAL) Collection() *mongo.Collection {
 	return s.collection
 }
 
 // GetDefault returns the default parameters from db
-func (s *ParametersDAL) GetDefault() (*covidtracker.Parameters, error) {
-	var result *covidtracker.Parameters
+func (s *RiskParametersDAL) GetDefault() (*covidtracker.RiskParameters, error) {
+	var result *covidtracker.RiskParameters
 	if err := s.collection.FindOne(s.client.Ctx, bson.M{"default": true}).Decode(&result); err != nil && err != mongo.ErrNoDocuments {
 		return nil, covidtracker.Errorf("error while getting parameters: %s", err)
 	} else if err == mongo.ErrNoDocuments {
@@ -35,8 +35,8 @@ func (s *ParametersDAL) GetDefault() (*covidtracker.Parameters, error) {
 	return result, nil
 }
 
-// Create creates new parameters.
-func (s *ParametersDAL) Insert(params *covidtracker.Parameters) error {
+// Insert creates new parameters.
+func (s *RiskParametersDAL) Insert(params *covidtracker.RiskParameters) error {
 	if params == nil {
 		return covidtracker.ErrDocRequired("parameters")
 	}

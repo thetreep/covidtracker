@@ -21,8 +21,8 @@ type Client struct {
 	Ctx context.Context
 
 	// DAL
-	risk       RiskDAL
-	parameters ParametersDAL
+	risk           RiskDAL
+	riskParameters RiskParametersDAL
 
 	mongo    *mongo.Client
 	database *mongo.Database
@@ -67,7 +67,7 @@ func (c *Client) Open() error {
 
 	c.database = c.mongo.Database(mongoDatabase)
 	c.risk.collection = c.database.Collection("risk")
-	c.parameters.collection = c.database.Collection("parameters")
+	c.riskParameters.collection = c.database.Collection("parameters")
 
 	return nil
 }
@@ -81,7 +81,7 @@ func (c *Client) Close() error {
 func (c *Client) Risk() covidtracker.RiskDAL { return &c.risk }
 
 // Parameters returns the dal for parameters
-func (c *Client) Parameters() covidtracker.ParametersDAL { return &c.parameters }
+func (c *Client) Parameters() covidtracker.RiskParametersDAL { return &c.riskParameters }
 
 type Accessor interface {
 	Client() *Client

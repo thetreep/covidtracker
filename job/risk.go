@@ -74,7 +74,7 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 	if err != nil {
 		return risk, err
 	}
-	scope := covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: seg.Transportation.ToDuration(seg.Departure, seg.Arrival)}
+	scope := covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: seg.Transportation.Duration(seg.Departure, seg.Arrival)}
 	params, ok := parameters.ParametersByScope[scope]
 	if !ok {
 		logger.Info(j.job.Ctx, "no parameters for this scope with transportation and duration, fallback on transportation 'Normal'")

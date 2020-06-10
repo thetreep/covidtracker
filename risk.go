@@ -39,32 +39,32 @@ type RiskSegment struct {
 	Report          Report  `bson:"report" json:"report"`
 }
 
-type Parameters struct {
+type RiskParameters struct {
 	// Use to splecify that these are the default parameters
 	IsDefault bool `bson:"default" json:"default"`
 
 	// The parameters associated to a scope
-	ParametersByScope map[ParameterScope]RiskParameter `bson:"parameters_by_scope" json:"parameters_by_scope"`
+	ParametersByScope map[ParameterScope]RiskParameter `bson:"parametersByScope" json:"parametersByScope"`
 }
 
 type RiskParameter struct {
 	// The number of persons with direct projection possible
-	NbDirect int `bson:"nb_direct" json:"nb_direct"`
+	NbDirect int `bson:"nbDirect" json:"nbDirect"`
 
 	// The probability of contagion via direct projection with an infectious person
-	ProbaContagionDirect float64 `bson:"proba_contagion_direct" json:"proba_contagion_direct"`
+	ProbaContagionDirect float64 `bson:"probaContagionDirect" json:"probaContagionDirect"`
 
 	// The number of persons with direct contact with the person
-	NbContact int `bson:"nb_contact" json:"nb_contact"`
+	NbContact int `bson:"nbContact" json:"nbContact"`
 
 	// The probability of contagion via direct contact with an infectious person
-	ProbaContagionContact float64 `bson:"proba_contagion_contact" json:"proba_contagion_contact"`
+	ProbaContagionContact float64 `bson:"probaContagionContact" json:"probaContagionContact"`
 
 	// The number of persons with indirect contact
-	NbIndirect int `bson:"nb_indirect" json:"nb_indirect"`
+	NbIndirect int `bson:"nbIndirect" json:"nbIndirect"`
 
 	// The probability of contagion via indirect contact with an infectious person
-	ProbaContagionIndirect float64 `bson:"proba_contagion_indirect" json:"proba_contagion_indirect"`
+	ProbaContagionIndirect float64 `bson:"probaContagionIndirect" json:"probaContagionIndirect"`
 
 	// The Pluses of this kind of segment
 	Pluses []string `bson:"pluses" json:"pluses"`
@@ -95,8 +95,8 @@ type RiskJob interface {
 	ComputeRisk(segs []Segment, protects []Protection) (*Risk, error)
 }
 
-//ParametersDAL defines the data access layer of risk parameters
-type ParametersDAL interface {
-	GetDefault() (*Parameters, error)
-	Insert(p *Parameters) error
+//RiskParametersDAL defines the data access layer of risk parameters
+type RiskParametersDAL interface {
+	GetDefault() (*RiskParameters, error)
+	Insert(p *RiskParameters) error
 }
