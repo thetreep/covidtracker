@@ -77,12 +77,19 @@ func (c *Client) Open() error {
 
 	c.database = c.mongo.Database(mongoDatabase)
 	c.risk.collection = c.database.Collection("risk")
-	c.riskParameters.collection = c.database.Collection("parameters")
+	c.risk.client = c
+	c.riskParameters.collection = c.database.Collection("risk_parameters")
+	c.riskParameters.client = c
 	c.covCase.collection = c.database.Collection("case")
+	c.covCase.client = c
 	c.emergency.collection = c.database.Collection("emergency")
+	c.emergency.client = c
 	c.hospitalization.collection = c.database.Collection("hospitalization")
+	c.hospitalization.client = c
 	c.indic.collection = c.database.Collection("indicator")
+	c.indic.client = c
 	c.screening.collection = c.database.Collection("screening")
+	c.screening.client = c
 
 	return nil
 }
