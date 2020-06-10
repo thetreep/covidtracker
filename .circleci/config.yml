@@ -69,7 +69,7 @@ jobs:
             docker create -v /go/src/github.com/thetreep/covidtracker --name sources golang:1.14 /bin/true
             docker cp /go/src/github.com/thetreep/covidtracker sources:/go/src/github.com/thetreep
             docker run --rm -e GO111MODULE="off" --volumes-from sources -w /go/src/github.com/thetreep/covidtracker/cmd/refresher golang:1.14 go build -o refresher
-            docker cp sources:/go/src/github.com/thetreep/covidtracker/cmd/refresher/refresher /go/src/github.com/thetreep/refresher/refresher
+            docker cp sources:/go/src/github.com/thetreep/covidtracker/cmd/refresher/refresher /go/src/github.com/thetreep/covidtracker/refresher
       - run:
           name: building docker image
           command: docker build --rm=false -t eu.gcr.io/the-treep-api-1525507752734/covidtracker-refresher:$CIRCLE_SHA1 -f ./Dockerfile.refresher .
@@ -136,6 +136,7 @@ workflows:
           context: TheTreep
           requires:
             - build_docker_image
+            - build_refresher
           filters:
             branches:
               only:
