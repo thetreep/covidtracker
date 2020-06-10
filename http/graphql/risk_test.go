@@ -11,6 +11,7 @@ import (
 	"github.com/thetreep/covidtracker/http/graphql"
 	"github.com/thetreep/covidtracker/mock"
 
+	"github.com/thetreep/toolbox/convert"
 	"github.com/thetreep/toolbox/test"
 )
 
@@ -29,16 +30,17 @@ func TestEstimate(t *testing.T) {
 	client := NewClient(ctx, server.URL)
 
 	tplFull := `
-	query ($segs: [segmentIn], $prots: [protectionIn]) {
+	query ($segs: [segmentIn], $prots: [protectionIn], $hots: [hotelIn]) {
 		risk(
 			segments:$segs,
-			protections:$prots
+			protections:$prots,
+			hotels:$hots
 		) {
 			bySegments {
 				riskLevel
 				segment {
-					origin
-					destination
+					origin { properties { geocoding {postcode,city,locality}}}
+					destination { properties { geocoding {postcode,city,locality}}}
 				}
 			}
 			riskLevel
@@ -52,10 +54,11 @@ func TestEstimate(t *testing.T) {
 	}`
 
 	tplReport := `
-	query ($segs: [segmentIn], $prots: [protectionIn]) {
+	query ($segs: [segmentIn], $prots: [protectionIn], $hots: [hotelIn]) {
 		risk(
 			segments:$segs,
-			protections:$prots
+			protections:$prots,
+			hotels:$hots
 		) {
 			report {
 				minuses {value}
@@ -66,10 +69,11 @@ func TestEstimate(t *testing.T) {
 	}`
 
 	tplRisk := `
-	query ($segs: [segmentIn], $prots: [protectionIn]) {
+	query ($segs: [segmentIn], $prots: [protectionIn], $hots: [hotelIn]) {
 		risk(
 			segments:$segs,
-			protections:$prots
+			protections:$prots,
+			hotels:$hots
 		) {
 			riskLevel
 		}
@@ -79,12 +83,13 @@ func TestEstimate(t *testing.T) {
 		got, err := client.Do(tplFull, map[string]interface{}{
 			"segs":  []covidtracker.Segment{},
 			"prots": []covidtracker.Protection{},
+			"hots":  []graphql.HotelInput{},
 		})
 		expected := &gqlResp{
 			Data:   map[string]interface{}{"risk": nil},
-			Errors: []gqlErr{{Message: "at least one `segment` is mandatory"}},
+			Errors: []gqlErr{{Message: "at least one `segment` or `hotel` is mandatory"}},
 		}
-		test.Compare(t, err.Error(), "at least one `segment` is mandatory", "unexpected error")
+		test.Compare(t, err.Error(), "at least one `segment` or `hotel` is mandatory", "unexpected error")
 		test.Compare(t, got, expected, "unexpected result")
 		test.Compare(t, risk.ComputeRiskInvoked, false, "estimate invokation unexpected")
 		test.Compare(t, risk.InsertInvoked, false, "insert invokation unexpected")
@@ -96,8 +101,9 @@ func TestEstimate(t *testing.T) {
 		}
 
 		got, err := client.Do(tplFull, map[string]interface{}{
-			"segs":  []covidtracker.Segment{{Origin: "paris", Destination: "lyon"}},
+			"segs":  []covidtracker.Segment{{Origin: &mock.Paris, Destination: &mock.Bordeaux}},
 			"prots": []covidtracker.Protection{},
+			"hots":  []graphql.HotelInput{},
 		})
 		expected := &gqlResp{
 			Data:   map[string]interface{}{"risk": nil},
@@ -122,12 +128,19 @@ func TestEstimate(t *testing.T) {
 				},
 			}
 			for i := range segs {
-				r.BySegments = append(r.BySegments, covidtracker.RiskSegment{
+				rs := covidtracker.RiskSegment{
 					ID:              covidtracker.RiskSegID(fmt.Sprint(i + 1)),
 					Segment:         &segs[i],
 					RiskLevel:       .5,
 					ConfidenceLevel: .5,
-				})
+				}
+				if segs[i].HotelID != nil {
+					r.RiskLevel = 0.6
+					r.ConfidenceLevel = 0.4
+					rs.RiskLevel = .7
+					rs.ConfidenceLevel = .3
+				}
+				r.BySegments = append(r.BySegments, rs)
 			}
 			return r, nil
 		}
@@ -142,11 +155,16 @@ func TestEstimate(t *testing.T) {
 		}
 
 		tcases := map[string]struct {
+			segs   []covidtracker.Segment
+			hots   []graphql.HotelInput
 			tpl    string
 			expRaw []byte
+			expDB  []*covidtracker.Risk
 		}{
 			"full query": {
-				tpl: tplFull,
+				segs: []covidtracker.Segment{{Origin: &mock.Paris, Destination: &mock.Bordeaux}},
+				hots: []graphql.HotelInput{},
+				tpl:  tplFull,
 				expRaw: []byte(`{
 					"data": {
 						"risk": {
@@ -154,8 +172,24 @@ func TestEstimate(t *testing.T) {
 							"confidenceLevel": 0.5,
 							"bySegments": [{
 								"segment": {
-									"origin": "paris",
-									"destination": "lyon"
+									"origin": {
+										"properties": {
+											"geocoding": {
+												"postcode":"75015",
+												"city":"Paris 15",
+												"locality":"Paris"
+											}
+										}
+									},
+									"destination": {
+										"properties": {
+											"geocoding": {
+												"postcode":"33000",
+												"city":"Bordeaux",
+												"locality":"Bordeaux"
+											}
+										}
+									}
 								},
 								"riskLevel":       0.5
 							}],
@@ -167,9 +201,29 @@ func TestEstimate(t *testing.T) {
 						}
 					}
 				}`),
+				expDB: []*covidtracker.Risk{{
+					ID:              "1",
+					RiskLevel:       .5,
+					ConfidenceLevel: .5,
+					BySegments: []covidtracker.RiskSegment{
+						{
+							ID:              covidtracker.RiskSegID("1"),
+							Segment:         &covidtracker.Segment{Origin: &mock.Paris, Destination: &mock.Bordeaux},
+							ConfidenceLevel: .5,
+							RiskLevel:       .5,
+						},
+					},
+					Report: covidtracker.Report{
+						Advices: []covidtracker.Statement{{Value: "a wise advice"}},
+						Pluses:  []covidtracker.Statement{{Value: "it's pretty good"}},
+						Minuses: []covidtracker.Statement{{Value: "it's not good"}},
+					},
+				}},
 			},
 			"only risk": {
-				tpl: tplRisk,
+				segs: []covidtracker.Segment{{Origin: &mock.Paris, Destination: &mock.Bordeaux}},
+				hots: []graphql.HotelInput{},
+				tpl:  tplRisk,
 				expRaw: []byte(`{
 					"data": {
 						"risk": {
@@ -177,9 +231,64 @@ func TestEstimate(t *testing.T) {
 						}
 					}
 				}`),
+				expDB: []*covidtracker.Risk{{
+					ID:              "1",
+					RiskLevel:       .5,
+					ConfidenceLevel: .5,
+					BySegments: []covidtracker.RiskSegment{
+						{
+							ID:              covidtracker.RiskSegID("1"),
+							Segment:         &covidtracker.Segment{Origin: &mock.Paris, Destination: &mock.Bordeaux},
+							ConfidenceLevel: .5,
+							RiskLevel:       .5,
+						},
+					},
+					Report: covidtracker.Report{
+						Advices: []covidtracker.Statement{{Value: "a wise advice"}},
+						Pluses:  []covidtracker.Statement{{Value: "it's pretty good"}},
+						Minuses: []covidtracker.Statement{{Value: "it's not good"}},
+					},
+				}},
 			},
+			"only risk with hotel": {
+				segs: []covidtracker.Segment{{Origin: &mock.Paris, Destination: &mock.Bordeaux}},
+				hots: []graphql.HotelInput{{ID: "an.hotel.id"}},
+				tpl:  tplRisk,
+				expRaw: []byte(`{
+					"data": {
+						"risk": {
+							"riskLevel":       0.6
+						}
+					}
+				}`),
+				expDB: []*covidtracker.Risk{{
+					ID:              "1",
+					RiskLevel:       .6,
+					ConfidenceLevel: .4,
+					BySegments: []covidtracker.RiskSegment{
+						{
+							ID:              covidtracker.RiskSegID("1"),
+							Segment:         &covidtracker.Segment{Origin: &mock.Paris, Destination: &mock.Bordeaux},
+							ConfidenceLevel: .5,
+							RiskLevel:       .5,
+						},
+						{
+							ID:              covidtracker.RiskSegID("2"),
+							Segment:         &covidtracker.Segment{HotelID: convert.StrP("an.hotel.id")},
+							ConfidenceLevel: .3,
+							RiskLevel:       .7,
+						},
+					},
+					Report: covidtracker.Report{
+						Advices: []covidtracker.Statement{{Value: "a wise advice"}},
+						Pluses:  []covidtracker.Statement{{Value: "it's pretty good"}},
+						Minuses: []covidtracker.Statement{{Value: "it's not good"}},
+					},
+				}}},
 			"only report": {
-				tpl: tplReport,
+				segs: []covidtracker.Segment{{Origin: &mock.Paris, Destination: &mock.Bordeaux}},
+				hots: []graphql.HotelInput{},
+				tpl:  tplReport,
 				expRaw: []byte(`{
 					"data": {
 						"risk": {
@@ -191,27 +300,26 @@ func TestEstimate(t *testing.T) {
 						}
 					}
 				}`),
+				expDB: []*covidtracker.Risk{{
+					ID:              "1",
+					RiskLevel:       .5,
+					ConfidenceLevel: .5,
+					BySegments: []covidtracker.RiskSegment{
+						{
+							ID:              covidtracker.RiskSegID("1"),
+							Segment:         &covidtracker.Segment{Origin: &mock.Paris, Destination: &mock.Bordeaux},
+							ConfidenceLevel: .5,
+							RiskLevel:       .5,
+						},
+					},
+					Report: covidtracker.Report{
+						Advices: []covidtracker.Statement{{Value: "a wise advice"}},
+						Pluses:  []covidtracker.Statement{{Value: "it's pretty good"}},
+						Minuses: []covidtracker.Statement{{Value: "it's not good"}},
+					},
+				}},
 			},
 		}
-
-		expDB := []*covidtracker.Risk{{
-			ID:              "1",
-			RiskLevel:       .5,
-			ConfidenceLevel: .5,
-			BySegments: []covidtracker.RiskSegment{
-				{
-					ID:              covidtracker.RiskSegID("1"),
-					Segment:         &covidtracker.Segment{Origin: "paris", Destination: "lyon"},
-					ConfidenceLevel: .5,
-					RiskLevel:       .5,
-				},
-			},
-			Report: covidtracker.Report{
-				Advices: []covidtracker.Statement{{Value: "a wise advice"}},
-				Pluses:  []covidtracker.Statement{{Value: "it's pretty good"}},
-				Minuses: []covidtracker.Statement{{Value: "it's not good"}},
-			},
-		}}
 
 		for name, tcase := range tcases {
 			t.Logf("case %s... :", name)
@@ -220,8 +328,9 @@ func TestEstimate(t *testing.T) {
 			risk.Reset()
 
 			got, err := client.Do(tcase.tpl, map[string]interface{}{
-				"segs":  []covidtracker.Segment{{Origin: "paris", Destination: "lyon"}},
+				"segs":  tcase.segs,
 				"prots": []covidtracker.Protection{},
+				"hots":  tcase.hots,
 			})
 
 			expResult := &gqlResp{}
@@ -233,7 +342,7 @@ func TestEstimate(t *testing.T) {
 			test.Compare(t, risk.ComputeRiskInvoked, true, name+": estimate invokation is expected")
 			test.Compare(t, risk.InsertInvoked, true, name+": insert invokation expected")
 			test.Compare(t, got, expResult, name+": unexpected result")
-			test.Compare(t, db, expDB, name+": unexpected inserted results")
+			test.Compare(t, db, tcase.expDB, name+": unexpected inserted results")
 		}
 
 	})

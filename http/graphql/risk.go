@@ -3,6 +3,7 @@ package graphql
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/graphql/gqlerrors"
@@ -18,6 +19,12 @@ type RiskHandler struct {
 
 var _ Configurer = &RiskHandler{}
 
+type HotelInput struct {
+	ID       string    `json:"id"`
+	Arrival  time.Time `json:"arrival"`
+	NbNights int       `json:"nbNights"`
+}
+
 func (h *RiskHandler) Queries() graphql.Fields {
 	return graphql.Fields{"risk": h.Estimate()}
 }
@@ -29,12 +36,13 @@ func (h *RiskHandler) Mutations() graphql.Fields {
 func (h *RiskHandler) Estimate() *graphql.Field {
 	logger.Debug(context.Background(), "Estimate")
 
+	geoIn := GeoIn()
 	segmentIn := graphql.NewInputObject(
 		graphql.InputObjectConfig{
 			Name: "segmentIn",
 			Fields: graphql.InputObjectConfigFieldMap{
-				"origin":         &graphql.InputObjectFieldConfig{Type: graphql.String},
-				"destination":    &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"origin":         &graphql.InputObjectFieldConfig{Type: geoIn},
+				"destination":    &graphql.InputObjectFieldConfig{Type: geoIn},
 				"departure":      &graphql.InputObjectFieldConfig{Type: graphql.DateTime},
 				"arrival":        &graphql.InputObjectFieldConfig{Type: graphql.DateTime},
 				"transportation": &graphql.InputObjectFieldConfig{Type: graphql.String},
@@ -51,17 +59,30 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 		},
 	)
 
-	//TODO move these definitions outside, in another file ?
+	hotelIn := graphql.NewInputObject(
+		graphql.InputObjectConfig{
+			Name: "hotelIn",
+			Fields: graphql.InputObjectConfigFieldMap{
+				"id":       &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"nbNights": &graphql.InputObjectFieldConfig{Type: graphql.Int},
+				"arrival":  &graphql.InputObjectFieldConfig{Type: graphql.DateTime},
+			},
+		},
+	)
+
+	geoObj := GeoObj()
 	segment := graphql.NewObject(graphql.ObjectConfig{
 		Name: "segment",
 		Fields: graphql.Fields{
-			"origin":         &graphql.Field{Type: graphql.String},
-			"destination":    &graphql.Field{Type: graphql.String},
+			"origin":         &graphql.Field{Type: geoObj},
+			"destination":    &graphql.Field{Type: geoObj},
 			"departure":      &graphql.Field{Type: graphql.DateTime},
 			"arrival":        &graphql.Field{Type: graphql.DateTime},
 			"transportation": &graphql.Field{Type: graphql.String},
+			"hotelID":        &graphql.Field{Type: graphql.String},
 		},
 	})
+
 	segmentRisk := graphql.NewObject(graphql.ObjectConfig{
 		Name: "segmentRisk",
 		Fields: graphql.Fields{
@@ -105,10 +126,14 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 			"protections": &graphql.ArgumentConfig{
 				Type: graphql.NewList(protIn),
 			},
+			"hotels": &graphql.ArgumentConfig{
+				Type: graphql.NewList(hotelIn),
+			},
 		},
 		Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 			segsI := params.Args["segments"].([]interface{})
 			protectsI := params.Args["protections"].([]interface{})
+			hotelsI := params.Args["hotels"].([]interface{})
 
 			var (
 				segs     []covidtracker.Segment
@@ -125,8 +150,23 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 				}
 			}
 
+			for _, i := range hotelsI {
+				if m, ok := i.(map[string]interface{}); ok {
+					var hin HotelInput
+					if err := convert(m, &hin); err != nil {
+						return nil, err
+					}
+
+					segs = append(segs, covidtracker.Segment{
+						Departure: hin.Arrival,
+						Arrival:   hin.Arrival.AddDate(0, 0, hin.NbNights),
+						HotelID:   &hin.ID,
+					})
+				}
+			}
+
 			if len(segs) == 0 {
-				return nil, fmt.Errorf("at least one `segment` is mandatory")
+				return nil, fmt.Errorf("at least one `segment` or `hotel` is mandatory")
 			}
 
 			for _, i := range protectsI {

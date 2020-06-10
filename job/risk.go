@@ -19,6 +19,7 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 	r := &covidtracker.Risk{
 		NoticeDate: time.Now(),
 	}
+
 	for i, seg := range segs {
 		segRisk, err := j.computeSegmentRisk(seg, protects)
 		if err != nil {
@@ -26,12 +27,16 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 		}
 		r.BySegments = append(r.BySegments, segRisk)
 	}
+
+	//TODO use hotel information
+
 	if err := j.aggregateSegmentRisk(r); err != nil {
 		return nil, fmt.Errorf("cannot aggregate risk of %d segments: %s", len(segs), err)
 	}
 	if err := j.aggregateReport(r, protects); err != nil {
 		return nil, fmt.Errorf("cannot compute report: %s", err)
 	}
+
 	return r, nil
 }
 
