@@ -10,7 +10,7 @@ type ScreeningDAL struct {
 	GetFn      func(dep string, date time.Time) (*covidtracker.Screening, error)
 	GetInvoked bool
 
-	GetRangeFn      func(dep int, start, end time.Time) ([]*covidtracker.Screening, error)
+	GetRangeFn      func(dep string, start, end time.Time) ([]*covidtracker.Screening, error)
 	GetRangeInvoked bool
 
 	UpsertFn      func(...*covidtracker.Screening) error
@@ -24,7 +24,7 @@ func (m *ScreeningDAL) Get(dep string, date time.Time) (*covidtracker.Screening,
 	return m.GetFn(dep, date)
 }
 
-func (m *ScreeningDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Screening, error) {
+func (m *ScreeningDAL) GetRange(dep string, start, end time.Time) ([]*covidtracker.Screening, error) {
 	m.GetRangeInvoked = true
 	return m.GetRangeFn(dep, start, end)
 }

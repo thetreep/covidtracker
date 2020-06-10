@@ -106,14 +106,14 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 	}
 	emergencies, err := j.job.EmergencyDAL.GetRange(originDep, departure.Add(-15*24*time.Hour), departure.Add(-1*time.Hour)) // Get emergency results from last 14 days (days - 15 to yesterday)
 	if err != nil {
-		return risk, covidtracker.Errorf("cannot get emergencies stats for department %d: %s", originDep, err)
+		return risk, covidtracker.Errorf("cannot get emergencies stats for department %s: %s", originDep, err)
 	}
 	var nbSuspiciousCase []int
 	for _, emer := range emergencies {
 		nbSuspiciousCase = append(nbSuspiciousCase, emer.Cov19SuspCount)
 	}
 	if len(nbSuspiciousCase) < 13 {
-		return risk, covidtracker.Errorf("cannot compute risk, not enough emergency data for departement %d and departure %s: got %d", originDep, departure, len(nbSuspiciousCase))
+		return risk, covidtracker.Errorf("cannot compute risk, not enough emergency data for departement %s and departure %s: got %d", originDep, departure, len(nbSuspiciousCase))
 	}
 
 	pop, err := covidtracker.PopulationOfDepartment(fmt.Sprint(originDep))
