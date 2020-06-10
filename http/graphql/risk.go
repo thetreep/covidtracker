@@ -131,37 +131,50 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 			},
 		},
 		Resolve: func(params graphql.ResolveParams) (interface{}, error) {
-			segsI := params.Args["segments"].([]interface{})
-			protectsI := params.Args["protections"].([]interface{})
-			hotelsI := params.Args["hotels"].([]interface{})
+			segsI, segOK := params.Args["segments"].([]interface{})
+			if !segOK {
+				logger.Warn(context.Background(), "impossible to read segments input %v", params.Args["segments"])
+			}
+			hotelsI, hotOK := params.Args["hotels"].([]interface{})
+			if !hotOK {
+				logger.Warn(context.Background(), "impossible to read hotels input %v", params.Args["hotels"])
+			}
+			protectsI, protOK := params.Args["protections"].([]interface{})
+			if !protOK {
+				logger.Warn(context.Background(), "impossible to read protections input %v", params.Args["protections"])
+			}
 
 			var (
 				segs     []covidtracker.Segment
 				protects []covidtracker.Protection
 			)
 
-			for _, i := range segsI {
-				if m, ok := i.(map[string]interface{}); ok {
-					var seg covidtracker.Segment
-					if err := convert(m, &seg); err != nil {
-						return nil, err
+			if segOK {
+				for _, i := range segsI {
+					if m, ok := i.(map[string]interface{}); ok {
+						var seg covidtracker.Segment
+						if err := convert(m, &seg); err != nil {
+							return nil, err
+						}
+						segs = append(segs, seg)
 					}
-					segs = append(segs, seg)
 				}
 			}
 
-			for _, i := range hotelsI {
-				if m, ok := i.(map[string]interface{}); ok {
-					var hin HotelInput
-					if err := convert(m, &hin); err != nil {
-						return nil, err
-					}
+			if hotOK {
+				for _, i := range hotelsI {
+					if m, ok := i.(map[string]interface{}); ok {
+						var hin HotelInput
+						if err := convert(m, &hin); err != nil {
+							return nil, err
+						}
 
-					segs = append(segs, covidtracker.Segment{
-						Departure: hin.Arrival,
-						Arrival:   hin.Arrival.AddDate(0, 0, hin.NbNights),
-						HotelID:   &hin.ID,
-					})
+						segs = append(segs, covidtracker.Segment{
+							Departure: hin.Arrival,
+							Arrival:   hin.Arrival.AddDate(0, 0, hin.NbNights),
+							HotelID:   &hin.ID,
+						})
+					}
 				}
 			}
 
@@ -169,13 +182,15 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 				return nil, fmt.Errorf("at least one `segment` or `hotel` is mandatory")
 			}
 
-			for _, i := range protectsI {
-				if m, ok := i.(map[string]interface{}); ok {
-					var prot covidtracker.Protection
-					if err := convert(m, &prot); err != nil {
-						return nil, err
+			if protOK {
+				for _, i := range protectsI {
+					if m, ok := i.(map[string]interface{}); ok {
+						var prot covidtracker.Protection
+						if err := convert(m, &prot); err != nil {
+							return nil, err
+						}
+						protects = append(protects, prot)
 					}
-					protects = append(protects, prot)
 				}
 			}
 

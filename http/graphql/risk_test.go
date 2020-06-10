@@ -222,7 +222,6 @@ func TestEstimate(t *testing.T) {
 			},
 			"only risk": {
 				segs: []covidtracker.Segment{{Origin: &mock.Paris, Destination: &mock.Bordeaux}},
-				hots: []graphql.HotelInput{},
 				tpl:  tplRisk,
 				expRaw: []byte(`{
 					"data": {
