@@ -42,8 +42,6 @@ func (s *IndicDAL) Get(dep string, date time.Time) (*covidtracker.Indicator, err
 	default:
 		return nil, fmt.Errorf("error while getting indicator: %s", err)
 	}
-
-	return result, nil
 }
 
 func (s *IndicDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Indicator, error) {

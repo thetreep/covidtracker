@@ -42,8 +42,6 @@ func (s *ScreeningDAL) Get(dep string, date time.Time) (*covidtracker.Screening,
 	default:
 		return nil, fmt.Errorf("error while getting screening: %s", err)
 	}
-
-	return result, nil
 }
 
 func (s *ScreeningDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Screening, error) {

@@ -42,8 +42,6 @@ func (s *CaseDAL) Get(dep string, date time.Time) (*covidtracker.Case, error) {
 	default:
 		return nil, fmt.Errorf("error while getting case: %s", err)
 	}
-
-	return result, nil
 }
 
 func (s *CaseDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Case, error) {

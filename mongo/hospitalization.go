@@ -42,8 +42,6 @@ func (s *HospDAL) Get(dep string, date time.Time) (*covidtracker.Hospitalization
 	default:
 		return nil, fmt.Errorf("error while getting hospitalization: %s", err)
 	}
-
-	return result, nil
 }
 
 func (s *HospDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Hospitalization, error) {

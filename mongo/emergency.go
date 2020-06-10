@@ -42,8 +42,6 @@ func (s *EmergencyDAL) Get(dep string, date time.Time) (*covidtracker.Emergency,
 	default:
 		return nil, fmt.Errorf("error while getting emergency: %s", err)
 	}
-
-	return result, nil
 }
 
 func (s *EmergencyDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Emergency, error) {
