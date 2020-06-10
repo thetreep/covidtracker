@@ -38,6 +38,7 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 				"departure":      &graphql.InputObjectFieldConfig{Type: graphql.DateTime},
 				"arrival":        &graphql.InputObjectFieldConfig{Type: graphql.DateTime},
 				"transportation": &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"hotelID":        &graphql.InputObjectFieldConfig{Type: graphql.String},
 			},
 		},
 	)
