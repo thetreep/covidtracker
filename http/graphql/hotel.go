@@ -5,12 +5,14 @@ import (
 	"fmt"
 
 	"github.com/graphql-go/graphql"
+	"github.com/graphql-go/graphql/gqlerrors"
 
 	"github.com/thetreep/covidtracker"
 )
 
 type HotelHandler struct {
 	Job covidtracker.HotelJob
+	DAL covidtracker.HotelDAL
 }
 
 var _ Configurer = &HotelHandler{}
@@ -56,7 +58,23 @@ func (h *HotelHandler) Search() *graphql.Field {
 				return nil, fmt.Errorf("%v", err)
 			}
 
-			return hotels, nil
+			if hotels == nil || len(hotels) == 0 {
+				return nil, nil
+			}
+
+			var mHotels []*covidtracker.Hotel
+			if mHotels, err = h.DAL.Insert(hotels); err != nil {
+				return hotels, gqlerrors.NewError(
+					"error insertion database",
+					nil,
+					"",
+					nil,
+					[]int{},
+					err,
+				)
+			}
+
+			return mHotels, nil
 		},
 	}
 }
