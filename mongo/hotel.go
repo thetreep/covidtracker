@@ -54,8 +54,8 @@ func (s *HotelDAL) Insert(hotels []*covidtracker.Hotel) ([]*covidtracker.Hotel, 
 
 	var result []*covidtracker.Hotel
 	if err = mongo.WithSession(ctx, session, func(sessCtx mongo.SessionContext) error {
-		var resp *covidtracker.Hotel
 		for _, hotel := range hotels {
+			var resp *covidtracker.Hotel
 			if notFound := s.collection.FindOne(s.client.Ctx, bson.M{"name": hotel.Name, "address": hotel.Address}).Decode(&resp); notFound == nil {
 				result = append(result, resp)
 				continue
