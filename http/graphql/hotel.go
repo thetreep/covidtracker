@@ -8,7 +8,6 @@ import (
 	"github.com/graphql-go/graphql/gqlerrors"
 
 	"github.com/thetreep/covidtracker"
-	"github.com/thetreep/covidtracker/logger"
 )
 
 type HotelHandler struct {

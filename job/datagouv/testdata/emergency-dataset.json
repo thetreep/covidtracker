@@ -1,0 +1,296 @@
+{
+	"acronym": null,
+	"archived": null,
+	"badges": [
+	  {
+		"kind": "covid-19"
+	  }
+	],
+	"created_at": "2020-03-20T17:19:01.201000",
+	"deleted": null,
+	"description": "### Les actions de Santé publique France\n\nSanté publique France a pour mission d'améliorer et de protéger la santé des populations. Durant la crise sanitaire liée à l'épidémie du COVID-19, Santé publique France se charge de surveiller et comprendre la dynamique de l'épidémie, d'anticiper les différents scénarii et de mettre en place des actions pour prévenir et limiter la transmission de ce virus sur le territoire national.\n\n### Description du jeu de données\n\nQuatre fichiers sont proposés :\n\n- **Les données quotidiennes de SOS médecins et des urgences hospitalières par département, sexe et tranche d’âge des patients** : nombre de passages aux urgences pour suspicion de COVID-19, nombre total de passages aux urgences, nombre d’hospitalisations parmi les passages aux urgences pour suspicion de COVID-19, nombre total d’actes médicaux SOS Médecins pour suspicion de COVID-19, nombre d’actes médicaux SOS Médecins.\n\n- **Les données quotidiennes de SOS médecins et des urgences hospitalières par région, sexe et tranches d’âge des patients** : nombre de passages aux urgences pour suspicion de COVID-19, nombre total de passages aux urgences, nombre d’hospitalisations parmi les passages aux urgences pour suspicion de COVID-19, nombre d’actes médicaux SOS Médecins pour suspicion de COVID-19, nombre d’actes médicaux SOS Médecins total. Le code région correspond au [code INSEE](https://fr.wikipedia.org/wiki/Région_française#Niveau_national) publié par l’INSEE sur [www.data.gouv.fr](https://www.data.gouv.fr/fr/datasets/code-officiel-geographique-cog/#resource-c2a54903-513e-41b9-a108-3d9cb2104217).\n\n- **Les données quotidiennes de SOS médecins et des urgences hospitalières à l’échelle de la France, par sexe et tranches d’âge des patients** : nombre de passages aux urgences pour suspicion de COVID-19, nombre total de passages aux urgences, nombre d’hospitalisations parmi les passages aux urgences pour suspicion de COVID-19, nombre d’actes médicaux SOS Médecins pour suspicion de COVID-19, nombre d’actes médicaux SOS Médecins total. Le code région correspond au [code INSEE](https://fr.wikipedia.org/wiki/Région_française#Niveau_national) publié par l’INSEE sur [www.data.gouv.fr](https://www.data.gouv.fr/fr/datasets/code-officiel-geographique-cog/#resource-c2a54903-513e-41b9-a108-3d9cb2104217).\n\n- **Les données hebdomadaires de SOS médecins et des urgences hospitalières par département et par tranches d’âge des patients** : nombre de passages aux urgences pour suspicion de COVID-19, nombre total de passages aux urgences, nombre d’hospitalisations parmi les passages aux urgences pour suspicion de COVID-19, nombres total d’actes médicaux SOS Médecins pour suspicion de COVID-19, nombres d’actes médicaux SOS Médecins.\nPour chacun de ces fichiers, une fiche de métadonnées est proposée.\n\n### Anomalies détectées dans les fichiers\n\nAttention, certains fichiers peuvent comporter des anomalies du fait des difficultés de collecte des données.\n\nDes rapports d'erreurs sont publiés tous les jours par Etalab dans la rubrique ressources communautaires :\n- [Rapport d'erreurs pour le fichier quotidien](https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200402-160328/sursaud-covid19-quotidien-incoherence-01042020.xlsx) ;\n- [Rapport d'erreurs pour le fichier hebdomadaire](https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200402-160350/sursaud-covid19-hebdomadaire-incoherence-01042020.xlsx).\n\nÀ noter que : \n- Pour certains patients, la classe d’âge n’a pas été identifiée dans la base de données. Ce qui peut induire un décalage entre la somme de toutes les classes d’âge d’un indicateur et le nombre total de cet indicateur ;\n- Pour certains patients, le sexe n’a pas été identifié dans la base de données. Ce qui peut induire un décalage entre la somme H/F d’un indicateur et le nombre total de cet indicateur.\n\n\nN’hésitez pas à signaler d'autres anomalies en commentaire. Ces remarques seront communiquées à l'équipe en charge de la collecte et diffusion des données. \n\n### Autres données disponibles\n\n[Santé publique France](https://www.data.gouv.fr/fr/organizations/sante-publique-france/) publie également les [données hospitalières relatives à l’épidémie de COVID-19](https://www.data.gouv.fr/fr/datasets/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/).\n",
+	"extras": {},
+	"frequency": "unknown",
+	"frequency_date": "2020-03-21T17:18:23",
+	"id": "5e74ecf52eb7514f2d3b8845",
+	"last_modified": "2020-06-08T19:00:27.722000",
+	"last_update": "2020-03-27T18:56:34",
+	"license": "lov2",
+	"metrics": {
+	  "discussions": 51,
+	  "followers": 25,
+	  "issues": 1,
+	  "reuses": 41,
+	  "views": 504
+	},
+	"organization": {
+	  "acronym": "SPF",
+	  "class": "Organization",
+	  "id": "5e721a395d57f93d0bed451f",
+	  "logo": "https://static.data.gouv.fr/avatars/79/7e94cd7a8d43d39544d4018666e646-original.png",
+	  "logo_thumbnail": "https://static.data.gouv.fr/avatars/79/7e94cd7a8d43d39544d4018666e646-100.png",
+	  "name": "Santé publique France",
+	  "page": "https://www.data.gouv.fr/fr/organizations/sante-publique-france/",
+	  "slug": "sante-publique-france",
+	  "uri": "https://www.data.gouv.fr/api/1/organizations/sante-publique-france/"
+	},
+	"owner": null,
+	"page": "https://www.data.gouv.fr/fr/datasets/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/",
+	"private": false,
+	"resources": [
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "98c9dd8f6c62a7554640ff25ad48b148ae9f7b49"
+		},
+		"created_at": "2020-03-20T18:56:25.178000",
+		"description": null,
+		"extras": {},
+		"filesize": 2474594,
+		"filetype": "file",
+		"format": "csv",
+		"id": "eceb9fb4-3ebc-4da3-828d-f5939712600a",
+		"last_modified": "2020-06-08T19:00:26.606000",
+		"latest": "{{apiServerHost}}/emergency.csv",
+		"metrics": {
+		  "views": 12960
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200608-190026%2Fsursaud-covid19-quotidien-2020-06-08-19h00-departement.csv",
+		"published": "2020-03-20T18:56:25.178000",
+		"title": "sursaud-covid19-quotidien-2020-06-08-19h00-departement.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200608-190026/sursaud-covid19-quotidien-2020-06-08-19h00-departement.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "e5be717ca2cd1d3acad191f01eaf7b51eabe2322"
+		},
+		"created_at": "2020-03-20T18:56:25.009000",
+		"description": null,
+		"extras": {},
+		"filesize": 683079,
+		"filetype": "file",
+		"format": "csv",
+		"id": "d2af5160-a21d-47b7-8f30-3c20dade63b1",
+		"last_modified": "2020-06-08T19:00:27.034000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/d2af5160-a21d-47b7-8f30-3c20dade63b1",
+		"metrics": {
+		  "views": 2755
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200608-190026%2Fsursaud-covid19-quotidien-2020-06-08-19h00-region.csv",
+		"published": "2020-03-20T18:56:25.009000",
+		"title": "sursaud-covid19-quotidien-2020-06-08-19h00-region.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200608-190026/sursaud-covid19-quotidien-2020-06-08-19h00-region.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "a43abfb13b06641a7406c3cce9fbf2c434d71453"
+		},
+		"created_at": "2020-03-27T16:17:55.495000",
+		"description": null,
+		"extras": {},
+		"filesize": 45269,
+		"filetype": "file",
+		"format": "csv",
+		"id": "219427ba-7e90-4eb1-9ac7-4de2e7e2112c",
+		"last_modified": "2020-06-08T19:00:27.622000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/219427ba-7e90-4eb1-9ac7-4de2e7e2112c",
+		"metrics": {
+		  "views": 2643
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200608-190027%2Fsursaud-covid19-quotidien-2020-06-08-19h00-france.csv",
+		"published": "2020-03-27T16:17:55",
+		"title": "sursaud-covid19-quotidien-2020-06-08-19h00-france.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200608-190027/sursaud-covid19-quotidien-2020-06-08-19h00-france.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "db6f2ee59d3be3995a376eab2b8071265f00ab9e"
+		},
+		"created_at": "2020-03-20T19:14:55.007000",
+		"description": null,
+		"extras": {},
+		"filesize": 4745229,
+		"filetype": "file",
+		"format": "xlsx",
+		"id": "941ff2b4-ea24-4cdf-b0a7-655f2a332fb2",
+		"last_modified": "2020-06-08T19:00:25.902000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/941ff2b4-ea24-4cdf-b0a7-655f2a332fb2",
+		"metrics": {
+		  "views": 4215
+		},
+		"mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200608-190025%2Fsursaud-covid19-quotidien-2020-06-08-19h00.xlsx",
+		"published": "2020-03-20T19:14:55.007000",
+		"title": "sursaud-covid19-quotidien-2020-06-08-19h00.xlsx",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200608-190025/sursaud-covid19-quotidien-2020-06-08-19h00.xlsx"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "39178e07518f9a3edc61e4df2a9a1a7a1c2fcb73"
+		},
+		"created_at": "2020-03-20T19:15:53.340000",
+		"description": null,
+		"extras": {},
+		"filesize": 208830,
+		"filetype": "file",
+		"format": "csv",
+		"id": "c67aebf7-9883-49ef-a654-c4af5fdf5206",
+		"last_modified": "2020-05-27T19:00:21.768000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/c67aebf7-9883-49ef-a654-c4af5fdf5206",
+		"metrics": {
+		  "views": 892
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200527-190021%2Fsursaud-covid19-hebdomadaire-2020-05-27-19h00.csv",
+		"published": "2020-03-20T19:15:53",
+		"title": "sursaud-covid19-hebdomadaire-2020-05-27-19h00.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200527-190021/sursaud-covid19-hebdomadaire-2020-05-27-19h00.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "f82854be4f6c99a887b6d03fc510e33ae4e9e679"
+		},
+		"created_at": "2020-03-23T19:49:34.576000",
+		"description": null,
+		"extras": {},
+		"filesize": 2694,
+		"filetype": "file",
+		"format": "csv",
+		"id": "2265d880-5260-4b34-8827-b3d76180032e",
+		"last_modified": "2020-03-27T18:46:47.519000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/2265d880-5260-4b34-8827-b3d76180032e",
+		"metrics": {
+		  "views": 981
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-relatives-a-lepidemie-du-covid-19%2F20200323-194934%2Fmetadonnee-urgenceshos-sosmedecin-covid19-quot.csv",
+		"published": "2020-03-23T19:49:34",
+		"title": "metadonnee-urgenceshos-sosmedecins-covid19-quot-dep.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-relatives-a-lepidemie-du-covid-19/20200323-194934/metadonnee-urgenceshos-sosmedecin-covid19-quot.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "11861d8a08e39d5ca093e7aa10b8c8cfdc431a8b"
+		},
+		"created_at": "2020-03-27T18:49:59.817000",
+		"description": null,
+		"extras": {},
+		"filesize": 2682,
+		"filetype": "file",
+		"format": "csv",
+		"id": "02c99d99-96a0-4953-8e30-04fd660530f6",
+		"last_modified": "2020-03-27T18:50:07.711000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/02c99d99-96a0-4953-8e30-04fd660530f6",
+		"metrics": {
+		  "views": 200
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-ugences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200327-184959%2Fmetadonnee-urgenceshos-sosmedecin-covid19-quot-reg.csv",
+		"published": "2020-03-27T18:49:59",
+		"title": "metadonnee-urgenceshos-sosmedecin-covid19-quot-reg.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-des-ugences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200327-184959/metadonnee-urgenceshos-sosmedecin-covid19-quot-reg.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "4298826ae95608b509664b32dbf4833d0049a597"
+		},
+		"created_at": "2020-03-27T18:56:34.899000",
+		"description": null,
+		"extras": {},
+		"filesize": 2680,
+		"filetype": "file",
+		"format": "csv",
+		"id": "0289e4fe-bb67-42b9-a320-cd22c98d82c3",
+		"last_modified": "2020-03-27T18:56:51.696000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/0289e4fe-bb67-42b9-a320-cd22c98d82c3",
+		"metrics": {
+		  "views": 273
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-ugences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200327-185634%2Fmetadonnee-urgenceshos-sosmedecin-covid19-quot-fra.csv",
+		"published": "2020-03-27T18:56:34",
+		"title": "metadonnee-urgenceshos-sosmedecin-covid19-quot-fra.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-des-ugences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200327-185634/metadonnee-urgenceshos-sosmedecin-covid19-quot-fra.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "8ae0c8f49f35ff3ab611de8cc8650b1340fe87d0"
+		},
+		"created_at": "2020-03-23T19:49:55.734000",
+		"description": null,
+		"extras": {},
+		"filesize": 1329,
+		"filetype": "file",
+		"format": "csv",
+		"id": "8ed0a51f-147f-4c6b-b2f3-b50c88fc7c07",
+		"last_modified": "2020-03-23T19:50:19.338000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/8ed0a51f-147f-4c6b-b2f3-b50c88fc7c07",
+		"metrics": {
+		  "views": 325
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-relatives-a-lepidemie-du-covid-19%2F20200323-194955%2Fmetadonnee-urgenceshos-sosmedecin-covid19-hebdo.csv",
+		"published": "2020-03-23T19:49:55",
+		"title": "metadonnee-urgenceshos-sosmedecins-covid19-hebdo.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-relatives-a-lepidemie-du-covid-19/20200323-194955/metadonnee-urgenceshos-sosmedecin-covid19-hebdo.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "06b8b6bd3c95ebc1a283bff184ab7c60b10e6ad7"
+		},
+		"created_at": "2020-03-20T18:19:24.201000",
+		"description": null,
+		"extras": {},
+		"filesize": 110,
+		"filetype": "file",
+		"format": "csv",
+		"id": "cbed61a8-64e8-4c8c-8e97-65d3a31a99b6",
+		"last_modified": "2020-03-23T18:47:52.441000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/cbed61a8-64e8-4c8c-8e97-65d3a31a99b6",
+		"metrics": {
+		  "views": 1442
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-relatives-a-lepidemie-du-covid-19%2F20200320-181924%2Fcode-tranches-dage.csv",
+		"published": "2020-03-20T18:19:24",
+		"title": "code-tranches-dage.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-relatives-a-lepidemie-du-covid-19/20200320-181924/code-tranches-dage.csv"
+	  }
+	],
+	"slug": "donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19",
+	"spatial": {
+	  "geom": null,
+	  "granularity": "fr:departement",
+	  "zones": []
+	},
+	"tags": [
+	  "coronavirus",
+	  "covid-19",
+	  "covid19"
+	],
+	"temporal_coverage": null,
+	"title": "Données des urgences hospitalières et de SOS médecins relatives à l'épidémie de COVID-19 ",
+	"uri": "https://www.data.gouv.fr/api/1/datasets/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/"
+  }

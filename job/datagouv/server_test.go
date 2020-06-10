@@ -6,33 +6,44 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/thetreep/covidtracker/job/datagouv"
 )
 
-func DatagouvServer(t *testing.T) *httptest.Server {
+type DatagouvAPI struct{}
+
+func DatagouvServers(t *testing.T) (api *httptest.Server, opendata *httptest.Server) {
 	t.Helper()
-	return httptest.NewServer(
+
+	opendata = httptest.NewServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			//try to serve file
+			fmt.Fprint(w, fileContent("./testdata/"+r.URL.Path))
+		}),
+	)
+
+	api = httptest.NewServer(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			file := "./testdata/"
-			switch r.URL.Path {
-			case string(datagouv.EmergencyURL):
-				file += "emergency.csv"
-			case string(datagouv.CaseURL):
-				file += "case.csv"
-			case string(datagouv.HospitalizationURL):
-				file += "hospitalization.csv"
-			case string(datagouv.ScreeningURL):
-				file += "screening.csv"
-			case string(datagouv.IndicatorURL):
-				file += "indicator.csv"
+			n := strings.Replace(r.URL.Path, "/api/1/datasets/", "", -1)
+			switch n {
+			case string(datagouv.EmergencyDataset):
+				file += "emergency-dataset.json"
+			case string(datagouv.HospDataset):
+				file += "hospitalization-dataset.json"
+			case string(datagouv.ScreeningDataset):
+				file += "screening-dataset.json"
+			case string(datagouv.IndicDataset):
+				file += "indicator-dataset.json"
 			default:
 				t.Fatalf("unexpected path %q", r.URL.Path)
 			}
-			fmt.Fprint(w, fileContent(file))
+			fmt.Fprint(w, strings.Replace(fileContent(file), "{{apiServerHost}}", opendata.URL, -1))
 		}),
 	)
+	return
 }
 
 func fileContent(filename string) string {

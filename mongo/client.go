@@ -21,8 +21,15 @@ type Client struct {
 	Ctx context.Context
 
 	// DAL
+
 	risk  RiskDAL
 	hotel HotelDAL
+	risk            RiskDAL
+	covCase         CaseDAL
+	emergency       EmergencyDAL
+	hospitalization HospDAL
+	indic           IndicDAL
+	screening       ScreeningDAL
 
 	mongo    *mongo.Client
 	database *mongo.Database
@@ -33,6 +40,11 @@ func NewClient(mongoURI string) *Client {
 	c := &Client{Now: time.Now, MongoURI: mongoURI, Ctx: context.Background()}
 	c.risk.client = c
 	c.hotel.client = c
+	c.covCase.client = c
+	c.emergency.client = c
+	c.hospitalization.client = c
+	c.indic.client = c
+	c.screening.client = c
 	return c
 }
 
@@ -69,6 +81,11 @@ func (c *Client) Open() error {
 	c.database = c.mongo.Database(mongoDatabase)
 	c.risk.collection = c.database.Collection("risk")
 	c.hotel.collection = c.database.Collection("hotels")
+	c.covCase.collection = c.database.Collection("case")
+	c.emergency.collection = c.database.Collection("emergency")
+	c.hospitalization.collection = c.database.Collection("hospitalization")
+	c.indic.collection = c.database.Collection("indicator")
+	c.screening.collection = c.database.Collection("screening")
 
 	return nil
 }
@@ -83,6 +100,31 @@ func (c *Client) Risk() covidtracker.RiskDAL { return &c.risk }
 
 // Hotel returns the dal for hotel
 func (c *Client) Hotel() covidtracker.HotelDAL { return &c.hotel }
+
+// Case returns the dal for hospital service with at least one declared case
+func (c *Client) Case() covidtracker.CaseDAL {
+	return &c.covCase
+}
+
+// Emergency returns the dal for emergency data
+func (c *Client) Emergency() covidtracker.EmergencyDAL {
+	return &c.emergency
+}
+
+// Hospitalization returns the dal for hospitalization data
+func (c *Client) Hospitalization() covidtracker.HospDAL {
+	return &c.hospitalization
+}
+
+// Indicator returns the dal for indicator data
+func (c *Client) Indicator() covidtracker.IndicDAL {
+	return &c.indic
+}
+
+// Screening returns the dal for screening data
+func (c *Client) Screening() covidtracker.ScreeningDAL {
+	return &c.screening
+}
 
 type Accessor interface {
 	Client() *Client
