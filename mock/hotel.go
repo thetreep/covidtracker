@@ -16,7 +16,6 @@ type Hotel struct {
 
 var (
 	_ covidtracker.HotelJob = &Hotel{}
-	// _ covidtracker.HotelDAL = &Hotel{}
 )
 
 func (h *Hotel) Reset() {

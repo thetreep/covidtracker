@@ -21,7 +21,8 @@ type Client struct {
 	Ctx context.Context
 
 	// DAL
-	risk RiskDAL
+	risk  RiskDAL
+	hotel HotelDAL
 
 	mongo    *mongo.Client
 	database *mongo.Database
@@ -31,6 +32,7 @@ type Client struct {
 func NewClient(mongoURI string) *Client {
 	c := &Client{Now: time.Now, MongoURI: mongoURI, Ctx: context.Background()}
 	c.risk.client = c
+	c.hotel.client = c
 	return c
 }
 
@@ -66,6 +68,7 @@ func (c *Client) Open() error {
 
 	c.database = c.mongo.Database(mongoDatabase)
 	c.risk.collection = c.database.Collection("risk")
+	c.hotel.collection = c.database.Collection("hotels")
 
 	return nil
 }
@@ -77,6 +80,9 @@ func (c *Client) Close() error {
 
 // Risk returns the dal for risk
 func (c *Client) Risk() covidtracker.RiskDAL { return &c.risk }
+
+// Hotel returns the dal for hotel
+func (c *Client) Hotel() covidtracker.HotelDAL { return &c.hotel }
 
 type Accessor interface {
 	Client() *Client

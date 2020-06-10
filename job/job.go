@@ -14,6 +14,7 @@ type Job struct {
 	RiskDAL covidtracker.RiskDAL
 	RiskJob RiskJob
 
+	HotelDAL covidtracker.HotelDAL
 	HotelJob HotelJob
 }
 
