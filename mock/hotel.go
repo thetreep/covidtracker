@@ -13,7 +13,7 @@ type Hotel struct {
 	GetFn      func(id covidtracker.HotelID) (*covidtracker.Hotel, error)
 	GetInvoked bool
 
-	InsertFn      func(hotels ...*covidtracker.Hotel) error
+	InsertFn      func(h []*covidtracker.Hotel) ([]*covidtracker.Hotel, error)
 	InsertInvoked bool
 
 	//API
@@ -41,9 +41,10 @@ func (h *Hotel) Get(id covidtracker.HotelID) (*covidtracker.Hotel, error) {
 	h.GetInvoked = true
 	return h.GetFn(id)
 }
-func (h *Hotel) Insert(hotels ...*covidtracker.Hotel) error {
+func (h *Hotel) Insert(hotels []*covidtracker.Hotel) ([]*covidtracker.Hotel, error) {
 	h.InsertInvoked = true
-	return h.InsertFn(hotels...)
+	hotels, err := h.InsertFn(hotels)
+	return hotels, err
 }
 
 func (h *Hotel) Search(query interface{}) ([]*covidtracker.Hotel, error) {
