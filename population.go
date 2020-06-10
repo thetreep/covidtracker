@@ -106,7 +106,7 @@ var popByDep = map[string]int{
 }
 
 func PopulationOfDepartment(dep string) (int, error) {
-	if pop, ok := popByDep[dep]; !ok {
+	if pop, ok := popByDep[dep]; ok {
 		return pop, nil
 	}
 	return 0, fmt.Errorf("invalid department %q", dep)

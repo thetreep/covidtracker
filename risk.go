@@ -43,11 +43,22 @@ type RiskParameters struct {
 	// Use to splecify that these are the default parameters
 	IsDefault bool `bson:"default" json:"default"`
 
-	// The parameters associated to a scope
-	ParametersByScope map[ParameterScope]RiskParameter `bson:"parametersByScope" json:"parametersByScope"`
+	// The parameters associated with a scope
+	Parameters []*RiskParameter `bson:"parameters" json:"parameters"`
+}
+
+func (r *RiskParameters) ByScope() map[ParameterScope]*RiskParameter {
+	res := make(map[ParameterScope]*RiskParameter)
+	for _, p := range r.Parameters {
+		res[p.Scope] = p
+	}
+	return res
 }
 
 type RiskParameter struct {
+	// The scope of this risk parameter
+	Scope ParameterScope `bson:"scope" json:"scope"`
+
 	// The number of persons with direct projection possible
 	NbDirect int `bson:"nbDirect" json:"nbDirect"`
 

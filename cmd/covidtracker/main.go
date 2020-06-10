@@ -33,9 +33,12 @@ func main() {
 	}
 	defer mongo.Close()
 
-	j := job.NewJob(datagouv.NewService(context.Background(), &logger.Logger{}))
+	log := &logger.Logger{}
+	ctx := context.Background()
+	j := job.NewJob(log, datagouv.NewService(context.Background(), log))
 	j.RiskDAL = mongo.Risk()
 	j.RiskParametersDAL = mongo.RiskParameters()
+	j.EmergencyDAL = mongo.Emergency()
 
 	pingHandler := &graphql.PingHandler{}
 
@@ -44,7 +47,7 @@ func main() {
 	riskHandler.DAL = mongo.Risk()
 
 	if err := createDefaultParametersIfMissing(mongo.RiskParameters()); err != nil {
-		log.Fatal(err)
+		log.Fatal(ctx, err.Error())
 	}
 
 	cds.Init()
@@ -53,14 +56,14 @@ func main() {
 
 	gql, err := graphql.NewHandler(pingHandler, riskHandler, HotelHandler)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(ctx, err.Error())
 	}
 
 	// start http server
 	s := http.NewServer()
 	s.AddHandler(gql, "/graphql")
 	if err := s.Open(); err != nil {
-		log.Fatal(err)
+		log.Fatal(ctx, err.Error())
 	}
 
 	// We need to shut down gracefully when the user hits Ctrl-C.
@@ -90,8 +93,9 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 	}
 	defaultParams := &covidtracker.RiskParameters{
 		IsDefault: true,
-		ParametersByScope: map[covidtracker.ParameterScope]covidtracker.RiskParameter{
-			{Transportation: covidtracker.Aircraft, Duration: covidtracker.Long}: {
+		Parameters: []*covidtracker.RiskParameter{
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.Aircraft, Duration: covidtracker.Long},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -102,7 +106,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Segment avion long"},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.Aircraft, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.Aircraft, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -113,7 +118,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.Aircraft, Duration: covidtracker.Short}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.Aircraft, Duration: covidtracker.Short},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -124,7 +130,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TGV, Duration: covidtracker.Long}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TGV, Duration: covidtracker.Long},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -135,7 +142,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Segment train long"},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TGV, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TGV, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -146,7 +154,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TGV, Duration: covidtracker.Short}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TGV, Duration: covidtracker.Short},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -157,7 +166,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TER, Duration: covidtracker.Long}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TER, Duration: covidtracker.Long},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -168,7 +178,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Segment train long"},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TER, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TER, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -179,7 +190,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TER, Duration: covidtracker.Short}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TER, Duration: covidtracker.Short},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -190,7 +202,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.CarSolo, Duration: covidtracker.Long}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarSolo, Duration: covidtracker.Long},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -201,7 +214,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Segment voiture long, il faudra probablement s'arrêter à une pompe à essence"},
 				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
 			},
-			{Transportation: covidtracker.CarSolo, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarSolo, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -212,7 +226,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
 			},
-			{Transportation: covidtracker.CarSolo, Duration: covidtracker.Short}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarSolo, Duration: covidtracker.Short},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -223,7 +238,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.CarDuo, Duration: covidtracker.Long}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarDuo, Duration: covidtracker.Long},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -234,7 +250,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Segment voiture long, il faudra probablement s'arrêter à une pompe à essence", "Vous êtes plusieurs dans voiture"},
 				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
 			},
-			{Transportation: covidtracker.CarDuo, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarDuo, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -245,7 +262,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
 				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
 			},
-			{Transportation: covidtracker.CarDuo, Duration: covidtracker.Short}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarDuo, Duration: covidtracker.Short},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -256,7 +274,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.CarGroup, Duration: covidtracker.Long}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarGroup, Duration: covidtracker.Long},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -267,7 +286,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Segment voiture long, il faudra probablement s'arrêter à une pompe à essence", "Vous êtes plusieurs dans voiture"},
 				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
 			},
-			{Transportation: covidtracker.CarGroup, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarGroup, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -278,7 +298,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
 				Advices:                []string{"Lavez vous bien les mains si vous prenez de l'essence"},
 			},
-			{Transportation: covidtracker.CarGroup, Duration: covidtracker.Short}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.CarGroup, Duration: covidtracker.Short},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -289,7 +310,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Vous êtes plusieurs dans voiture"},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Long}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Long},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -300,7 +322,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -311,7 +334,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Short}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.PublicTransports, Duration: covidtracker.Short},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -322,7 +346,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TaxiSolo, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TaxiSolo, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -333,7 +358,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.TaxiGroup, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.TaxiGroup, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -344,7 +370,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{"Vous êtes plusieurs passagers dans le taxi"},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.Scooter, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.Scooter, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,
@@ -355,7 +382,8 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				Minuses:                []string{},
 				Advices:                []string{},
 			},
-			{Transportation: covidtracker.Bike, Duration: covidtracker.Normal}: {
+			{
+				Scope:                  covidtracker.ParameterScope{Transportation: covidtracker.Bike, Duration: covidtracker.Normal},
 				NbDirect:               5,
 				ProbaContagionDirect:   0.7,
 				NbContact:              2,

@@ -14,6 +14,7 @@ type Job struct {
 	RiskDAL           covidtracker.RiskDAL
 	RiskJob           RiskJob
 	RiskParametersDAL covidtracker.RiskParametersDAL
+	EmergencyDAL      covidtracker.EmergencyDAL
 
 	RefreshJob RefreshJob
 	HotelJob   HotelJob
@@ -22,7 +23,7 @@ type Job struct {
 }
 
 // NewJob creates a new job
-func NewJob(refresher covidtracker.Refresher) *Job {
+func NewJob(log covidtracker.Logfer, refresher covidtracker.Refresher) *Job {
 	j := &Job{Now: time.Now, Ctx: context.Background()}
 	j.RiskJob.job = j
 	j.RefreshJob = RefreshJob{
@@ -30,6 +31,7 @@ func NewJob(refresher covidtracker.Refresher) *Job {
 		Refresher: refresher,
 	}
 	j.HotelJob.job = j
+	j.logger = log
 	return j
 }
 

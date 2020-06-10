@@ -74,10 +74,11 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 		return risk, err
 	}
 	scope := covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: seg.Transportation.Duration(seg.Departure, seg.Arrival)}
-	params, ok := parameters.ParametersByScope[scope]
+	paramsByScope := parameters.ByScope()
+	params, ok := paramsByScope[scope]
 	if !ok {
 		j.job.logger.Info(j.job.Ctx, "no parameters for this scope with transportation and duration, fallback on transportation 'Normal'")
-		params, ok = parameters.ParametersByScope[covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: covidtracker.Normal}]
+		params, ok = paramsByScope[covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: covidtracker.Normal}]
 		if !ok {
 			return risk, covidtracker.Errorf("no parameters are defined for scope %v", scope)
 		}
@@ -96,8 +97,31 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 		addAdvice(string(covidtracker.Mask), "Votre voyage est long, emportez plusieurs masques")
 	}
 
-	// @todo: fill here with actual numbers for department
-	probaContagious := probaContagiousPerson([]int{250, 350, 250, 120, 100}, 1000000)
+	originDep := 75 // @todo: use real values sent by front when available
+
+	departure := seg.Departure
+	now := time.Now()
+	if departure.IsZero() || departure.After(now) {
+		departure = now // We don't have data in the future, so we take now as a departure date
+	}
+	emergencies, err := j.job.EmergencyDAL.GetRange(originDep, departure.Add(-14*24*time.Hour), departure) // Get emergency results from last 14 days
+	if err != nil {
+		return risk, covidtracker.Errorf("cannot get emergencies stats for department %d: %s", originDep, err)
+	}
+	var nbSuspiciousCase []int
+	for _, emer := range emergencies {
+		nbSuspiciousCase = append(nbSuspiciousCase, emer.Cov19SuspCount)
+	}
+	if len(nbSuspiciousCase) < 13 {
+		return risk, covidtracker.Errorf("cannot compute risk, not enough emergency data for departement %d and departure %s: got %d", originDep, departure, len(nbSuspiciousCase))
+	}
+
+	pop, err := covidtracker.PopulationOfDepartment(fmt.Sprint(originDep))
+	if err != nil {
+		return risk, covidtracker.Errorf("cannot find population of department: %s", err)
+	}
+
+	probaContagious := probaContagiousPerson(nbSuspiciousCase, pop)
 
 	// infected if infected with contact OR with direct OR with indirect contact
 	riskLevel := probaUnionIndep(
@@ -138,6 +162,7 @@ func (j *RiskJob) aggregateReport(risk *covidtracker.Risk, protects []covidtrack
 	// aggregate and remove duplicates
 	pluses, minuses, advices := make(map[covidtracker.Statement]struct{}), make(map[covidtracker.Statement]struct{}), make(map[covidtracker.Statement]struct{})
 	for _, seg := range risk.BySegments {
+
 		for _, p := range seg.Report.Pluses {
 			pluses[p] = struct{}{}
 		}
