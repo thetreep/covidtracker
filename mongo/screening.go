@@ -44,7 +44,7 @@ func (s *ScreeningDAL) Get(dep string, date time.Time) (*covidtracker.Screening,
 	}
 }
 
-func (s *ScreeningDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Screening, error) {
+func (s *ScreeningDAL) GetRange(dep string, start, end time.Time) ([]*covidtracker.Screening, error) {
 	var result []*covidtracker.Screening
 
 	cur, err := s.collection.Find(s.client.Ctx, bson.M{"dep": dep, "noticeDate": dateRangeFilter(start, end)})

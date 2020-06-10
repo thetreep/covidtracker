@@ -97,14 +97,14 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 		addAdvice(string(covidtracker.Mask), "Votre voyage est long, emportez plusieurs masques")
 	}
 
-	originDep := 75 // @todo: use real values sent by front when available
+	originDep := "75" // @todo: use real values sent by front when available
 
 	departure := seg.Departure
 	now := time.Now()
 	if departure.IsZero() || departure.After(now) {
 		departure = now // We don't have data in the future, so we take now as a departure date
 	}
-	emergencies, err := j.job.EmergencyDAL.GetRange(originDep, departure.Add(-14*24*time.Hour), departure) // Get emergency results from last 14 days
+	emergencies, err := j.job.EmergencyDAL.GetRange(originDep, departure.Add(-15*24*time.Hour), departure.Add(-1*time.Hour)) // Get emergency results from last 14 days (days - 15 to yesterday)
 	if err != nil {
 		return risk, covidtracker.Errorf("cannot get emergencies stats for department %d: %s", originDep, err)
 	}

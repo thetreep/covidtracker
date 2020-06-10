@@ -44,7 +44,7 @@ func (s *CaseDAL) Get(dep string, date time.Time) (*covidtracker.Case, error) {
 	}
 }
 
-func (s *CaseDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Case, error) {
+func (s *CaseDAL) GetRange(dep string, start, end time.Time) ([]*covidtracker.Case, error) {
 	var result []*covidtracker.Case
 
 	cur, err := s.collection.Find(s.client.Ctx, bson.M{"dep": dep, "noticeDate": dateRangeFilter(start, end)})

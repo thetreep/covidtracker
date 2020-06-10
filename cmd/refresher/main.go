@@ -38,7 +38,9 @@ func main() {
 		fmt.Print(j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening()))
 	})
 	// launch it once to update data at first launch
-	j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening())
+	err = j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening())
+	log.HasErr(context.Background(), err)
+
 	c.Run()
 
 }
