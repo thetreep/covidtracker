@@ -1,0 +1,269 @@
+{
+	"acronym": null,
+	"archived": null,
+	"badges": [
+	  {
+		"kind": "covid-19"
+	  }
+	],
+	"created_at": "2020-03-27T15:40:10.048000",
+	"deleted": null,
+	"description": "\n### Les actions de Santé publique France\n\nSanté publique France a pour mission d'améliorer et de protéger la santé des populations. Durant la crise sanitaire liée à l'épidémie du COVID-19, Santé publique France se charge de surveiller et comprendre la dynamique de l'épidémie, d'anticiper les différents scénarii et de mettre en place des actions pour prévenir et limiter la transmission de ce virus sur le territoire national.\n\n### Description du jeu de données\n\nLe présent jeu de données renseigne sur la situation hospitalières concernant l'épidémie de COVID-19.\n\nQuatre fichiers sont proposés : \n\n- **Les données hospitalières relatives à l'épidémie du COVID-19 par département et sexe du patient** : nombre de patients hospitalisés, nombre de personnes actuellement en réanimation ou soins intensifs, nombre cumulé de personnes retournées à domicile, nombre cumulé de personnes décédées.\n\n- **Les données hospitalières relatives à l'épidémie du COVID-19 par région et classe d'âge du patient** : nombre de patients hospitalisés, nombre de personnes actuellement en réanimation ou soins intensifs, nombre cumulé de personnes retournées à domicile, nombre cumulé de personnes décédées.\n\n- **Les données hospitalières quotidiennes relatives à l'épidémie du COVID-19 par département du patient** : nombre quotidien de personnes nouvellement hospitalisées, nombre quotidien de nouvelles admissions en réanimation, nombre quotidien de personnes nouvellement décédées, nombre quotidien de nouveaux retours à domicile.\n\n- **Les données relatives aux établissements hospitaliers par département** : nombre cumulé de services ayant déclaré au moins un cas.\n\n\n### Anomalies détectées dans les fichiers\n\nAttention, certains fichiers peuvent comporter des anomalies du fait des difficultés de collecte des données.\n\nDes rapports d'erreurs sont publiés tous les jours par Etalab dans la rubrique ressources communautaires :\n- [Rapport d'erreurs pour les données hospitalières](https://www.data.gouv.fr/fr/datasets/r/f19775db-15c0-4261-a8a6-255034e94dbf) ;\n- [Rapport d'erreurs pour les établissements hospitaliers](https://www.data.gouv.fr/fr/datasets/r/8b55024d-6128-4fef-ae03-08692597dd94).\n\nÀ noter que : \n- Le système de déclaration des cas n'est pas exhaustif et le nombre d'établissements déclarant varie au cours du temps ;\n- Certains patients, présents dans la base de données hospitalières à un moment donné, sont retirés de la base de données par les établissements de santé lorsque le résultat biologique du patient est négatif par rapport au COVID-19 ; \n- Pour certains patients, la classe d'âge n'a pas été identifiée dans la base de données. Ce qui peut induire un décalage entre la somme de toutes les classes d'âge d'un indicateur et le nombre total de cet indicateur ; \n- Pour certains patients, le sexe n'a pas été identifié dans la base de données. Ce qui peut induire un décalage entre la somme H/F  d'un indicateur et le nombre total de cet indicateur. \n\nN’hésitez pas à signaler d'autres anomalies en commentaire. Ces remarques seront communiquées à l'équipe en charge de la collecte et diffusion des données. \n\n### Autres données disponibles\n\n[Santé publique France](https://www.data.gouv.fr/fr/organizations/sante-publique-france/) publie également les [données des urgences hospitalières et de SOS médecins relatives à l'épidémie de COVID-19](https://www.data.gouv.fr/fr/datasets/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/) et les données relatives aux [tests de dépistage de COVID-19 réalisés en laboratoire de ville](https://www.data.gouv.fr/fr/datasets/donnees-relatives-aux-tests-de-depistage-de-covid-19-realises-en-laboratoire-de-ville/).",
+	"extras": {},
+	"frequency": "daily",
+	"frequency_date": "2020-03-28T15:39:51",
+	"id": "5e7e104ace2080d9162b61d8",
+	"last_modified": "2020-06-08T19:00:29.345000",
+	"last_update": "2020-04-08T18:19:01",
+	"license": "lov2",
+	"metrics": {
+	  "discussions": 159,
+	  "followers": 33,
+	  "issues": 10,
+	  "reuses": 112,
+	  "views": 1169
+	},
+	"organization": {
+	  "acronym": "SPF",
+	  "class": "Organization",
+	  "id": "5e721a395d57f93d0bed451f",
+	  "logo": "https://static.data.gouv.fr/avatars/79/7e94cd7a8d43d39544d4018666e646-original.png",
+	  "logo_thumbnail": "https://static.data.gouv.fr/avatars/79/7e94cd7a8d43d39544d4018666e646-100.png",
+	  "name": "Santé publique France",
+	  "page": "https://www.data.gouv.fr/fr/organizations/sante-publique-france/",
+	  "slug": "sante-publique-france",
+	  "uri": "https://www.data.gouv.fr/api/1/organizations/sante-publique-france/"
+	},
+	"owner": null,
+	"page": "https://www.data.gouv.fr/fr/datasets/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/",
+	"private": false,
+	"resources": [
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "126c55ea51a763c1fedf0e7ae9a5ac5572c60e33"
+		},
+		"created_at": "2020-03-27T15:43:24.230000",
+		"description": null,
+		"extras": {},
+		"filesize": 830393,
+		"filetype": "file",
+		"format": "csv",
+		"id": "63352e38-d353-4b54-bfd1-f1b3ee1cabd7",
+		"last_modified": "2020-06-08T19:00:28.130000",
+		"latest": "{{apiServerHost}}/hospitalization.csv",
+		"metrics": {
+		  "views": 17681
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200608-190028%2Fdonnees-hospitalieres-covid19-2020-06-08-19h00.csv",
+		"published": "2020-03-27T15:43:24.230000",
+		"title": "donnees-hospitalieres-covid19-2020-06-08-19h00.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200608-190028/donnees-hospitalieres-covid19-2020-06-08-19h00.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "e0db66c3b61691a43a8b376c805bb12bc9c4e045"
+		},
+		"created_at": "2020-04-07T22:32:02.138000",
+		"description": null,
+		"extras": {},
+		"filesize": 196590,
+		"filetype": "file",
+		"format": "csv",
+		"id": "6fadff46-9efd-4c53-942a-54aca783c30c",
+		"last_modified": "2020-06-08T19:00:29.262000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/6fadff46-9efd-4c53-942a-54aca783c30c",
+		"metrics": {
+		  "views": 11356
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200608-190029%2Fdonnees-hospitalieres-nouveaux-covid19-2020-06-08-19h00.csv",
+		"published": "2020-04-07T22:32:02",
+		"title": "donnees-hospitalieres-nouveaux-covid19-2020-06-08-19h00.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200608-190029/donnees-hospitalieres-nouveaux-covid19-2020-06-08-19h00.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "d108c9b4812ea2725da2174c827819752696b976"
+		},
+		"created_at": "2020-04-08T17:10:58.309000",
+		"description": null,
+		"extras": {},
+		"filesize": 516326,
+		"filetype": "file",
+		"format": "csv",
+		"id": "08c18e08-6780-452d-9b8c-ae244ad529b3",
+		"last_modified": "2020-06-08T19:00:28.814000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3",
+		"metrics": {
+		  "views": 5780
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200608-190028%2Fdonnees-hospitalieres-classe-age-covid19-2020-06-08-19h00.csv",
+		"published": "2020-04-08T17:10:58",
+		"title": "donnees-hospitalieres-classe-age-covid19-2020-06-08-19h00.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200608-190028/donnees-hospitalieres-classe-age-covid19-2020-06-08-19h00.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "81c78ea5af8ec8a25063c465ec4fb01f38297c30"
+		},
+		"created_at": "2020-03-27T15:43:24.329000",
+		"description": null,
+		"extras": {},
+		"filesize": 179831,
+		"filetype": "file",
+		"format": "csv",
+		"id": "41b9bd2a-b5b6-4271-8878-e45a8902ef00",
+		"last_modified": "2020-06-08T19:00:28.438000",
+		"latest": "{{apiServerHost}}/service-with-case.csv",
+		"metrics": {
+		  "views": 5078
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200608-190028%2Fdonnees-hospitalieres-etablissements-covid19-2020-06-08-19h00.csv",
+		"published": "2020-03-27T15:43:24.329000",
+		"title": "donnees-hospitalieres-etablissements-covid19-2020-06-08-19h00.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200608-190028/donnees-hospitalieres-etablissements-covid19-2020-06-08-19h00.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "7560d00132aeefe87f21da9c00c5386db802d798"
+		},
+		"created_at": "2020-03-27T15:44:14.242000",
+		"description": null,
+		"extras": {},
+		"filesize": 649,
+		"filetype": "file",
+		"format": "csv",
+		"id": "3f0f1885-25f4-4102-bbab-edec5a58e34a",
+		"last_modified": "2020-03-27T15:44:28.796000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/3f0f1885-25f4-4102-bbab-edec5a58e34a",
+		"metrics": {
+		  "views": 3354
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200327-154414%2Fmetadonnees-donnees-hospitalieres-covid19.csv",
+		"published": "2020-03-27T15:44:14",
+		"title": "metadonnees-donnees-hospitalieres-covid19.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200327-154414/metadonnees-donnees-hospitalieres-covid19.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "39939611809f7717a87b1b88ad13c1aa0eb3a44e"
+		},
+		"created_at": "2020-04-07T22:30:14.828000",
+		"description": null,
+		"extras": {},
+		"filesize": 653,
+		"filetype": "file",
+		"format": "csv",
+		"id": "4900f53f-750d-4c5a-9df7-2d4ceb018acf",
+		"last_modified": "2020-04-08T17:44:10.666000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/4900f53f-750d-4c5a-9df7-2d4ceb018acf",
+		"metrics": {
+		  "views": 1348
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200407-223014%2Fmetadonnees-hospit-incid.csv",
+		"published": "2020-04-07T22:30:14",
+		"title": "metadonnees-donnees-hospitalieres-covid19-nouveaux.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200407-223014/metadonnees-hospit-incid.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "a97fb37a5447115b74123b997aa2e7ebd6b2af38"
+		},
+		"created_at": "2020-04-08T18:19:01.934000",
+		"description": null,
+		"extras": {},
+		"filesize": 944,
+		"filetype": "file",
+		"format": "csv",
+		"id": "929dff1b-b07c-4637-9690-fb7219ad3eb8",
+		"last_modified": "2020-04-08T18:19:09.680000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/929dff1b-b07c-4637-9690-fb7219ad3eb8",
+		"metrics": {
+		  "views": 1253
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200408-181901%2Fmetadonnees-donnees-hospitalieres-covid19-classes-age.csv",
+		"published": "2020-04-08T18:19:01",
+		"title": "metadonnees-donnees-hospitalieres-covid19-classes-age.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200408-181901/metadonnees-donnees-hospitalieres-covid19-classes-age.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "48bbc9297e5c17bc62d16e92fa1d359c53825bc1"
+		},
+		"created_at": "2020-03-27T15:44:14.232000",
+		"description": null,
+		"extras": {},
+		"filesize": 327,
+		"filetype": "file",
+		"format": "csv",
+		"id": "415c852b-7898-40f8-8f71-b9171faf4516",
+		"last_modified": "2020-03-27T15:44:36.435000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/415c852b-7898-40f8-8f71-b9171faf4516",
+		"metrics": {
+		  "views": 1435
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200327-154414%2Fmetadonnees-services-hospitaliers-covid19.csv",
+		"published": "2020-03-27T15:44:14",
+		"title": "metadonnees-services-hospitaliers-covid19.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200327-154414/metadonnees-services-hospitaliers-covid19.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "a8ce869dd07b486f3e40cff6b59d68365180871f"
+		},
+		"created_at": "2020-03-31T16:04:22.961000",
+		"description": null,
+		"extras": {},
+		"filesize": 422,
+		"filetype": "file",
+		"format": "csv",
+		"id": "9f94a259-2a8a-441d-bd0b-d6b45697d477",
+		"last_modified": "2020-03-31T16:04:34.712000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/9f94a259-2a8a-441d-bd0b-d6b45697d477",
+		"metrics": {
+		  "views": 1843
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-hospitalieres-relatives-a-lepidemie-de-covid-19%2F20200331-160422%2Fmetadonnees-sexe.csv",
+		"published": "2020-03-31T16:04:22",
+		"title": "metadonnees-sexe.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/20200331-160422/metadonnees-sexe.csv"
+	  }
+	],
+	"slug": "donnees-hospitalieres-relatives-a-lepidemie-de-covid-19",
+	"spatial": null,
+	"tags": [
+	  "coronavius",
+	  "covid-19",
+	  "covid19",
+	  "covid19france"
+	],
+	"temporal_coverage": null,
+	"title": "Données hospitalières relatives à l'épidémie de COVID-19",
+	"uri": "https://www.data.gouv.fr/api/1/datasets/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/"
+  }

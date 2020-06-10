@@ -17,7 +17,7 @@ type errorResponse struct {
 // Error writes an API error message to the response and logger.
 func Error(ctx context.Context, w http.ResponseWriter, err error, code int) {
 	// Log error.
-	logger.Info(ctx, "http error: %s (code=%d)", err, code)
+	logger.DefaultLogger.Info(ctx, "http error: %s (code=%d)", err, code)
 
 	// Hide error from client if it is internal.
 	if code == http.StatusInternalServerError {

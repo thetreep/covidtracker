@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -11,10 +12,13 @@ import (
 	"github.com/thetreep/covidtracker/http/graphql"
 	"github.com/thetreep/covidtracker/job"
 	"github.com/thetreep/covidtracker/job/cds"
+	"github.com/thetreep/covidtracker/job/datagouv"
+	"github.com/thetreep/covidtracker/logger"
 	"github.com/thetreep/covidtracker/mongo"
 )
 
 func main() {
+
 	//TODO set env variable
 	mongoURL := os.Getenv("THETREEP_COVIDTRACKER_MONGO_URL")
 	if mongoURL == "" {
@@ -28,7 +32,7 @@ func main() {
 	}
 	defer mongo.Close()
 
-	j := job.NewJob()
+	j := job.NewJob(datagouv.NewService(context.Background(), &logger.Logger{}))
 	j.RiskDAL = mongo.Risk()
 
 	pingHandler := &graphql.PingHandler{}

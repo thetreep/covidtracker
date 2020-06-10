@@ -7,7 +7,6 @@ import (
 	"github.com/graphql-go/graphql"
 
 	"github.com/thetreep/covidtracker"
-	"github.com/thetreep/covidtracker/logger"
 )
 
 type HotelHandler struct {
