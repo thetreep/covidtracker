@@ -1,10 +1,13 @@
 package http
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
+
+	"github.com/thetreep/covidtracker"
+	log "github.com/thetreep/covidtracker/logger"
 )
 
 // DefaultAddr is the default bind address.
@@ -21,6 +24,8 @@ type Server struct {
 
 	// Bind address to open.
 	Addr string
+
+	logger covidtracker.Logfer
 }
 
 // NewServer returns a new instance of Server.
@@ -28,6 +33,7 @@ func NewServer() *Server {
 	return &Server{
 		Addr:    DefaultAddr,
 		Routing: make(map[string]http.Handler),
+		logger:  &log.Logger{},
 	}
 }
 
@@ -47,7 +53,7 @@ func (s *Server) Open() error {
 		return err
 	}
 	s.ln = ln
-	log.Printf("starting operation api-server listening on %q", s.Addr)
+	s.logger.Debug(context.Background(), "starting operation api-server listening on %q", s.Addr)
 
 	// Start HTTP server.
 	go http.Serve(s.ln, s.Handlers())

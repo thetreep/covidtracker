@@ -1,0 +1,734 @@
+{
+    "Hotels": [
+        {
+            "HtlId": 1089737,
+            "HtlCd": "ACC2514",
+            "HtlName": "Ibis Budget Marseille Timone",
+            "HtlType": "Hotel",
+            "HtlAddress1": "69, Boulevard Sakakini",
+            "HtlCity": "Marseille",
+            "HtlZipCode": "13005",
+            "CntCd": "FR",
+            "HtlDesc1": "Ibis Budget Marseille Timone is located in Marseille, a 5-minute walk from Vallier Stadium. Free WiFi access is available. Private bathroom also comes with a shower. The property is 3 km from Le Dôme Concert Hall, Vélodrome Stadium and Parc Chanot. The hotel is 500 metres from La Timone Metro Station, 1.7 km from Castellane Metro Station and 2.1 km from Vieux Port Metro station. Marseille Provence Airport is 22 km away.",
+            "HtlDesc2": "L'Ibis Budget Marseille Timone se trouve à Marseille, à 5 minutes de marche du stade Vallier. La connexion Wi-Fi est gratuite. Vous disposerez d'une salle de bains privative pourvue d'une douche. L'établissement se trouve à 3 km de la salle de concerts Le Dôme, du stade Vélodrome et du parc Chanot. Vous séjournerez à 500 mètres de la station de métro La Timone, à 1,7 km de celle de Castellane et à 2,1 km de celle du Vieux Port. Enfin, l'aéroport de Marseille Provence est implanté à 22 km de l'Ibis Budget Marseille Timone.Si vous souhaitez bénéficier d'une place de parking, veuillez appeler directement l'Ibis Budget Marseille Timone à l'avance. Les demandes concernant le parking peuvent uniquement être confirmées par téléphone. Les coordonnées de l'hôtel figurent sur votre confirmation de réservation. Ni les lits d'appoint ni les lits superposés ne seront faits avant votre arrivée. Le linge de lit est fourni, mais vous devrez faire vous-même votre lit. Les enfants de moins de 12 ans bénéficient d'un tarif réduit pour le petit-déjeuner.",
+            "HtlStars": 2,
+            "HtlLongitude": 5.400740,
+            "HtlLatitude": 43.295240,
+            "HtlPhone": "+33 892 68 04 83",
+            "HtlFax": "+33 4 91 49 79 15",
+            "HtlEmail": "h2514@accor.com",
+            "HtlNameSearch": "IBIS BUDGET MARSEILLE TIMONE",
+            "MoreAvailToCheck": true,
+            "ImageUrl": "https://bookings.cdsgroupe.com/photos/Search/FR/ACC/251/ACC2514.jpg",
+            "HotelInfoList": [
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 1,
+                    "OtaCode": {
+                        "OtaName": "24-hour front desk",
+                        "OtaName2": "Réception 24/24"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 5,
+                    "OtaCode": {
+                        "OtaName": "Air conditioning",
+                        "OtaName2": "Air conditionné"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 33,
+                    "OtaCode": {
+                        "OtaName": "Elevators",
+                        "OtaName2": "Ascenseurs"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 47,
+                    "OtaCode": {
+                        "OtaName": "Accessible facilities",
+                        "OtaName2": "Accès handicapés"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 53,
+                    "OtaCode": {
+                        "OtaName": "Indoor parking",
+                        "OtaName2": "Parking couvert"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 54,
+                    "OtaCode": {
+                        "OtaName": "Indoor pool",
+                        "OtaName2": "Piscine couverte"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 68,
+                    "OtaCode": {
+                        "OtaName": "Parking",
+                        "OtaName2": "Parking"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 80,
+                    "OtaCode": {
+                        "OtaName": "Security",
+                        "OtaName2": "Service de sécurité permanent"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 91,
+                    "OtaCode": {
+                        "OtaName": "Tour/sightseeing desk",
+                        "OtaName2": "Guichet de tourisme"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 103,
+                    "OtaCode": {
+                        "OtaName": "Multilingual staff",
+                        "OtaName2": "Personnel polyglotte"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 106,
+                    "OtaCode": {
+                        "OtaName": "Bell staff/porter",
+                        "OtaName2": "Portier/bagagiste"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 115,
+                    "OtaCode": {
+                        "OtaName": "220 AC",
+                        "OtaName2": "Courant 220 V"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 132,
+                    "OtaCode": {
+                        "OtaName": "Public area air conditioned",
+                        "OtaName2": "Hôtel climatisé"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 145,
+                    "OtaCode": {
+                        "OtaName": "Complimentary newspaper in lobby",
+                        "OtaName2": "Journaux gratuits"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 179,
+                    "OtaCode": {
+                        "OtaName": "Wireless internet connection in public areas",
+                        "OtaName2": "Accès internet WIFI dans les zones communes"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 198,
+                    "OtaCode": {
+                        "OtaName": "Non-smoking rooms (generic)",
+                        "OtaName2": "Chambres non fumeur"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 223,
+                    "OtaCode": {
+                        "OtaName": "Internet services",
+                        "OtaName2": "Services Internet"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 224,
+                    "OtaCode": {
+                        "OtaName": "Pets allowed",
+                        "OtaName2": "Animaux acceptés"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 254,
+                    "OtaCode": {
+                        "OtaName": "Connecting rooms",
+                        "OtaName2": "Chambres communicantes"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 261,
+                    "OtaCode": {
+                        "OtaName": "High speed wireless",
+                        "OtaName2": "Accès internet WIFI"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 262,
+                    "OtaCode": {
+                        "OtaName": "Kitchenette",
+                        "OtaName2": "Kitchenette"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 292,
+                    "OtaCode": {
+                        "OtaName": "Newspaper"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 352,
+                    "OtaCode": {
+                        "OtaName": "Lift",
+                        "OtaName2": "Ascenseur"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 354,
+                    "OtaCode": {
+                        "OtaName": "Safety deposit box",
+                        "OtaName2": "Coffre-fort"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 360,
+                    "OtaCode": {
+                        "OtaName": "Soundproof rooms",
+                        "OtaName2": "Chambres insonorisées"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 369,
+                    "OtaCode": {
+                        "OtaName": "Heating",
+                        "OtaName2": "Chauffage"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 375,
+                    "OtaCode": {
+                        "OtaName": "Luggage storage",
+                        "OtaName2": "Bagagerie"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 377,
+                    "OtaCode": {
+                        "OtaName": "WiFi",
+                        "OtaName2": "Connexion Wi-Fi au réseau local"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 382,
+                    "OtaCode": {
+                        "OtaName": "Free WiFi",
+                        "OtaName2": "connexion Wi-Fi gratuite"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 384,
+                    "OtaCode": {
+                        "OtaName": "Designated smoking area",
+                        "OtaName2": "Espace fumeurs"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 406,
+                    "OtaCode": {
+                        "OtaName": "Vending machine (drinks)",
+                        "OtaName2": "Distributeur automatique (boissons)"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 407,
+                    "OtaCode": {
+                        "OtaName": "Vending machine (snacks)",
+                        "OtaName2": "Distributeur automatique (collations)"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 420,
+                    "OtaCode": {
+                        "OtaName": "Daily maid service",
+                        "OtaName2": "Service de ménage quotidien"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 424,
+                    "OtaCode": {
+                        "OtaName": "WiFi available in all areas",
+                        "OtaName2": "Wi-Fi disponible partout"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 439,
+                    "OtaCode": {
+                        "OtaName": "Parking garage",
+                        "OtaName2": "Parking intérieur"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 442,
+                    "OtaCode": {
+                        "OtaName": "Wheelchair accessible",
+                        "OtaName2": "Accessible aux personnes à mobilité réduite"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 443,
+                    "OtaCode": {
+                        "OtaName": "Toilet with grab rails",
+                        "OtaName2": "Toilettes avec barres d'appui"
+                    }
+                },
+                {
+                    "OtaType": "HAC",
+                    "OtaCd": 445,
+                    "OtaCode": {
+                        "OtaName": "Lower bathroom sink",
+                        "OtaName2": "Lavabo bas adapté aux personnes à mobilité réduite"
+                    }
+                },
+                {
+                    "OtaType": "GRI",
+                    "OtaCd": 1,
+                    "OtaCode": {
+                        "OtaName": "Physically challenged rooms"
+                    }
+                },
+                {
+                    "OtaType": "GRI",
+                    "OtaCd": 5,
+                    "OtaCode": {
+                        "OtaName": "Floors"
+                    }
+                },
+                {
+                    "OtaType": "GRI",
+                    "OtaCd": 28,
+                    "OtaCode": {
+                        "OtaName": "Total rooms and suites"
+                    }
+                },
+                {
+                    "OtaType": "PCT",
+                    "OtaCd": 20,
+                    "OtaCode": {
+                        "OtaName": "Hotel",
+                        "OtaName2": "Hotel"
+                    }
+                },
+                {
+                    "OtaType": "SEG",
+                    "OtaCd": 2,
+                    "OtaCode": {
+                        "OtaName": "Budget"
+                    }
+                },
+                {},
+                {},
+                {},
+                {
+                    "OtaCd": 653
+                },
+                {
+                    "OtaCd": 654
+                },
+                {},
+                {},
+                {
+                    "OtaType": "PMT",
+                    "OtaCd": 32,
+                    "OtaCode": {
+                        "OtaName": "Other information"
+                    }
+                }
+            ],
+            "RoomAmenityList": [
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 2,
+                    "OtaCode": {
+                        "OtaName": "Air conditioning",
+                        "OtaName2": "Air conditionné"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 18,
+                    "OtaCode": {
+                        "OtaName": "Cable television",
+                        "OtaName2": "Télévision cablée"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 28,
+                    "OtaCode": {
+                        "OtaName": "Desk",
+                        "OtaName2": "Bureau"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 85,
+                    "OtaCode": {
+                        "OtaName": "Private bathroom",
+                        "OtaName2": "Salle de bain privée"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 92,
+                    "OtaCode": {
+                        "OtaName": "Safe",
+                        "OtaName2": "Coffre-fort dans la chambre"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 97,
+                    "OtaCode": {
+                        "OtaName": "Shower only",
+                        "OtaName2": "Douche uniquement"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 101,
+                    "OtaCode": {
+                        "OtaName": "Smoking",
+                        "OtaName2": "Fumeur"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 123,
+                    "OtaCode": {
+                        "OtaName": "Wireless internet connection",
+                        "OtaName2": "Accès internet WIFI"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 126,
+                    "OtaCode": {
+                        "OtaName": "Air conditioning individually controlled in room",
+                        "OtaName2": "Climatisation à réglage individuel dans la chambre"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 140,
+                    "OtaCode": {
+                        "OtaName": "Pets allowed",
+                        "OtaName2": "Animaux acceptés"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 142,
+                    "OtaCode": {
+                        "OtaName": "Shower",
+                        "OtaName2": "Douche"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 205,
+                    "OtaCode": {
+                        "OtaName": "Free newspaper",
+                        "OtaName2": "Journal gratuit"
+                    }
+                },
+                {
+                    "OtaType": "RMA",
+                    "OtaCd": 251,
+                    "OtaCode": {
+                        "OtaName": "TV"
+                    }
+                }
+            ],
+            "ImageInfoList": [
+                {
+                    "ImgFile": "https://bookings.cdsgroupe.com/photos/Search/FR/ACC/251/ACC2514.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/067e4ec9_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/0ab687c4_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/0e502cc6_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/119dfdc4_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/135ff14a_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/136cd8ce_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/14a4184c_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/1d7b0ca1_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/209a2a6b_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/21e93600_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/22f74933_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/245e93fe_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/2c88306a_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/3051a8cc_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/3bcd6b82_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/3c77ba38_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/3df50ccb_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/3e26ef4f_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/40b0ff36_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/4731afba_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/4b0ac7e7_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/5408a35c_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/5b53fabb_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/5bce7c4a_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/628e6a9c_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/6665b709_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/692b2cf4_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/6a95add3_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/71898c7b_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/7ba1daa6_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/83c2b0fc_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/8c828f4c_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/8ce42c3f_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/901e398a_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/97c6d066_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/9b0fe356_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/9fb25371_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/a1d0732e_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/a2145248_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/a422fc56_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/a93afb72_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/ad4d677a_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/af0e232c_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/b0043f30_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/b5b19984_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/b5d9a5ce_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/ba6f7fb3_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/bf74317a_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/c0de9487_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/c643b082_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/c902d140_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/ca278ac4_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/ca947b32_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/cbb1b536_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/cd6064a9_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/cfa2cbe1_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/d5b8703b_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/d5c8b208_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/dfd1bd76_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/e15d0f58_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/e22009fd_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/e2564132_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/e76e7bc6_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/eb1abbaf_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/f337789f_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/f47a1396_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/fc5a66a2_z.jpg"
+                },
+                {
+                    "ImgFile": "https://i.travelapi.com/hotels/25000000/25000000/24999100/24999048/fde271c3_z.jpg"
+                }
+            ],
+            "AditionalInfoDescriptionListFr": [
+                "Enregistrement & Règlement en ligne",
+                "Distanciation sociale & sens de circulation",
+                "Formation des équipes internes aux mesures internes",
+                "Horaires & Messages de nettoyages des chambres",
+                "Renforcement du nettoyage du linge",
+                "Procédures de nettoyage renforcées des points de contacts en chambre",
+                "Port du masque par le personnel",
+                "Mise à disposition de gel hydro-alcoolique",
+                "Nettoyage renforcé des lieux de passage"
+            ],
+            "AditionalInfoDescriptionListEn": [
+                "Online Registration & Payment",
+                "Social distancing & traffic flow",
+                "Training of internal teams in internal measures",
+                "Room cleaning hours & messages",
+                "Reinforcement of linen cleaning",
+                "Reinforced cleaning procedures for room contact points",
+                "Staff wearing the mask",
+                "Provision of hydro - Alcoholic gel",
+                "Reinforced cleaning of places of passage"
+            ],
+            "SanitaryNote": 7.0,
+            "SanitaryNorm": "Accor - All Safe",
+            "ScoreBookingCom": "7,2",
+            "NbrReviewBookingCom": "1276",
+            "ScoreTripAdvisor": "3.5",
+            "NbrReviewTripAdvisor": "351",
+            "ImgTripAdvisor": "https://www.tripadvisor.com/img/cdsi/img2/ratings/traveler/3.5-39958-4.png",
+            "IsPhoneBookingActivated": null,
+            "IsCvvRequired": true,
+            "CdsHotelLink": "/Hotels?code=ACC2514"
+        }
+    ],
+    "Result": 1,
+    "ApiHttpStatusCode": 200,
+    "RequestedUri": "http://bookings.cdsgroupe.com/cds-api-test/v1/Hotels?agentDutyCode=THE_TREEP_API&prefix=ibis%20Budget%20Marseille%20Timone",
+    "Message": "200 (OK) - the request succeeded."
+}

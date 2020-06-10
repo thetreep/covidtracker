@@ -2,6 +2,7 @@ package datagouv
 
 import (
 	"io"
+	"sort"
 	"strconv"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 var _ covidtracker.EmergencyService = &Service{}
 
 func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
+	s.log.Debug(s.Ctx, "refreshing emergency data...")
 
 	//Header of csv emergency file
 	const (
@@ -35,15 +37,16 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 	)
 
 	//TODO add limits to avoid duplicate
-	reader, close, err := s.GetCSV(EmergencyURL)
+	reader, close, err := s.GetCSV(EmergencyID)
 	if err != nil {
 		return nil, err
 	}
 	defer close()
 
 	var (
-		result []*covidtracker.Emergency
-		atoi   = func(s string) (int, error) {
+		result      []*covidtracker.Emergency
+		resultByKey = make(map[string]*covidtracker.Emergency)
+		atoi        = func(s string) (int, error) {
 			if s == "" {
 				return 0, nil
 			}
@@ -61,12 +64,9 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 		}
 
 		entry := &covidtracker.Emergency{
-			AgeGroup: covidtracker.AgeGroup(line[sursaudClAgeCorona]),
+			Department: line[dep],
 		}
-		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "emergency", "dep") != nil {
-			continue
-		}
+
 		entry.Count, err = atoi(line[nbrePassTot])
 		if s.handleParsingErr(err, "emergency", "nbrePassTot") != nil {
 			continue
@@ -87,13 +87,35 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 		if s.handleParsingErr(err, "emergency", "nbreActeCorona") != nil {
 			continue
 		}
-		entry.NoticeDate, err = time.Parse("2006-01-02", line[dateDePassage])
+		entry.PassageDate, err = time.Parse("2006-01-02", line[dateDePassage])
 		if s.handleParsingErr(err, "emergency", "dateDePassage") != nil {
 			continue
 		}
 
-		result = append(result, entry)
+		k := line[dateDePassage] + "_" + line[dep]
+		if _, ok := resultByKey[k]; ok {
+			resultByKey[k].SOSMedCov19SuspAct += entry.SOSMedCov19SuspAct
+			resultByKey[k].TotalSOSMedAct += entry.TotalSOSMedAct
+			resultByKey[k].Cov19SuspHosp += entry.Cov19SuspHosp
+			resultByKey[k].Cov19SuspCount += entry.Cov19SuspCount
+			resultByKey[k].Count += entry.Count
+		} else {
+			resultByKey[k] = entry
+		}
 	}
+
+	for _, e := range resultByKey {
+		result = append(result, e)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].PassageDate.Equal(result[j].PassageDate) {
+			return result[i].Department < result[j].Department
+		}
+		return result[i].PassageDate.After(result[j].PassageDate)
+	})
+
+	s.log.Debug(s.Ctx, "got %d emergency entries !", len(result))
 
 	return result, nil
 }

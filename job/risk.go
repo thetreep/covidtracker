@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/thetreep/covidtracker"
-	"github.com/thetreep/covidtracker/logger"
 )
 
 // RiskJob represents a job for computing risk
@@ -70,14 +69,14 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 
 	duration := seg.Arrival.Sub(seg.Departure)
 
-	parameters, err := j.job.ParametersDAL.GetDefault()
+	parameters, err := j.job.RiskParametersDAL.GetDefault()
 	if err != nil {
 		return risk, err
 	}
 	scope := covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: seg.Transportation.Duration(seg.Departure, seg.Arrival)}
 	params, ok := parameters.ParametersByScope[scope]
 	if !ok {
-		logger.Info(j.job.Ctx, "no parameters for this scope with transportation and duration, fallback on transportation 'Normal'")
+		j.job.logger.Info(j.job.Ctx, "no parameters for this scope with transportation and duration, fallback on transportation 'Normal'")
 		params, ok = parameters.ParametersByScope[covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: covidtracker.Normal}]
 		if !ok {
 			return risk, covidtracker.Errorf("no parameters are defined for scope %v", scope)

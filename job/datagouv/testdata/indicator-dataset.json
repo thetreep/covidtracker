@@ -1,0 +1,116 @@
+{
+	"acronym": null,
+	"archived": null,
+	"badges": [],
+	"created_at": "2020-04-30T17:36:31.546000",
+	"deleted": null,
+	"description": "Le présent jeu de données contient les données sous-jacentes au [tableau de bord COVID-19 publié sur gouvernement.fr](https://www.gouvernement.fr/info-coronavirus/carte-et-donnees). Il décrit l'activité épidémique par département. \n\nL'indicateur proposé dans le jeu de données synthétise les 2 indicateurs suivants : \n- la circulation active du virus, basée sur la proportion de passages aux urgences pour une suspicion de COVID-19 ;\n- la tension hospitalière sur les capacités en réanimation, basée sur les taux d’occupation des lits de réanimation par des patients atteints de COVID-19, par rapport à la capacité initiale avant l’épidémie.",
+	"extras": {},
+	"frequency": "unknown",
+	"frequency_date": null,
+	"id": "5eaaf07f5abc47e306c5c258",
+	"last_modified": "2020-05-29T22:01:03.789000",
+	"last_update": "2020-05-07T16:21:40.303000",
+	"license": "fr-lo",
+	"metrics": {
+	  "discussions": 14,
+	  "followers": 7,
+	  "issues": 0,
+	  "reuses": 16,
+	  "views": 113
+	},
+	"organization": {
+	  "acronym": null,
+	  "class": "Organization",
+	  "id": "534fff94a3a7292c64a77fc1",
+	  "logo": "https://static.data.gouv.fr/avatars/3c/2a35d973814c2681b6941e11810ff3-original.png",
+	  "logo_thumbnail": "https://static.data.gouv.fr/avatars/3c/2a35d973814c2681b6941e11810ff3-100.png",
+	  "name": "Ministère des Solidarités et de la Santé",
+	  "page": "https://www.data.gouv.fr/fr/organizations/ministere-des-solidarites-et-de-la-sante/",
+	  "slug": "ministere-des-solidarites-et-de-la-sante",
+	  "uri": "https://www.data.gouv.fr/api/1/organizations/ministere-des-solidarites-et-de-la-sante/"
+	},
+	"owner": null,
+	"page": "https://www.data.gouv.fr/fr/datasets/indicateurs-dactivite-epidemique-covid-19-par-departement/",
+	"private": false,
+	"resources": [
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "fa614bec69fa7dcfaf24214a0834598d80bc7ce5"
+		},
+		"created_at": "2020-05-07T16:21:40.303000",
+		"description": null,
+		"extras": {},
+		"filesize": 153835,
+		"filetype": "file",
+		"format": "json",
+		"id": "01151af0-3209-4e89-94ab-9b319001c159",
+		"last_modified": "2020-05-29T22:01:03.699000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/01151af0-3209-4e89-94ab-9b319001c159",
+		"metrics": {
+		  "views": 9293
+		},
+		"mime": "application/json",
+		"preview_url": null,
+		"published": "2020-05-07T16:21:40.303000",
+		"title": "donnees-carte-synthese-tricolore.json",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/indicateurs-dactivite-epidemique-covid-19-par-departement/20200529-220103/donnees-carte-synthese-tricolore.json"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "b338f2025554031befae21fad2a69e2146d936ac"
+		},
+		"created_at": "2020-05-01T20:25:16.920000",
+		"description": "Les données sont disponibles également ici : https://raw.githubusercontent.com/etalab/covid19-dashboard/master/data/donnees_carte_synthese_tricolore.csv",
+		"extras": {},
+		"filesize": 43003,
+		"filetype": "file",
+		"format": "csv",
+		"id": "f2d0f955-f9c4-43a8-b588-a03733a38921",
+		"last_modified": "2020-05-29T22:01:02.527000",
+		"latest": "{{apiServerHost}}/indicator.csv",
+		"metrics": {
+		  "views": 4685
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Findicateurs-dactivite-epidemique-covid-19-par-departement%2F20200529-220102%2Fdonnees-carte-synthese-tricolore.csv",
+		"published": "2020-05-01T20:25:16",
+		"title": "donnees-carte-synthese-tricolore.csv",
+		"type": "main",
+		"url": "https://static.data.gouv.fr/resources/indicateurs-dactivite-epidemique-covid-19-par-departement/20200529-220102/donnees-carte-synthese-tricolore.csv"
+	  },
+	  {
+		"checksum": {
+		  "type": "sha1",
+		  "value": "cf56866e5fb53dd197aa9b394df2eb68e91503e0"
+		},
+		"created_at": "2020-04-30T21:40:43.579000",
+		"description": null,
+		"extras": {},
+		"filesize": 306,
+		"filetype": "file",
+		"format": "csv",
+		"id": "f73658fb-6aa5-4c1f-bd06-cbe68e4b1206",
+		"last_modified": "2020-04-30T21:40:50.819000",
+		"latest": "{{apiServerHost}}/fr/datasets/r/f73658fb-6aa5-4c1f-bd06-cbe68e4b1206",
+		"metrics": {
+		  "views": 4137
+		},
+		"mime": "text/csv",
+		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Findicateurs-dactivite-epidemique-covid-19-par-departement%2F20200430-214043%2Fmetadonnees-indicateurs-activite-epidemique-covid19.csv",
+		"published": "2020-04-30T21:40:43",
+		"title": "metadonnees-indicateurs-activite-epidemique-covid19.csv",
+		"type": "documentation",
+		"url": "https://static.data.gouv.fr/resources/indicateurs-dactivite-epidemique-covid-19-par-departement/20200430-214043/metadonnees-indicateurs-activite-epidemique-covid19.csv"
+	  }
+	],
+	"slug": "indicateurs-dactivite-epidemique-covid-19-par-departement",
+	"spatial": null,
+	"tags": [],
+	"temporal_coverage": null,
+	"title": "Indicateurs d'activité épidémique COVID-19 par département ",
+	"uri": "https://www.data.gouv.fr/api/1/datasets/indicateurs-dactivite-epidemique-covid-19-par-departement/"
+  }
