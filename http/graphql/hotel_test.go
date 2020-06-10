@@ -73,30 +73,39 @@ func TestSearch(t *testing.T) {
 	})
 
 	t.Run("Hotels found", func(t *testing.T) {
+
 		hotel.HotelsByPrefixFn = func(prefix string) ([]*covidtracker.Hotel, error) {
-			r := []*covidtracker.Hotel{
-				&covidtracker.Hotel{
-					Address:  "69, Boulevard Sakakini",
-					City:     "Marseille",
-					ImageURL: "https://bookings.cdsgroupe.com/photos/Search/FR/ACC/251/ACC2514.jpg",
-					Name:     "Ibis Budget Marseille Timone",
-					SanitaryInfos: []string{
-						"Enregistrement & Règlement en ligne",
-						"Distanciation sociale & sens de circulation",
-						"Formation des équipes internes aux mesures internes",
-						"Horaires & Messages de nettoyages des chambres",
-						"Renforcement du nettoyage du linge",
-						"Procédures de nettoyage renforcées des points de contacts en chambre",
-						"Port du masque par le personnel",
-						"Mise à disposition de gel hydro-alcoolique",
-						"Nettoyage renforcé des lieux de passage",
-					},
-					SanitaryNorm: "Accor - All Safe",
-					SanitaryNote: 7,
-					ZipCode:      "13005",
+			h := []*covidtracker.Hotel{{
+				Address:  "69, Boulevard Sakakini",
+				City:     "Marseille",
+				ImageURL: "https://bookings.cdsgroupe.com/photos/Search/FR/ACC/251/ACC2514.jpg",
+				Name:     "Ibis Budget Marseille Timone",
+				SanitaryInfos: []string{
+					"Enregistrement & Règlement en ligne",
+					"Distanciation sociale & sens de circulation",
+					"Formation des équipes internes aux mesures internes",
+					"Horaires & Messages de nettoyages des chambres",
+					"Renforcement du nettoyage du linge",
+					"Procédures de nettoyage renforcées des points de contacts en chambre",
+					"Port du masque par le personnel",
+					"Mise à disposition de gel hydro-alcoolique",
+					"Nettoyage renforcé des lieux de passage",
 				},
+				SanitaryNorm: "Accor - All Safe",
+				SanitaryNote: 7,
+				ZipCode:      "13005",
+			},
 			}
-			return r, nil
+			return h, nil
+		}
+
+		db := []*covidtracker.Hotel{}
+		hotel.InsertFn = func(hotels ...*covidtracker.Hotel) error {
+			for i, hotel := range hotels {
+				hotel.ID = covidtracker.HotelID(fmt.Sprint(i + 1))
+				db = append(db, hotel)
+			}
+			return nil
 		}
 
 		tcases := map[string]struct {
@@ -158,13 +167,55 @@ func TestSearch(t *testing.T) {
 			},
 		}
 
+		expDB := []*covidtracker.Hotel{{
+			// ID:       "1",
+			Address:  "69, Boulevard Sakakini",
+			City:     "Marseille",
+			ImageURL: "https://bookings.cdsgroupe.com/photos/Search/FR/ACC/251/ACC2514.jpg",
+			Name:     "Ibis Budget Marseille Timone",
+			SanitaryInfos: []string{
+				"Enregistrement & Règlement en ligne",
+				"Distanciation sociale & sens de circulation",
+				"Formation des équipes internes aux mesures internes",
+				"Horaires & Messages de nettoyages des chambres",
+				"Renforcement du nettoyage du linge",
+				"Procédures de nettoyage renforcées des points de contacts en chambre",
+				"Port du masque par le personnel",
+				"Mise à disposition de gel hydro-alcoolique",
+				"Nettoyage renforcé des lieux de passage",
+			},
+			SanitaryNorm: "Accor - All Safe",
+			SanitaryNote: 7,
+			ZipCode:      "13005",
+		}}
+
 		for name, tcase := range tcases {
 			t.Logf("case %s... :", name)
 
+			db = []*covidtracker.Hotel{{
+				Address:  "69, Boulevard Sakakini",
+				City:     "Marseille",
+				ImageURL: "https://bookings.cdsgroupe.com/photos/Search/FR/ACC/251/ACC2514.jpg",
+				Name:     "Ibis Budget Marseille Timone",
+				SanitaryInfos: []string{
+					"Enregistrement & Règlement en ligne",
+					"Distanciation sociale & sens de circulation",
+					"Formation des équipes internes aux mesures internes",
+					"Horaires & Messages de nettoyages des chambres",
+					"Renforcement du nettoyage du linge",
+					"Procédures de nettoyage renforcées des points de contacts en chambre",
+					"Port du masque par le personnel",
+					"Mise à disposition de gel hydro-alcoolique",
+					"Nettoyage renforcé des lieux de passage",
+				},
+				SanitaryNorm: "Accor - All Safe",
+				SanitaryNote: 7,
+				ZipCode:      "13005",
+			}}
 			hotel.Reset()
 
-			got, err := client.Do(tcase.tpl, map[string]interface{}{
-				"prefix": "Ibis Budget Marseille Timone",
+			got, err := client.Do(allHotel, map[string]interface{}{
+				"prefix": "Ibis budget marseille timone",
 			})
 
 			expResult := &gqlResp{}
@@ -174,6 +225,8 @@ func TestSearch(t *testing.T) {
 
 			test.Compare(t, err, nil, name+": unexpected error")
 			test.Compare(t, hotel.HotelsByPrefixInvoked, true, name+": hotelsByPrefix invokation is expected")
+			test.Compare(t, hotel.InsertInvoked, true, name+": insert invokation expected")
+			test.Compare(t, db, expDB, name+": unexpected inserted results")
 			test.Compare(t, got, expResult, name+": unexpected result")
 		}
 	})
