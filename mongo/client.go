@@ -21,10 +21,8 @@ type Client struct {
 	Ctx context.Context
 
 	// DAL
-
-	risk  RiskDAL
-	hotel HotelDAL
 	risk            RiskDAL
+	hotel           HotelDAL
 	covCase         CaseDAL
 	emergency       EmergencyDAL
 	hospitalization HospDAL

@@ -58,14 +58,10 @@ func (h *HotelHandler) Search() *graphql.Field {
 				return nil, fmt.Errorf("%v", err)
 			}
 
-			if hotels == nil || len(hotels) == 0 {
-				return nil, nil
-			}
-
 			var mHotels []*covidtracker.Hotel
 			if mHotels, err = h.DAL.Insert(hotels); err != nil {
 				return hotels, gqlerrors.NewError(
-					"error insertion database",
+					"cannot insert to database",
 					nil,
 					"",
 					nil,
