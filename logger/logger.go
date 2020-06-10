@@ -119,6 +119,13 @@ func (l *Logger) PanicWithFields(ctx context.Context, fields map[string]interfac
 	l.entry(ctx, fields, true).Panicf(str, vars...)
 }
 
+func (l *Logger) Fatal(ctx context.Context, str string, vars ...interface{}) {
+	l.FatalWithFields(ctx, nil, str, vars...)
+}
+func (l *Logger) FatalWithFields(ctx context.Context, fields map[string]interface{}, str string, vars ...interface{}) {
+	l.entry(ctx, fields, true).Fatalf(str, vars...)
+}
+
 func (l *Logger) entry(ctx context.Context, fields map[string]interface{}, includeStack bool) *logrus.Entry {
 	entry := DefaultLogger.WithFields(fields)
 	if id := ctx.Value(ContextKeyRequestId); id != nil {

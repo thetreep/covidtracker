@@ -44,7 +44,7 @@ func (s *HospDAL) Get(dep string, date time.Time) (*covidtracker.Hospitalization
 	}
 }
 
-func (s *HospDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Hospitalization, error) {
+func (s *HospDAL) GetRange(dep string, start, end time.Time) ([]*covidtracker.Hospitalization, error) {
 	var result []*covidtracker.Hospitalization
 
 	cur, err := s.collection.Find(s.client.Ctx, bson.M{"dep": dep, "date": dateRangeFilter(start, end)})

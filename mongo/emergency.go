@@ -44,7 +44,7 @@ func (s *EmergencyDAL) Get(dep string, date time.Time) (*covidtracker.Emergency,
 	}
 }
 
-func (s *EmergencyDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Emergency, error) {
+func (s *EmergencyDAL) GetRange(dep string, start, end time.Time) ([]*covidtracker.Emergency, error) {
 	var result []*covidtracker.Emergency
 
 	cur, err := s.collection.Find(s.client.Ctx, bson.M{"dep": dep, "passageDate": dateRangeFilter(start, end)})

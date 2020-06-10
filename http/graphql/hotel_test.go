@@ -203,7 +203,7 @@ func TestSearch(t *testing.T) {
 
 			expResult := &gqlResp{}
 			if err := json.Unmarshal(tcase.expRaw, expResult); err != nil {
-				t.Fatal(err)
+				t.Fatal("test", err)
 			}
 
 			test.Compare(t, err, nil, name+": unexpected error")

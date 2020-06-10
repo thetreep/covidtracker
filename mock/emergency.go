@@ -10,7 +10,7 @@ type EmergencyDAL struct {
 	GetFn      func(dep string, date time.Time) (*covidtracker.Emergency, error)
 	GetInvoked bool
 
-	GetRangeFn      func(dep int, start, end time.Time) ([]*covidtracker.Emergency, error)
+	GetRangeFn      func(dep string, start, end time.Time) ([]*covidtracker.Emergency, error)
 	GetRangeInvoked bool
 
 	UpsertFn      func(...*covidtracker.Emergency) error
@@ -23,7 +23,7 @@ func (m *EmergencyDAL) Get(dep string, date time.Time) (*covidtracker.Emergency,
 	m.GetInvoked = true
 	return m.GetFn(dep, date)
 }
-func (m *EmergencyDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Emergency, error) {
+func (m *EmergencyDAL) GetRange(dep string, start, end time.Time) ([]*covidtracker.Emergency, error) {
 	m.GetRangeInvoked = true
 	return m.GetRangeFn(dep, start, end)
 }

@@ -28,12 +28,19 @@ func main() {
 	}
 	defer mongo.Close()
 
-	j := job.NewJob(datagouv.NewService(context.Background(), &logger.Logger{}))
+	log := &logger.Logger{}
+
+	j := job.NewJob(log, datagouv.NewService(context.Background(), log))
 	j.RiskDAL = mongo.Risk()
 
 	c := cron.New()
 	c.AddFunc("@midnight", func() {
 		fmt.Print(j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening()))
 	})
+	// launch it once to update data at first launch
+	err = j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening())
+	log.HasErr(context.Background(), err)
+
+	c.Run()
 
 }
