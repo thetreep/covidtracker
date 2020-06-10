@@ -19,6 +19,6 @@ type CaseService interface {
 
 type CaseDAL interface {
 	Get(dep string, date time.Time) (*Case, error)
-	GetRange(dep int, begin, end time.Time) ([]*Case, error)
+	GetRange(dep string, begin, end time.Time) ([]*Case, error)
 	Upsert(...*Case) error
 }

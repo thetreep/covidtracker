@@ -39,6 +39,59 @@ type RiskSegment struct {
 	Report          Report  `bson:"report" json:"report"`
 }
 
+type RiskParameters struct {
+	// Use to splecify that these are the default parameters
+	IsDefault bool `bson:"default" json:"default"`
+
+	// The parameters associated with a scope
+	Parameters []*RiskParameter `bson:"parameters" json:"parameters"`
+}
+
+func (r *RiskParameters) ByScope() map[ParameterScope]*RiskParameter {
+	res := make(map[ParameterScope]*RiskParameter)
+	for _, p := range r.Parameters {
+		res[p.Scope] = p
+	}
+	return res
+}
+
+type RiskParameter struct {
+	// The scope of this risk parameter
+	Scope ParameterScope `bson:"scope" json:"scope"`
+
+	// The number of persons with direct projection possible
+	NbDirect int `bson:"nbDirect" json:"nbDirect"`
+
+	// The probability of contagion via direct projection with an infectious person
+	ProbaContagionDirect float64 `bson:"probaContagionDirect" json:"probaContagionDirect"`
+
+	// The number of persons with direct contact with the person
+	NbContact int `bson:"nbContact" json:"nbContact"`
+
+	// The probability of contagion via direct contact with an infectious person
+	ProbaContagionContact float64 `bson:"probaContagionContact" json:"probaContagionContact"`
+
+	// The number of persons with indirect contact
+	NbIndirect int `bson:"nbIndirect" json:"nbIndirect"`
+
+	// The probability of contagion via indirect contact with an infectious person
+	ProbaContagionIndirect float64 `bson:"probaContagionIndirect" json:"probaContagionIndirect"`
+
+	// The Pluses of this kind of segment
+	Pluses []string `bson:"pluses" json:"pluses"`
+
+	// The Minuses of this kind of segment
+	Minuses []string `bson:"minuses" json:"minuses"`
+
+	// The Advices of this kind of segment
+	Advices []string `bson:"advices" json:"advices"`
+}
+
+type ParameterScope struct {
+	Transportation Transportation         `bson:"transportation" json:"transportation"`
+	Duration       TransportationDuration `bson:"duration" json:"duration"`
+}
+
 //RiskSegID identifies a RiskSegment
 type RiskSegID string
 
@@ -51,4 +104,10 @@ type RiskDAL interface {
 //RiskJob defines the job to implements risk data logic
 type RiskJob interface {
 	ComputeRisk(segs []Segment, protects []Protection) (*Risk, error)
+}
+
+//RiskParametersDAL defines the data access layer of risk parameters
+type RiskParametersDAL interface {
+	GetDefault() (*RiskParameters, error)
+	Insert(p *RiskParameters) error
 }

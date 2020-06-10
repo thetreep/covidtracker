@@ -28,6 +28,6 @@ type HospService interface {
 
 type HospDAL interface {
 	Get(dep string, date time.Time) (*Hospitalization, error)
-	GetRange(dep int, begin, end time.Time) ([]*Hospitalization, error)
+	GetRange(dep string, begin, end time.Time) ([]*Hospitalization, error)
 	Upsert(...*Hospitalization) error
 }

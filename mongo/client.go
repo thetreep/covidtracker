@@ -22,6 +22,7 @@ type Client struct {
 
 	// DAL
 	risk            RiskDAL
+	riskParameters  RiskParametersDAL
 	hotel           HotelDAL
 	covCase         CaseDAL
 	emergency       EmergencyDAL
@@ -78,12 +79,21 @@ func (c *Client) Open() error {
 
 	c.database = c.mongo.Database(mongoDatabase)
 	c.risk.collection = c.database.Collection("risk")
+	c.risk.client = c
+	c.riskParameters.collection = c.database.Collection("risk_parameters")
+	c.riskParameters.client = c
 	c.hotel.collection = c.database.Collection("hotels")
+	c.hotel.client = c
 	c.covCase.collection = c.database.Collection("case")
+	c.covCase.client = c
 	c.emergency.collection = c.database.Collection("emergency")
+	c.emergency.client = c
 	c.hospitalization.collection = c.database.Collection("hospitalization")
+	c.hospitalization.client = c
 	c.indic.collection = c.database.Collection("indicator")
+	c.indic.client = c
 	c.screening.collection = c.database.Collection("screening")
+	c.screening.client = c
 
 	return nil
 }
@@ -95,6 +105,9 @@ func (c *Client) Close() error {
 
 // Risk returns the dal for risk
 func (c *Client) Risk() covidtracker.RiskDAL { return &c.risk }
+
+// Parameters returns the dal for parameters
+func (c *Client) RiskParameters() covidtracker.RiskParametersDAL { return &c.riskParameters }
 
 // Hotel returns the dal for hotel
 func (c *Client) Hotel() covidtracker.HotelDAL { return &c.hotel }

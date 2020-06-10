@@ -10,7 +10,7 @@ type HospDAL struct {
 	GetFn      func(dep string, date time.Time) (*covidtracker.Hospitalization, error)
 	GetInvoked bool
 
-	GetRangeFn      func(dep int, start, end time.Time) ([]*covidtracker.Hospitalization, error)
+	GetRangeFn      func(dep string, start, end time.Time) ([]*covidtracker.Hospitalization, error)
 	GetRangeInvoked bool
 
 	UpsertFn      func(...*covidtracker.Hospitalization) error
@@ -24,7 +24,7 @@ func (m *HospDAL) Get(dep string, date time.Time) (*covidtracker.Hospitalization
 	return m.GetFn(dep, date)
 }
 
-func (m *HospDAL) GetRange(dep int, start, end time.Time) ([]*covidtracker.Hospitalization, error) {
+func (m *HospDAL) GetRange(dep string, start, end time.Time) ([]*covidtracker.Hospitalization, error) {
 	m.GetRangeInvoked = true
 	return m.GetRangeFn(dep, start, end)
 }

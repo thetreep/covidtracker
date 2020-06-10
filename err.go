@@ -17,6 +17,7 @@ const (
 	ErrInvalidAuthenticationToken = Error("invalid authentication token provided")
 	ErrMissingAPISecret           = Error("api-secret is missing")
 	ErrInvalidAPISecret           = Error("api-secret is wrong")
+	ErrNoParametersDefined        = Error("no default parameters are defined")
 )
 
 //DB Errors
