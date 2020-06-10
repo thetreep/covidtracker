@@ -11,7 +11,7 @@ import (
 	log "github.com/thetreep/covidtracker/logger"
 )
 
-var logger = log.DefaultLogger
+var logger = log.Logger{}
 
 type Configurer interface {
 	Queries() graphql.Fields

@@ -37,6 +37,8 @@ func main() {
 	ctx := context.Background()
 	j := job.NewJob(log, datagouv.NewService(context.Background(), log))
 	j.RiskDAL = mongo.Risk()
+	j.RiskParametersDAL = mongo.RiskParameters()
+	j.EmergencyDAL = mongo.Emergency()
 	j.HotelDAL = mongo.Hotel()
 
 	pingHandler := &graphql.PingHandler{}
