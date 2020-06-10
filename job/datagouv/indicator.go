@@ -2,7 +2,7 @@ package datagouv
 
 import (
 	"io"
-	"strconv"
+	"sort"
 	"time"
 
 	"github.com/thetreep/covidtracker"
@@ -11,23 +11,26 @@ import (
 var _ covidtracker.IndicService = &Service{}
 
 func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
+	s.log.Debug(s.Ctx, "refreshing indicator data...")
 
-	//Header of csv emergency file
+	//Header of csv indicator file
 	const (
 		extractDate = iota
 		departement
+		depName
+		region
 		indicSynthese
 	)
 
-	reader, close, err := s.GetCSV(IndicatorURL)
+	reader, close, err := s.GetCSV(IndicatorID)
 	if err != nil {
 		return nil, err
 	}
 	defer close()
 
 	var (
-		result []*covidtracker.Indicator
-		atoi   = strconv.Atoi
+		result      []*covidtracker.Indicator
+		resultByKey = make(map[string]*covidtracker.Indicator)
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -40,19 +43,33 @@ func (s *Service) RefreshIndicator() ([]*covidtracker.Indicator, error) {
 		}
 
 		entry := &covidtracker.Indicator{
-			Color: line[indicSynthese],
+			Color:      line[indicSynthese],
+			Department: line[departement],
 		}
-		entry.Department, err = atoi(line[departement])
-		if s.handleParsingErr(err, "indicator", "dep") != nil {
-			continue
-		}
+
 		entry.ExtractDate, err = time.Parse("2006-01-02", line[extractDate])
 		if s.handleParsingErr(err, "indicator", "extractDate") != nil {
 			continue
 		}
 
-		result = append(result, entry)
+		//avoid duplicate
+		k := line[extractDate] + "_" + line[departement]
+		resultByKey[k] = entry
+
 	}
+
+	for _, e := range resultByKey {
+		result = append(result, e)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].ExtractDate.Equal(result[j].ExtractDate) {
+			return result[i].Department < result[j].Department
+		}
+		return result[i].ExtractDate.After(result[j].ExtractDate)
+	})
+
+	s.log.Debug(s.Ctx, "got %d screening data !", len(result))
 
 	return result, nil
 }

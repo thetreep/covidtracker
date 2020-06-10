@@ -145,7 +145,7 @@ func (s *Server) log() adapter {
 
 			ctx := r.Context()
 			msg := fmt.Sprintf("%s - %s [%s] \"%s %s\" \"%s\" \"%s\" (%dms)", clientIP, hostname, time.Now().Format("02/Jan/2006:15:04:05 -0700"), r.Method, path, referer, clientUserAgent, latency)
-			logger.InfoWithFields(ctx, fields, msg)
+			s.logger.InfoWithFields(ctx, fields, msg)
 		})
 	}
 }

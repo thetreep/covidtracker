@@ -8,8 +8,10 @@ import (
 	"github.com/graphql-go/graphql/gqlerrors"
 	"github.com/graphql-go/handler"
 
-	"github.com/thetreep/covidtracker/logger"
+	log "github.com/thetreep/covidtracker/logger"
 )
+
+var logger = log.DefaultLogger
 
 type Configurer interface {
 	Queries() graphql.Fields
@@ -45,6 +47,7 @@ func NewHandler(configs ...Configurer) (http.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	logger.Debug(context.Background(), "graphQL schema created")
 
 	return handler.New(&handler.Config{

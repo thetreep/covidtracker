@@ -387,33 +387,33 @@ func createOrderedBatches(models []WriteModel) []bulkWriteBatch {
 	i := -1 // batch index
 
 	for _, model := range models {
-		var createNewBatch bool
+		var UpsertBatch bool
 		var canRetry bool
 		var newKind writeCommandKind
 
 		// TODO(GODRIVER-1157): fix batching once operation retryability is fixed
 		switch model.(type) {
 		case *InsertOneModel:
-			createNewBatch = prevKind != insertCommand
+			UpsertBatch = prevKind != insertCommand
 			canRetry = true
 			newKind = insertCommand
 		case *DeleteOneModel:
-			createNewBatch = prevKind != deleteOneCommand
+			UpsertBatch = prevKind != deleteOneCommand
 			canRetry = true
 			newKind = deleteOneCommand
 		case *DeleteManyModel:
-			createNewBatch = prevKind != deleteManyCommand
+			UpsertBatch = prevKind != deleteManyCommand
 			newKind = deleteManyCommand
 		case *ReplaceOneModel, *UpdateOneModel:
-			createNewBatch = prevKind != updateOneCommand
+			UpsertBatch = prevKind != updateOneCommand
 			canRetry = true
 			newKind = updateOneCommand
 		case *UpdateManyModel:
-			createNewBatch = prevKind != updateManyCommand
+			UpsertBatch = prevKind != updateManyCommand
 			newKind = updateManyCommand
 		}
 
-		if createNewBatch {
+		if UpsertBatch {
 			batches = append(batches, bulkWriteBatch{
 				models:   []WriteModel{model},
 				canRetry: canRetry,

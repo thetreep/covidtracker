@@ -2,6 +2,7 @@ package datagouv
 
 import (
 	"io"
+	"sort"
 	"strconv"
 	"time"
 
@@ -11,6 +12,8 @@ import (
 var _ covidtracker.CaseService = &Service{}
 
 func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
+	s.log.Debug(s.Ctx, "refreshing case data...")
+
 	//header
 	const (
 		dep = iota
@@ -18,15 +21,16 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 		nb
 	)
 
-	reader, close, err := s.GetCSV(CaseURL)
+	reader, close, err := s.GetCSV(CaseID)
 	if err != nil {
 		return nil, err
 	}
 	defer close()
 
 	var (
-		result []*covidtracker.Case
-		atoi   = strconv.Atoi
+		result      []*covidtracker.Case
+		resultByKey = make(map[string]*covidtracker.Case)
+		atoi        = strconv.Atoi
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -38,12 +42,10 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 			return nil, err
 		}
 
-		entry := &covidtracker.Case{}
-
-		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "covid_case", "nbTest") != nil {
-			continue
+		entry := &covidtracker.Case{
+			Department: line[dep],
 		}
+
 		entry.HospServiceCountRelated, err = atoi(line[nb])
 		if s.handleParsingErr(err, "covid_case", "txPos") != nil {
 			continue
@@ -53,7 +55,24 @@ func (s *Service) RefreshCase() ([]*covidtracker.Case, error) {
 			continue
 		}
 
-		result = append(result, entry)
+		//avoid duplicate
+		k := line[jour] + "_" + line[dep]
+		resultByKey[k] = entry
+
 	}
+
+	for _, e := range resultByKey {
+		result = append(result, e)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].NoticeDate.Equal(result[j].NoticeDate) {
+			return result[i].Department < result[j].Department
+		}
+		return result[i].NoticeDate.After(result[j].NoticeDate)
+	})
+
+	s.log.Debug(s.Ctx, "got %d case entries !", len(result))
+
 	return result, nil
 }

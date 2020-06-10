@@ -9,7 +9,6 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/thetreep/covidtracker"
-	"github.com/thetreep/covidtracker/logger"
 )
 
 type RiskHandler struct {

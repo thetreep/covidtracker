@@ -2,6 +2,7 @@ package datagouv
 
 import (
 	"io"
+	"sort"
 	"strconv"
 	"time"
 
@@ -11,7 +12,7 @@ import (
 var _ covidtracker.ScreeningService = &Service{}
 
 func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
-	//TODO add limits to avoid duplicate
+	s.log.Debug(s.Ctx, "refreshing screening data...")
 
 	//header
 	const (
@@ -27,15 +28,16 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 		nbPosF
 	)
 
-	reader, close, err := s.GetCSV(ScreeningURL)
+	reader, close, err := s.GetCSV(ScreeningID)
 	if err != nil {
 		return nil, err
 	}
 	defer close()
 
 	var (
-		result []*covidtracker.Screening
-		atoi   = strconv.Atoi
+		result      []*covidtracker.Screening
+		resultByKey = make(map[string]*covidtracker.Screening)
+		atoi        = strconv.Atoi
 	)
 
 	reader.Read() //ignore first line (columns names)
@@ -48,13 +50,9 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 		}
 
 		entry := &covidtracker.Screening{
-			AgeGroup: covidtracker.AgeGroup(line[clageCovid]),
+			Department: line[dep],
 		}
 
-		entry.Department, err = atoi(line[dep])
-		if s.handleParsingErr(err, "screening", "dep") != nil {
-			continue
-		}
 		entry.Count, err = atoi(line[nbTest])
 		if s.handleParsingErr(err, "screening", "nbTest") != nil {
 			continue
@@ -72,8 +70,28 @@ func (s *Service) RefreshScreening() ([]*covidtracker.Screening, error) {
 			continue
 		}
 
-		result = append(result, entry)
+		k := line[jour] + "_" + line[dep]
+		if _, ok := resultByKey[k]; ok {
+			resultByKey[k].PositiveRate += entry.PositiveRate
+			resultByKey[k].PositiveCount += entry.PositiveCount
+			resultByKey[k].Count += entry.Count
+		} else {
+			resultByKey[k] = entry
+		}
 	}
+
+	for _, e := range resultByKey {
+		result = append(result, e)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		if result[i].NoticeDate.Equal(result[j].NoticeDate) {
+			return result[i].Department < result[j].Department
+		}
+		return result[i].NoticeDate.After(result[j].NoticeDate)
+	})
+
+	s.log.Debug(s.Ctx, "got %d screening entries !", len(result))
 
 	return result, nil
 }
