@@ -1,0 +1,10 @@
+FROM golang:1.14
+
+WORKDIR /app
+
+# copy the linux executable
+COPY refresher refresher
+
+EXPOSE 3456
+
+ENTRYPOINT ["/app/refresher"]

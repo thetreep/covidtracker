@@ -47,6 +47,42 @@ jobs:
           root: .
           paths:
             - docker-cache
+  build_refresher:
+    resource_class: small
+    environment:
+      GO111MODULE: "off"
+    working_directory: /go/src/github.com/thetreep/covidtracker
+    docker:
+      - image: circleci/golang:1.14
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Does docker exist
+          command: docker -v
+
+
+
+      - run:
+          name: Build service for runtime docker image (create volume, copy the sources, build executable, copy the executable locally)
+          command: |
+            docker create -v /go/src/github.com/thetreep/covidtracker --name sources golang:1.14 /bin/true
+            docker cp /go/src/github.com/thetreep/covidtracker sources:/go/src/github.com/thetreep
+            docker run --rm -e GO111MODULE="off" --volumes-from sources -w /go/src/github.com/thetreep/covidtracker/cmd/refresher golang:1.14 go build -o refresher
+            docker cp sources:/go/src/github.com/thetreep/covidtracker/cmd/refresher/refresher /go/src/github.com/thetreep/refresher/refresher
+      - run:
+          name: building docker image
+          command: docker build --rm=false -t eu.gcr.io/the-treep-api-1525507752734/covidtracker-refresher:$CIRCLE_SHA1 -f ./Dockerfile.refresher .
+      - run:
+          name: Mkdir docker-cache-refresher
+          command: mkdir -p docker-cache-refresher
+      - run:
+          name: Save docker image to cache directory
+          command: docker save -o docker-cache-refresher/built-image.tar eu.gcr.io/the-treep-api-1525507752734/covidtracker-refresher:$CIRCLE_SHA1
+      - persist_to_workspace:
+          root: .
+          paths:
+            - docker-cache-refresher
   deploy_prod:
     resource_class: small
     working_directory: /go/src/github.com/thetreep/covidtracker
@@ -61,11 +97,17 @@ jobs:
           name: Load docker image from cache
           command: docker load --input docker-cache/built-image.tar
       - run:
+          name: Load docker image for refresher from cache
+          command: docker load --input docker-cache-refresher/built-image.tar
+      - run:
           name: Auth gCloud SDK
           command: bash .circleci/gcloud-auth.sh
       - run:
           name: tag docker image with prod
           command: docker tag eu.gcr.io/the-treep-api-1525507752734/covidtracker:$CIRCLE_SHA1 eu.gcr.io/the-treep-api-1525507752734/covidtracker:prod
+      - run:
+          name: tag docker image for refresher with prod
+          command: docker tag eu.gcr.io/the-treep-api-1525507752734/covidtracker-refresher:$CIRCLE_SHA1 eu.gcr.io/the-treep-api-1525507752734/covidtracker-refresher:prod
       - run:
           name: Running prod.sh
           command: bash .circleci/prod.sh
@@ -75,6 +117,14 @@ workflows:
     jobs:
       - unit_tests
       - build_docker_image:
+          requires:
+            - unit_tests
+          filters:
+            branches:
+              only:
+                - master
+                - prod
+      - build_refresher:
           requires:
             - unit_tests
           filters:
