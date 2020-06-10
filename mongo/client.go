@@ -21,6 +21,9 @@ type Client struct {
 	Ctx context.Context
 
 	// DAL
+
+	risk  RiskDAL
+	hotel HotelDAL
 	risk            RiskDAL
 	covCase         CaseDAL
 	emergency       EmergencyDAL
@@ -36,6 +39,7 @@ type Client struct {
 func NewClient(mongoURI string) *Client {
 	c := &Client{Now: time.Now, MongoURI: mongoURI, Ctx: context.Background()}
 	c.risk.client = c
+	c.hotel.client = c
 	c.covCase.client = c
 	c.emergency.client = c
 	c.hospitalization.client = c
@@ -76,6 +80,7 @@ func (c *Client) Open() error {
 
 	c.database = c.mongo.Database(mongoDatabase)
 	c.risk.collection = c.database.Collection("risk")
+	c.hotel.collection = c.database.Collection("hotels")
 	c.covCase.collection = c.database.Collection("case")
 	c.emergency.collection = c.database.Collection("emergency")
 	c.hospitalization.collection = c.database.Collection("hospitalization")
@@ -92,6 +97,9 @@ func (c *Client) Close() error {
 
 // Risk returns the dal for risk
 func (c *Client) Risk() covidtracker.RiskDAL { return &c.risk }
+
+// Hotel returns the dal for hotel
+func (c *Client) Hotel() covidtracker.HotelDAL { return &c.hotel }
 
 // Case returns the dal for hospital service with at least one declared case
 func (c *Client) Case() covidtracker.CaseDAL {
