@@ -106,7 +106,7 @@ func TestSearch(t *testing.T) {
 				hotel.ID = covidtracker.HotelID(fmt.Sprint(i + 1))
 				db = append(db, hotel)
 			}
-			return nil, nil
+			return hotels, nil
 		}
 
 		tcases := map[string]struct {
