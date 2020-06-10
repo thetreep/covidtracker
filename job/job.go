@@ -16,9 +16,8 @@ type Job struct {
 
 	HotelDAL covidtracker.HotelDAL
 	HotelJob HotelJob
-  
+
 	RefreshJob RefreshJob
-	HotelJob   HotelJob
 
 	logger covidtracker.Logfer
 }
