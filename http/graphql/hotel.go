@@ -46,14 +46,18 @@ func (h *HotelHandler) Search() *graphql.Field {
 	return &graphql.Field{
 		Type: graphql.NewList(hotelType),
 		Args: graphql.FieldConfigArgument{
+			"city": &graphql.ArgumentConfig{
+				Type: graphql.NewNonNull(graphql.String),
+			},
 			"prefix": &graphql.ArgumentConfig{
 				Type: graphql.NewNonNull(graphql.String),
 			},
 		},
 		Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+			city := params.Args["city"].(string)
 			name := params.Args["prefix"].(string)
 
-			hotels, err := h.Job.HotelsByPrefix(name)
+			hotels, err := h.Job.HotelsByPrefix(city, name)
 			if err != nil {
 				return nil, fmt.Errorf("%v", err)
 			}

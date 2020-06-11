@@ -21,5 +21,5 @@ type HotelDAL interface {
 }
 
 type HotelJob interface {
-	HotelsByPrefix(prefix string) ([]*Hotel, error)
+	HotelsByPrefix(city string, prefix string) ([]*Hotel, error)
 }
