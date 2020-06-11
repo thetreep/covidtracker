@@ -70,3 +70,19 @@ func (g Geo) Check() error {
 
 	return nil
 }
+
+func (g Geo) Dep() (string, error) {
+
+	if g.Properties.DepCode != nil {
+		return *g.Properties.DepCode, nil
+	}
+
+	if g.Properties.GeoCoding != nil {
+		if err := g.Check(); err != nil {
+			return "", err
+		}
+		return g.Properties.GeoCoding.PostCode[:2], nil
+	}
+
+	return "", fmt.Errorf("department missing")
+}
