@@ -43,6 +43,18 @@ type RiskParameters struct {
 	// Use to splecify that these are the default parameters
 	IsDefault bool `bson:"default" json:"default"`
 
+	// The protection factor of sewn mask
+	SewnMaskProtect float64 `bson:"sewnMaskProtect" json:"sewnMaskProtect"`
+
+	// The protection factor of surgical mask
+	SurgicalMaskProtect float64 `bson:"surgicalMaskProtect" json:"surgicalMaskProtect"`
+
+	// The protection factor of ffpx mask
+	FFPXMaskProtect float64 `bson:"ffpxMaskProtect" json:"ffpxMaskProtect"`
+
+	// The protection factor of hydro alcoholic gel
+	HydroAlcoholicGelProtect float64 `bson:"hydroAlcoholicGelProtect" json:"hydroAlcoholicGelProtect"`
+
 	// The parameters associated with a scope
 	Parameters []*RiskParameter `bson:"parameters" json:"parameters"`
 }
@@ -65,17 +77,32 @@ type RiskParameter struct {
 	// The probability of contagion via direct projection with an infectious person
 	ProbaContagionDirect float64 `bson:"probaContagionDirect" json:"probaContagionDirect"`
 
+	// The protection factor of mask against direct contagion
+	MaskProtectDirect float64 `bson:"maskProtectDirect" json:"maskProtectDirect"`
+
 	// The number of persons with direct contact with the person
 	NbContact int `bson:"nbContact" json:"nbContact"`
 
 	// The probability of contagion via direct contact with an infectious person
 	ProbaContagionContact float64 `bson:"probaContagionContact" json:"probaContagionContact"`
 
+	// The protection factor of mask against contact contagion
+	MaskProtectContact float64 `bson:"maskProtectContact" json:"maskProtectContact"`
+
+	// The protection factor of gel against contact contagion
+	GelProtectContact float64 `bson:"gelProtectContact" json:"gelProtectContact"`
+
 	// The number of persons with indirect contact
 	NbIndirect int `bson:"nbIndirect" json:"nbIndirect"`
 
 	// The probability of contagion via indirect contact with an infectious person
 	ProbaContagionIndirect float64 `bson:"probaContagionIndirect" json:"probaContagionIndirect"`
+
+	// The protection factor of mask against indirect contact contagion
+	MaskProtectIndirect float64 `bson:"maskProtectIndirect" json:"maskProtectIndirect"`
+
+	// The protection factor of gel against indirect contact contagion
+	GelProtectIndirect float64 `bson:"gelProtectIndirect" json:"gelProtectIndirect"`
 
 	// The Pluses of this kind of segment
 	Pluses []string `bson:"pluses" json:"pluses"`
@@ -88,8 +115,23 @@ type RiskParameter struct {
 }
 
 type ParameterScope struct {
-	Transportation Transportation         `bson:"transportation" json:"transportation"`
-	Duration       TransportationDuration `bson:"duration" json:"duration"`
+	// Transportation optionally represents the transportation of this scope (if not a place)
+	Transportation Transportation `bson:"transportation" json:"transportation"`
+
+	// Place optionally represents the place of this scope (if not a transportation)
+	Place Place `bson:"place" json:"place"`
+
+	Duration TransportationDuration `bson:"duration" json:"duration"`
+}
+
+func (s *ParameterScope) String() string {
+	if len(s.Transportation) != 0 {
+		return string(s.Transportation)
+	}
+	if len(s.Place) != 0 {
+		return string(s.Place)
+	}
+	return ""
 }
 
 //RiskSegID identifies a RiskSegment

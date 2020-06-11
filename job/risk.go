@@ -39,26 +39,7 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 }
 
 func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidtracker.Protection) (covidtracker.RiskSegment, error) {
-	var (
-		maskProtect float64
-		gelProtect  float64
-	)
 
-	// basic coef for mask protection
-	//@todo: update coefs according to scope
-	for _, prot := range protects {
-		switch prot.Type {
-		case covidtracker.MaskSewn:
-			maskProtect = math.Max(maskProtect, 0.71)
-		case covidtracker.MaskSurgical:
-			maskProtect = math.Max(maskProtect, 0.85)
-		case covidtracker.MaskFFPX:
-			maskProtect = math.Max(maskProtect, 0.99)
-		case covidtracker.Gel:
-			// @todo gelProtect = 0.99
-			gelProtect = 0.1
-		}
-	}
 	risk := covidtracker.RiskSegment{Segment: &seg}
 	addPlus := func(category, msg string) {
 		risk.Report.Pluses = append(risk.Report.Pluses, covidtracker.Statement{Category: category, Value: msg})
@@ -76,33 +57,84 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 	if err != nil {
 		return risk, err
 	}
-	scope := covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: seg.Transportation.Duration(seg.Departure, seg.Arrival)}
+
+	var (
+		maskProtect float64
+		gelProtect  float64
+	)
+
+	for _, prot := range protects {
+		switch prot.Type {
+		case covidtracker.MaskSewn:
+			maskProtect = math.Max(maskProtect, parameters.SewnMaskProtect)
+		case covidtracker.MaskSurgical:
+			maskProtect = math.Max(maskProtect, parameters.SurgicalMaskProtect)
+		case covidtracker.MaskFFPX:
+			maskProtect = math.Max(maskProtect, parameters.FFPXMaskProtect)
+		case covidtracker.Gel:
+			gelProtect = parameters.HydroAlcoholicGelProtect
+		}
+	}
+	scope := covidtracker.ParameterScope{}
+	if len(seg.Transportation) > 0 {
+		scope.Transportation = seg.Transportation
+		scope.Duration = seg.Transportation.Duration(seg.Departure, seg.Arrival)
+	}
+	if seg.HotelID != nil {
+		place := covidtracker.HotelPlace
+		scope.Place = place
+		scope.Duration = covidtracker.Normal
+	}
 	paramsByScope := parameters.ByScope()
 	params, ok := paramsByScope[scope]
 	if !ok {
 		j.job.logger.Info(j.job.Ctx, "no parameters for this scope with transportation and duration, fallback on transportation 'Normal'")
-		params, ok = paramsByScope[covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: covidtracker.Normal}]
+		scope.Duration = covidtracker.Normal
+		params, ok = paramsByScope[scope]
 		if !ok {
-			return risk, covidtracker.Errorf("no parameters are defined for scope %v", scope)
+			return risk, covidtracker.Errorf("no parameters are defined for scope %s", &scope)
 		}
 	}
 	for _, p := range params.Pluses {
-		addPlus(string(seg.Transportation), p)
+		addPlus(scope.String(), p)
 	}
 	for _, m := range params.Minuses {
-		addMinus(string(seg.Transportation), m)
+		addMinus(scope.String(), m)
 	}
 	for _, a := range params.Advices {
-		addAdvice(string(seg.Transportation), a)
+		addAdvice(scope.String(), a)
 	}
 
 	if duration > 4*time.Hour {
 		addAdvice(string(covidtracker.Mask), "Votre voyage est long, emportez plusieurs masques")
 	}
-
-	originDep, err := seg.Origin.Dep()
-	if err != nil {
-		return risk, covidtracker.Errorf("cannot find department: %s", err)
+	var (
+		originDep string
+	)
+	if seg.HotelID != nil {
+		hotel, err := j.job.HotelDAL.Get(covidtracker.HotelID(*seg.HotelID))
+		if err != nil {
+			return risk, covidtracker.Errorf("cannot find hotel with ID %q: %s", *seg.HotelID, err)
+		}
+		originDep, err = hotel.Dep()
+		if err != nil {
+			return risk, covidtracker.Errorf("cannot find hotel department: %s", err)
+		}
+		// basic adjustement of coefs according to sanitary note
+		if hotel.SanitaryNote > 0. && hotel.SanitaryNote <= 10. {
+			hotelProtect := hotel.SanitaryNote / 10.
+			params.ProbaContagionContact *= (1 - hotelProtect)
+			params.ProbaContagionDirect *= (1 - hotelProtect)
+			params.ProbaContagionIndirect *= (1 - hotelProtect)
+		}
+	} else {
+		if seg.Origin == nil {
+			return risk, covidtracker.Errorf("invalid segment, missing origin")
+		}
+		originDep, err = seg.Origin.Dep()
+		if err != nil {
+			return risk, covidtracker.Errorf("cannot find department: %s", err)
+		}
 	}
 
 	departure := seg.Departure
@@ -129,19 +161,22 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 
 	probaContagious := probaContagiousPerson(nbSuspiciousCase, pop)
 
-	// infected if infected with contact OR with direct OR with indirect contact
-	riskLevel := probaUnionIndep(
-		probaInfected(params.NbContact, probaContagious, params.ProbaContagionContact),
-		probaUnionIndep(
-			probaInfected(params.NbDirect, probaContagious, params.ProbaContagionDirect),
-			probaInfected(params.NbIndirect, probaContagious, params.ProbaContagionIndirect),
-		),
-	)
+	// Contagion via contact
+	contactRisk := probaInfected(params.NbContact, probaContagious, params.ProbaContagionContact)
+	contactRisk *= (1 - maskProtect*params.MaskProtectContact)
+	contactRisk *= (1 - gelProtect*params.GelProtectContact)
 
-	riskLevel *= (1 - maskProtect)
-	riskLevel *= (1 - gelProtect)
-	risk.RiskLevel = riskLevel
-	risk.ConfidenceLevel = 1 - riskLevel
+	// Contagion via direct projection
+	directRisk := probaInfected(params.NbDirect, probaContagious, params.ProbaContagionDirect)
+	directRisk *= (1 - maskProtect*params.MaskProtectDirect)
+
+	indirectRisk := probaInfected(params.NbIndirect, probaContagious, params.ProbaContagionIndirect)
+	indirectRisk *= (1 - maskProtect*params.MaskProtectIndirect)
+	indirectRisk *= (1 - gelProtect*params.GelProtectIndirect)
+
+	// infected if infected with contact OR with direct OR with indirect contact
+	risk.RiskLevel = probaUnionIndep(contactRisk, probaUnionIndep(directRisk, indirectRisk))
+	risk.ConfidenceLevel = 1 - risk.RiskLevel
 
 	return risk, nil
 }
