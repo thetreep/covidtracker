@@ -29,12 +29,14 @@ func TestHotelsByPrefix(t *testing.T) {
 			checkAuth(t, r)
 			checkURLParams(t, r, map[string]string{
 				"agentDutyCode": AgentDutyCode,
-				"prefix":        "ibis Budget Marseille Timone",
+				"country":       "FR",
+				"city":          "Marseille",
+				"prefix":        "ibis Budget",
 			})
 			defer r.Body.Close()
 			fmt.Fprint(w, fileContent("./testdata/HotelByPrefix-resp.json"))
 		})
-		hotels, err := c.HotelsByPrefix("ibis Budget Marseille Timone")
+		hotels, err := c.HotelsByPrefix("Marseille", "ibis Budget")
 		if err != nil {
 			t.Fatal("une erreur est survenue", err)
 		}
