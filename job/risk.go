@@ -28,8 +28,6 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 		r.BySegments = append(r.BySegments, segRisk)
 	}
 
-	//TODO use hotel information
-
 	if err := j.aggregateSegmentRisk(r); err != nil {
 		return nil, fmt.Errorf("cannot aggregate risk of %d segments: %s", len(segs), err)
 	}
@@ -41,26 +39,7 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 }
 
 func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidtracker.Protection) (covidtracker.RiskSegment, error) {
-	var (
-		maskProtect float64
-		gelProtect  float64
-	)
 
-	// basic coef for mask protection
-	//@todo: update coefs according to scope
-	for _, prot := range protects {
-		switch prot.Type {
-		case covidtracker.MaskSewn:
-			maskProtect = math.Max(maskProtect, 0.71)
-		case covidtracker.MaskSurgical:
-			maskProtect = math.Max(maskProtect, 0.85)
-		case covidtracker.MaskFFPX:
-			maskProtect = math.Max(maskProtect, 0.99)
-		case covidtracker.Gel:
-			// @todo gelProtect = 0.99
-			gelProtect = 0.1
-		}
-	}
 	risk := covidtracker.RiskSegment{Segment: &seg}
 	addPlus := func(category, msg string) {
 		risk.Report.Pluses = append(risk.Report.Pluses, covidtracker.Statement{Category: category, Value: msg})
@@ -78,6 +57,25 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 	if err != nil {
 		return risk, err
 	}
+
+	var (
+		maskProtect float64
+		gelProtect  float64
+	)
+
+	for _, prot := range protects {
+		switch prot.Type {
+		case covidtracker.MaskSewn:
+			maskProtect = math.Max(maskProtect, parameters.SewnMaskProtect)
+		case covidtracker.MaskSurgical:
+			maskProtect = math.Max(maskProtect, parameters.SurgicalMaskProtect)
+		case covidtracker.MaskFFPX:
+			maskProtect = math.Max(maskProtect, parameters.FFPXMaskProtect)
+		case covidtracker.Gel:
+			gelProtect = parameters.HydroAlcoholicGelProtect
+		}
+	}
+
 	scope := covidtracker.ParameterScope{Transportation: seg.Transportation, Duration: seg.Transportation.Duration(seg.Departure, seg.Arrival)}
 	paramsByScope := parameters.ByScope()
 	params, ok := paramsByScope[scope]
@@ -102,7 +100,7 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 		addAdvice(string(covidtracker.Mask), "Votre voyage est long, emportez plusieurs masques")
 	}
 
-	originDep := "75" // @todo: use real values sent by front when available
+	originDep := "75" // @todo: update with actual value
 
 	departure := seg.Departure
 	now := time.Now()
@@ -128,19 +126,22 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 
 	probaContagious := probaContagiousPerson(nbSuspiciousCase, pop)
 
-	// infected if infected with contact OR with direct OR with indirect contact
-	riskLevel := probaUnionIndep(
-		probaInfected(params.NbContact, probaContagious, params.ProbaContagionContact),
-		probaUnionIndep(
-			probaInfected(params.NbDirect, probaContagious, params.ProbaContagionDirect),
-			probaInfected(params.NbIndirect, probaContagious, params.ProbaContagionIndirect),
-		),
-	)
+	// Contagion via contact
+	contactRisk := probaInfected(params.NbContact, probaContagious, params.ProbaContagionContact)
+	contactRisk *= (1 - maskProtect*params.MaskProtectContact)
+	contactRisk *= (1 - gelProtect*params.GelProtectContact)
 
-	riskLevel *= (1 - maskProtect)
-	riskLevel *= (1 - gelProtect)
-	risk.RiskLevel = riskLevel
-	risk.ConfidenceLevel = 1 - riskLevel
+	// Contagion via direct projection
+	directRisk := probaInfected(params.NbDirect, probaContagious, params.ProbaContagionDirect)
+	directRisk *= (1 - maskProtect*params.MaskProtectDirect)
+
+	indirectRisk := probaInfected(params.NbIndirect, probaContagious, params.ProbaContagionIndirect)
+	indirectRisk *= (1 - maskProtect*params.MaskProtectIndirect)
+	indirectRisk *= (1 - gelProtect*params.GelProtectIndirect)
+
+	// infected if infected with contact OR with direct OR with indirect contact
+	risk.RiskLevel = probaUnionIndep(contactRisk, probaUnionIndep(directRisk, indirectRisk))
+	risk.ConfidenceLevel = 1 - risk.RiskLevel
 
 	return risk, nil
 }
