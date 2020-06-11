@@ -28,8 +28,6 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 		r.BySegments = append(r.BySegments, segRisk)
 	}
 
-	//TODO use hotel information
-
 	if err := j.aggregateSegmentRisk(r); err != nil {
 		return nil, fmt.Errorf("cannot aggregate risk of %d segments: %s", len(segs), err)
 	}
@@ -102,7 +100,10 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 		addAdvice(string(covidtracker.Mask), "Votre voyage est long, emportez plusieurs masques")
 	}
 
-	originDep := "75" // @todo: use real values sent by front when available
+	originDep, err := seg.Origin.Dep()
+	if err != nil {
+		return risk, covidtracker.Errorf("cannot find department: %s", err)
+	}
 
 	departure := seg.Departure
 	now := time.Now()
@@ -121,7 +122,7 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 		return risk, covidtracker.Errorf("cannot compute risk, not enough emergency data for departement %s and departure %s: got %d", originDep, departure, len(nbSuspiciousCase))
 	}
 
-	pop, err := covidtracker.PopulationOfDepartment(fmt.Sprint(originDep))
+	pop, err := covidtracker.PopulationOfDepartment(originDep)
 	if err != nil {
 		return risk, covidtracker.Errorf("cannot find population of department: %s", err)
 	}
