@@ -29,8 +29,9 @@ func TestSearch(t *testing.T) {
 	client := NewClient(ctx, server.URL)
 
 	allHotel := `
-	query hotels($prefix: String!) {
+	query hotels($city: String!, $prefix: String!) {
 		hotels(
+			city:$city
 			prefix:$prefix,
 		) {
 			Name, Address, City, ZipCode, ImageURL, SanitaryInfos, SanitaryNote, SanitaryNorm
@@ -38,8 +39,9 @@ func TestSearch(t *testing.T) {
 	}`
 
 	nameHotel := `
-	query hotels($prefix: String!) {
+	query hotels($city: String!, $prefix: String!) {
 		hotels(
+			city:$city
 			prefix:$prefix,
 		) {
 			Name
@@ -47,8 +49,9 @@ func TestSearch(t *testing.T) {
 	}`
 
 	noteHotel := `
-	query hotels($prefix: String!) {
+	query hotels($city: String!, $prefix: String!) {
 		hotels(
+			city:$city
 			prefix:$prefix,
 		) {
 			SanitaryNote
@@ -56,11 +59,12 @@ func TestSearch(t *testing.T) {
 	}`
 
 	t.Run("hotels error", func(t *testing.T) {
-		hotel.HotelsByPrefixFn = func(prefix string) ([]*covidtracker.Hotel, error) {
+		hotel.HotelsByPrefixFn = func(city string, prefix string) ([]*covidtracker.Hotel, error) {
 			return nil, fmt.Errorf("search hotels error")
 		}
 
 		got, err := client.Do(allHotel, map[string]interface{}{
+			"city":   "",
 			"prefix": "",
 		})
 		expected := &gqlResp{
@@ -74,7 +78,7 @@ func TestSearch(t *testing.T) {
 
 	t.Run("Hotels found", func(t *testing.T) {
 
-		hotel.HotelsByPrefixFn = func(prefix string) ([]*covidtracker.Hotel, error) {
+		hotel.HotelsByPrefixFn = func(city string, prefix string) ([]*covidtracker.Hotel, error) {
 			h := []*covidtracker.Hotel{
 				&covidtracker.Hotel{
 					Address:  "69, Boulevard Sakakini",
@@ -198,7 +202,8 @@ func TestSearch(t *testing.T) {
 			hotel.Reset()
 
 			got, err := client.Do(tcase.tpl, map[string]interface{}{
-				"prefix": "Ibis Budget Marseille Timone",
+				"city":   "Marseille",
+				"prefix": "Ibis Budget",
 			})
 
 			expResult := &gqlResp{}

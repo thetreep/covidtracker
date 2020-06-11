@@ -115,8 +115,23 @@ type RiskParameter struct {
 }
 
 type ParameterScope struct {
-	Transportation Transportation         `bson:"transportation" json:"transportation"`
-	Duration       TransportationDuration `bson:"duration" json:"duration"`
+	// Transportation optionally represents the transportation of this scope (if not a place)
+	Transportation Transportation `bson:"transportation" json:"transportation"`
+
+	// Place optionally represents the place of this scope (if not a transportation)
+	Place Place `bson:"place" json:"place"`
+
+	Duration TransportationDuration `bson:"duration" json:"duration"`
+}
+
+func (s *ParameterScope) String() string {
+	if len(s.Transportation) != 0 {
+		return string(s.Transportation)
+	}
+	if len(s.Place) != 0 {
+		return string(s.Place)
+	}
+	return ""
 }
 
 //RiskSegID identifies a RiskSegment

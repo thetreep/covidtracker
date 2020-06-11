@@ -1,13 +1,48 @@
 package mock
 
-import "github.com/thetreep/covidtracker"
+import (
+	"github.com/thetreep/covidtracker"
+	"github.com/thetreep/toolbox/convert"
+)
 
 var (
+	strP  = convert.StrP
+	intP  = convert.IntP
 	Paris = covidtracker.Geo{
+		Properties: covidtracker.Properties{
+			Name:        strP("Paris"),
+			PostalCode:  strP("75056"),
+			DepCode:     strP("75"),
+			RegionCode:  strP("11"),
+			Population:  intP(2190327),
+			PostalCodes: []string{"75001", "75002", "75003", "75004", "75005"},
+		},
+		Type: "Feature",
+		Geometry: covidtracker.Geometry{
+			Coordinates: []float64{2.3488, 48.8534},
+			Type:        "Point",
+		},
+	}
+	Bordeaux = covidtracker.Geo{
+		Properties: covidtracker.Properties{
+			Name:        strP("Bordeaux"),
+			PostalCode:  strP("33063"),
+			DepCode:     strP("33"),
+			RegionCode:  strP("75"),
+			Population:  intP(252040),
+			PostalCodes: []string{"33000", "33300", "33100", "33090", "33200"},
+		},
+		Type: "Feature",
+		Geometry: covidtracker.Geometry{
+			Coordinates: []float64{-0.5874, 44.8572},
+			Type:        "Point",
+		},
+	}
+	ParisStd = covidtracker.Geo{
 		// REQUIRED. As per GeoJSON spec.
 		Properties: covidtracker.Properties{
 			// REQUIRED. Namespace.
-			GeoCoding: covidtracker.GeoCoding{
+			GeoCoding: &covidtracker.GeoCoding{
 				// REQUIRED. One of "house", "street", "locality", "city", "region", "country".
 				// TODO: make a clean list of common cases, plus make clear that the list
 				// isn't meant to be closed.
@@ -57,11 +92,11 @@ var (
 			Type:        "Point",
 		},
 	}
-	Bordeaux = covidtracker.Geo{
+	BordeauxStd = covidtracker.Geo{
 		// REQUIRED. As per GeoJSON spec.
 		Properties: covidtracker.Properties{
 			// REQUIRED. Namespace.
-			GeoCoding: covidtracker.GeoCoding{
+			GeoCoding: &covidtracker.GeoCoding{
 				// REQUIRED. One of "house", "street", "locality", "city", "region", "country".
 				// TODO: make a clean list of common cases, plus make clear that the list
 				// isn't meant to be closed.

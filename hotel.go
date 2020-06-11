@@ -1,5 +1,7 @@
 package covidtracker
 
+import "fmt"
+
 type HotelID string
 
 type Hotel struct {
@@ -15,11 +17,19 @@ type Hotel struct {
 	SanitaryNorm  string   `bson:"sanitaryNorm" json:"sanitaryNorm"`
 }
 
+func (h *Hotel) Dep() (string, error) {
+	if len(h.ZipCode) > 2 {
+		return h.ZipCode[:2], nil
+	}
+
+	return "", fmt.Errorf("department missing")
+}
+
 type HotelDAL interface {
 	Get(id HotelID) (*Hotel, error)
 	Insert(hotels []*Hotel) ([]*Hotel, error)
 }
 
 type HotelJob interface {
-	HotelsByPrefix(prefix string) ([]*Hotel, error)
+	HotelsByPrefix(city string, prefix string) ([]*Hotel, error)
 }

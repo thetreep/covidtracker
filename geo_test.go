@@ -28,7 +28,7 @@ func TestGeocoding(t *testing.T) {
 		for n, tcase := range tcases {
 			got, want := covidtracker.Geo{
 				Properties: covidtracker.Properties{
-					GeoCoding: covidtracker.GeoCoding{PostCode: tcase.code},
+					GeoCoding: &covidtracker.GeoCoding{PostCode: tcase.code},
 				},
 			}.Check() == nil, tcase.exp
 			test.Compare(t, got, want, n)

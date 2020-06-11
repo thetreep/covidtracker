@@ -6,7 +6,7 @@ import (
 
 type Hotel struct {
 	//Jobs
-	HotelsByPrefixFn      func(prefix string) ([]*covidtracker.Hotel, error)
+	HotelsByPrefixFn      func(city string, prefix string) ([]*covidtracker.Hotel, error)
 	HotelsByPrefixInvoked bool
 
 	//DAL
@@ -32,9 +32,9 @@ func (h *Hotel) Reset() {
 	h.InsertInvoked = false
 }
 
-func (h *Hotel) HotelsByPrefix(prefix string) ([]*covidtracker.Hotel, error) {
+func (h *Hotel) HotelsByPrefix(city string, prefix string) ([]*covidtracker.Hotel, error) {
 	h.HotelsByPrefixInvoked = true
-	return h.HotelsByPrefixFn(prefix)
+	return h.HotelsByPrefixFn(city, prefix)
 }
 
 func (h *Hotel) Get(id covidtracker.HotelID) (*covidtracker.Hotel, error) {

@@ -32,7 +32,7 @@ var (
 )
 
 type cdsAPI interface {
-	HotelsByPrefix(p string) ([]*covidtracker.Hotel, error)
+	HotelsByPrefix(city string, prefix string) ([]*covidtracker.Hotel, error)
 }
 
 type tracedCDSService struct {
@@ -40,12 +40,12 @@ type tracedCDSService struct {
 }
 
 func Init() {
-	endpoint = prodEndPoint
+	endpoint = testEndPoint
 	Service = &tracedCDSService{service: newClient(nil)}
 }
 
-func (s *tracedCDSService) HotelsByPrefix(p string) ([]*covidtracker.Hotel, error) {
-	out, err := s.service.HotelsByPrefix(p)
+func (s *tracedCDSService) HotelsByPrefix(c string, p string) ([]*covidtracker.Hotel, error) {
+	out, err := s.service.HotelsByPrefix(c, p)
 	return out, err
 }
 
@@ -68,7 +68,7 @@ func newClient(httpClient *http.Client) *Client {
 	return c
 }
 
-func (c *Client) HotelsByPrefix(p string) ([]*covidtracker.Hotel, error) {
+func (c *Client) HotelsByPrefix(city string, prefix string) ([]*covidtracker.Hotel, error) {
 	clientCode, user, pwd := AgentDutyCode, User, Password
 	err := c.authenticate(user, pwd)
 	if err != nil {
@@ -76,7 +76,12 @@ func (c *Client) HotelsByPrefix(p string) ([]*covidtracker.Hotel, error) {
 	}
 	params := map[string][]string{
 		"agentDutyCode": []string{clientCode},
-		"prefix":        []string{p},
+		"prefix":        []string{prefix},
+	}
+
+	if city != "" {
+		params["city"] = []string{city}
+		params["country"] = []string{"FR"}
 	}
 
 	req, err := c.NewRequest("GET", hotelByPrefixPath, nil, params)
@@ -91,10 +96,6 @@ func (c *Client) HotelsByPrefix(p string) ([]*covidtracker.Hotel, error) {
 	}
 	var hotels []*covidtracker.Hotel
 	for _, h := range resp.Hotels {
-		// We skip hotels that are not in France
-		if h.CntCd != "FR" {
-			continue
-		}
 		hotel := h.ToHotel()
 		hotels = append(hotels, hotel)
 	}

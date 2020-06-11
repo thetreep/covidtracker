@@ -525,6 +525,23 @@ func createDefaultParametersIfMissing(dal covidtracker.RiskParametersDAL) error 
 				MaskProtectIndirect:    0.1,
 				GelProtectIndirect:     0.5,
 			},
+			{
+				Scope:                  covidtracker.ParameterScope{Place: covidtracker.HotelPlace, Duration: covidtracker.Normal},
+				NbDirect:               5,
+				ProbaContagionDirect:   0.8, // worst case. Will be mitigated by Hotel sanitary note
+				NbContact:              1,
+				ProbaContagionContact:  0.6, // worst case. Will be mitigated by Hotel sanitary note
+				NbIndirect:             10,
+				ProbaContagionIndirect: 0.4, // worst case. Will be mitigated by Hotel sanitary note
+				Pluses:                 []string{},
+				Minuses:                []string{},
+				Advices:                []string{},
+				MaskProtectDirect:      0.7,
+				MaskProtectContact:     0.1,
+				GelProtectContact:      0.5,
+				MaskProtectIndirect:    0.1,
+				GelProtectIndirect:     0.5,
+			},
 		},
 	}
 	return dal.Insert(defaultParams)

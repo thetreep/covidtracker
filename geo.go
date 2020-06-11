@@ -12,7 +12,14 @@ type Geo struct {
 }
 
 type Properties struct {
-	GeoCoding GeoCoding `json:"geocoding"`
+	GeoCoding *GeoCoding `json:"geocoding,omitempty"`
+	//props fr
+	Name        *string  `json:"nom,omitempty"`
+	PostalCode  *string  `json:"code,omitempty"`
+	DepCode     *string  `json:"codeDepartement,omitempty"`
+	RegionCode  *string  `json:"codeRegion,omitempty"`
+	Population  *int     `json:"population,omitempty"`
+	PostalCodes []string `json:"codesPostaux,omitempty"`
 }
 
 type Geometry struct {
@@ -49,6 +56,10 @@ var regex = regexp.MustCompile(`^(([0-8][0-9])|(9[0-5])|(2[ab]))[0-9]{3}$`)
 //Check checks format / value of Geo
 func (g Geo) Check() error {
 
+	if g.Properties.GeoCoding == nil {
+		return nil
+	}
+
 	if regex == nil {
 		return fmt.Errorf("postal code regexp cannot be created")
 	}
@@ -58,4 +69,20 @@ func (g Geo) Check() error {
 	}
 
 	return nil
+}
+
+func (g Geo) Dep() (string, error) {
+
+	if g.Properties.DepCode != nil {
+		return *g.Properties.DepCode, nil
+	}
+
+	if g.Properties.GeoCoding != nil {
+		if err := g.Check(); err != nil {
+			return "", err
+		}
+		return g.Properties.GeoCoding.PostCode[:2], nil
+	}
+
+	return "", fmt.Errorf("department missing")
 }
