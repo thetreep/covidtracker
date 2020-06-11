@@ -39,8 +39,8 @@ func TestEstimate(t *testing.T) {
 			bySegments {
 				riskLevel
 				segment {
-					origin { properties { geocoding {postcode,city,locality}}}
-					destination { properties { geocoding {postcode,city,locality}}}
+					origin { properties { code, nom, codeDepartement }}
+					destination { properties  { code, nom, codeDepartement }}
 				}
 			}
 			riskLevel
@@ -174,20 +174,16 @@ func TestEstimate(t *testing.T) {
 								"segment": {
 									"origin": {
 										"properties": {
-											"geocoding": {
-												"postcode":"75015",
-												"city":"Paris 15",
-												"locality":"Paris"
-											}
+											"code":"75056",
+											"nom":"Paris",
+											"codeDepartement":"75"
 										}
 									},
 									"destination": {
 										"properties": {
-											"geocoding": {
-												"postcode":"33000",
-												"city":"Bordeaux",
-												"locality":"Bordeaux"
-											}
+											"code":"33063",
+											"nom":"Bordeaux",
+											"codeDepartement":"33"
 										}
 									}
 								},

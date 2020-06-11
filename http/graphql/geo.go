@@ -54,7 +54,13 @@ func GeoIn() *graphql.InputObject {
 		graphql.InputObjectConfig{
 			Name: "propIn",
 			Fields: graphql.InputObjectConfigFieldMap{
-				"geocoding": &graphql.InputObjectFieldConfig{Type: geoCodingIn},
+				"geocoding":       &graphql.InputObjectFieldConfig{Type: geoCodingIn},
+				"nom":             &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"code":            &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"codeDepartement": &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"codeRegion":      &graphql.InputObjectFieldConfig{Type: graphql.String},
+				"codesPostaux":    &graphql.InputObjectFieldConfig{Type: graphql.NewList(graphql.String)},
+				"population":      &graphql.InputObjectFieldConfig{Type: graphql.Int},
 			},
 		},
 	)
@@ -122,7 +128,13 @@ func GeoObj() *graphql.Object {
 		graphql.ObjectConfig{
 			Name: "prop",
 			Fields: graphql.Fields{
-				"geocoding": &graphql.Field{Type: geoCoding},
+				"geocoding":       &graphql.Field{Type: geoCoding},
+				"nom":             &graphql.Field{Type: graphql.String},
+				"code":            &graphql.Field{Type: graphql.String},
+				"codeDepartement": &graphql.Field{Type: graphql.String},
+				"codeRegion":      &graphql.Field{Type: graphql.String},
+				"codesPostaux":    &graphql.Field{Type: graphql.NewList(graphql.String)},
+				"population":      &graphql.Field{Type: graphql.Int},
 			},
 		},
 	)
