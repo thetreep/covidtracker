@@ -47,7 +47,7 @@ func (h *HotelHandler) Search() *graphql.Field {
 		Type: graphql.NewList(hotelType),
 		Args: graphql.FieldConfigArgument{
 			"city": &graphql.ArgumentConfig{
-				Type: graphql.NewNonNull(graphql.String),
+				Type: graphql.String,
 			},
 			"prefix": &graphql.ArgumentConfig{
 				Type: graphql.NewNonNull(graphql.String),
