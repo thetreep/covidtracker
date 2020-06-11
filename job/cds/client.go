@@ -76,9 +76,12 @@ func (c *Client) HotelsByPrefix(city string, prefix string) ([]*covidtracker.Hot
 	}
 	params := map[string][]string{
 		"agentDutyCode": []string{clientCode},
-		"country":       []string{"FR"},
-		"city":          []string{city},
 		"prefix":        []string{prefix},
+	}
+
+	if city != "" {
+		params["city"] = []string{city}
+		params["country"] = []string{"FR"}
 	}
 
 	req, err := c.NewRequest("GET", hotelByPrefixPath, nil, params)
