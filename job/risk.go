@@ -17,7 +17,7 @@ var _ covidtracker.RiskJob = &RiskJob{}
 
 func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtracker.Protection) (*covidtracker.Risk, error) {
 	r := &covidtracker.Risk{
-		NoticeDate: time.Now(),
+		NoticeDate: j.job.Now(),
 	}
 
 	for i, seg := range segs {
@@ -189,8 +189,14 @@ func (j *RiskJob) aggregateSegmentRisk(risk *covidtracker.Risk) error {
 	for _, seg := range risk.BySegments {
 		probasSegment = append(probasSegment, seg.RiskLevel)
 	}
-	risk.RiskLevel = probaUnionIndepSlice(0, probasSegment)
-	risk.ConfidenceLevel = 1 - risk.RiskLevel
+	actualRisk := probaUnionIndepSlice(0, probasSegment)
+	displayedRisk := actualRisk
+	// we chose to present
+	if actualRisk > 0 {
+		displayedRisk = 1 / (1. - (math.Log10(actualRisk)))
+	}
+	risk.RiskLevel = displayedRisk
+	risk.ConfidenceLevel = 1 - displayedRisk
 	return nil
 }
 
