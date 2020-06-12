@@ -49,7 +49,7 @@ func (t *Transportation) Duration(departure, arrival time.Time) TransportationDu
 	case CarSolo, CarDuo, CarGroup:
 		if duration <= 30*time.Minute {
 			return Short
-		} else if duration <= 3*time.Hour {
+		} else if duration <= 2*time.Hour {
 			return Normal
 		} else {
 			return Long
