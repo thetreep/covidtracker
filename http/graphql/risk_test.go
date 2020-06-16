@@ -64,6 +64,7 @@ func TestEstimate(t *testing.T) {
 			}
 			riskLevel
 			confidenceLevel
+			displayedRisk
 			report {
 				minuses {value}
 				pluses {value}
@@ -140,6 +141,7 @@ func TestEstimate(t *testing.T) {
 			r := &covidtracker.Risk{
 				RiskLevel:       0.5,
 				ConfidenceLevel: 0.5,
+				DisplayedRisk:   0.8,
 				Report: covidtracker.Report{
 					Minuses: []covidtracker.Statement{{Value: "it's not good"}},
 					Pluses:  []covidtracker.Statement{{Value: "it's pretty good"}},
@@ -189,6 +191,7 @@ func TestEstimate(t *testing.T) {
 						"risk": {
 							"riskLevel":       0.5,
 							"confidenceLevel": 0.5,
+							"displayedRisk": 0.8,
 							"bySegments": [{
 								"segment": {
 									"origin": {
@@ -220,6 +223,7 @@ func TestEstimate(t *testing.T) {
 					ID:              "1",
 					RiskLevel:       .5,
 					ConfidenceLevel: .5,
+					DisplayedRisk:   0.8,
 					BySegments: []covidtracker.RiskSegment{
 						{
 							ID:              covidtracker.RiskSegID("1"),
@@ -249,6 +253,7 @@ func TestEstimate(t *testing.T) {
 					ID:              "1",
 					RiskLevel:       .5,
 					ConfidenceLevel: .5,
+					DisplayedRisk:   0.8,
 					BySegments: []covidtracker.RiskSegment{
 						{
 							ID:              covidtracker.RiskSegID("1"),
@@ -279,6 +284,7 @@ func TestEstimate(t *testing.T) {
 					ID:              "1",
 					RiskLevel:       .6,
 					ConfidenceLevel: .4,
+					DisplayedRisk:   0.8,
 					BySegments: []covidtracker.RiskSegment{
 						{
 							ID:              covidtracker.RiskSegID("1"),
@@ -318,6 +324,7 @@ func TestEstimate(t *testing.T) {
 					ID:              "1",
 					RiskLevel:       .5,
 					ConfidenceLevel: .5,
+					DisplayedRisk:   0.8,
 					BySegments: []covidtracker.RiskSegment{
 						{
 							ID:              covidtracker.RiskSegID("1"),
