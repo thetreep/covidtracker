@@ -131,6 +131,7 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 			"noticeDate":      &graphql.Field{Type: graphql.DateTime},
 			"riskLevel":       &graphql.Field{Type: graphql.Float},
 			"confidenceLevel": &graphql.Field{Type: graphql.Float},
+			"displayedRisk":   &graphql.Field{Type: graphql.Float},
 			"bySegments":      &graphql.Field{Type: graphql.NewList(segmentRisk)},
 			"report":          &graphql.Field{Type: report},
 		},
