@@ -1,3 +1,22 @@
+/*
+	This file is part of covidtracker also known as EviteCovid .
+
+    Copyright 2020 the Treep
+
+    covdtracker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    covidtracker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with covidtracker.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 package job
 
 import (
@@ -73,8 +92,9 @@ func TestComputeRisk(t *testing.T) {
 			protects: []covidtracker.Protection{{Type: covidtracker.Gel}, {Type: covidtracker.MaskFFPX}, {Type: covidtracker.MaskSewn}},
 			expectRisk: &covidtracker.Risk{
 				NoticeDate:      dep,
-				ConfidenceLevel: 0.5794296600833837,
-				RiskLevel:       0.42057033991661624,
+				ConfidenceLevel: 0.9580939763332113,
+				RiskLevel:       0.04190602366678872,
+				DisplayedRisk:   0.42057033991661624,
 				BySegments: []covidtracker.RiskSegment{{
 					Segment: &covidtracker.Segment{
 						Origin:         paris,

@@ -1,3 +1,22 @@
+/*
+	This file is part of covidtracker also known as EviteCovid .
+
+    Copyright 2020 the Treep
+
+    covdtracker is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    covidtracker is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with covidtracker.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 package job
 
 import (
@@ -189,14 +208,14 @@ func (j *RiskJob) aggregateSegmentRisk(risk *covidtracker.Risk) error {
 	for _, seg := range risk.BySegments {
 		probasSegment = append(probasSegment, seg.RiskLevel)
 	}
-	actualRisk := probaUnionIndepSlice(0, probasSegment)
-	displayedRisk := actualRisk
-	// we chose to present
-	if actualRisk > 0 {
-		displayedRisk = 1 / (1. - (math.Log10(actualRisk)))
+	risk.RiskLevel = probaUnionIndepSlice(0, probasSegment)
+	risk.ConfidenceLevel = 1 - risk.RiskLevel
+	risk.DisplayedRisk = risk.RiskLevel
+	// we chose to display risk using a log scale and such a formula d = (1/1-log(r)) to accentuate week values of probability
+	// (as a probability of 0.1 may be something risky)
+	if risk.RiskLevel > 0 {
+		risk.DisplayedRisk = 1 / (1. - (math.Log10(risk.RiskLevel)))
 	}
-	risk.RiskLevel = displayedRisk
-	risk.ConfidenceLevel = 1 - displayedRisk
 	return nil
 }
 
