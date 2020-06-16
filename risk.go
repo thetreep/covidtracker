@@ -10,6 +10,7 @@ type Risk struct {
 	NoticeDate      time.Time     `bson:"noticeDate" json:"noticeDate"`
 	ConfidenceLevel float64       `bson:"confidenceLevel" json:"confidenceLevel"`
 	RiskLevel       float64       `bson:"riskLevel" json:"riskLevel"`
+	DisplayedRisk   float64       `bson:"displayedRisk" json:"displayedRisk"`
 	BySegments      []RiskSegment `bson:"bySegments" json:"bySegments"`
 	Report          Report        `bson:"report" json:"report"`
 }

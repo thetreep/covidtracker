@@ -73,8 +73,9 @@ func TestComputeRisk(t *testing.T) {
 			protects: []covidtracker.Protection{{Type: covidtracker.Gel}, {Type: covidtracker.MaskFFPX}, {Type: covidtracker.MaskSewn}},
 			expectRisk: &covidtracker.Risk{
 				NoticeDate:      dep,
-				ConfidenceLevel: 0.5794296600833837,
-				RiskLevel:       0.42057033991661624,
+				ConfidenceLevel: 0.9580939763332113,
+				RiskLevel:       0.04190602366678872,
+				DisplayedRisk:   0.42057033991661624,
 				BySegments: []covidtracker.RiskSegment{{
 					Segment: &covidtracker.Segment{
 						Origin:         paris,

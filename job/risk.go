@@ -189,14 +189,14 @@ func (j *RiskJob) aggregateSegmentRisk(risk *covidtracker.Risk) error {
 	for _, seg := range risk.BySegments {
 		probasSegment = append(probasSegment, seg.RiskLevel)
 	}
-	actualRisk := probaUnionIndepSlice(0, probasSegment)
-	displayedRisk := actualRisk
-	// we chose to present
-	if actualRisk > 0 {
-		displayedRisk = 1 / (1. - (math.Log10(actualRisk)))
+	risk.RiskLevel = probaUnionIndepSlice(0, probasSegment)
+	risk.ConfidenceLevel = 1 - risk.RiskLevel
+	risk.DisplayedRisk = risk.RiskLevel
+	// we chose to display risk using a log scale and such a formula d = (1/1-log(r)) to accentuate week values of probability
+	// (as a probability of 0.1 may be something risky)
+	if risk.RiskLevel > 0 {
+		risk.DisplayedRisk = 1 / (1. - (math.Log10(risk.RiskLevel)))
 	}
-	risk.RiskLevel = displayedRisk
-	risk.ConfidenceLevel = 1 - displayedRisk
 	return nil
 }
 
