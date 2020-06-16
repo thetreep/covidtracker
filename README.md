@@ -62,3 +62,7 @@ or with all flags (to display all output, test coverage and detect race conditio
 
     go test -cover -race -v ./...
 
+
+## License
+
+This work is copyrighted by the Treep and released publicly under the terms of the GNU General Public License.
