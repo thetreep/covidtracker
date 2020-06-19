@@ -94,7 +94,7 @@ func TestComputeRisk(t *testing.T) {
 				NoticeDate:      dep,
 				ConfidenceLevel: 0.9580939763332113,
 				RiskLevel:       0.04190602366678872,
-				DisplayedRisk:   0.42057033991661624,
+				DisplayedRisk:   0.35953011833394366,
 				BySegments: []covidtracker.RiskSegment{{
 					Segment: &covidtracker.Segment{
 						Origin:         paris,
@@ -134,6 +134,27 @@ func TestComputeRisk(t *testing.T) {
 				t.Fatalf("%s: %s", tcase.name, err)
 			}
 			test.Compare(t, r, tcase.expectRisk, tcase.name)
+		}
+	}
+}
+
+func TestYOnLine(t *testing.T) {
+	tcases := []struct {
+		x       float64
+		x1, y1  float64
+		x2, y2  float64
+		expectY float64
+	}{
+		{x: 0, x1: 0, y1: 0, x2: 4, y2: 4, expectY: 0},
+		{x: 1, x1: 0, y1: 0, x2: 4, y2: 4, expectY: 1},
+		{x: 0, x1: 0, y1: 5, x2: 4, y2: 4, expectY: 5},
+		{x: 4, x1: 0, y1: 5, x2: 4, y2: 4, expectY: 4},
+		{x: 4, x1: 2, y1: 6, x2: 12, y2: 11, expectY: 7},
+	}
+	for i, tcase := range tcases {
+		y := yOnLine(tcase.x, tcase.x1, tcase.y1, tcase.x2, tcase.y2)
+		if got, want := y, tcase.expectY; got != want {
+			t.Fatalf("%d: got %f, want %f", i+1, got, want)
 		}
 	}
 }

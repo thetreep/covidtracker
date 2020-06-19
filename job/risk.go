@@ -50,6 +50,9 @@ func (j *RiskJob) ComputeRisk(segs []covidtracker.Segment, protects []covidtrack
 	if err := j.aggregateSegmentRisk(r); err != nil {
 		return nil, fmt.Errorf("cannot aggregate risk of %d segments: %s", len(segs), err)
 	}
+	if err := j.computeDisplayedRisk(r); err != nil {
+		return nil, fmt.Errorf("cannot compute displayed risk: %s", err)
+	}
 	if err := j.aggregateReport(r, protects); err != nil {
 		return nil, fmt.Errorf("cannot compute report: %s", err)
 	}
@@ -210,11 +213,27 @@ func (j *RiskJob) aggregateSegmentRisk(risk *covidtracker.Risk) error {
 	}
 	risk.RiskLevel = probaUnionIndepSlice(0, probasSegment)
 	risk.ConfidenceLevel = 1 - risk.RiskLevel
-	risk.DisplayedRisk = risk.RiskLevel
-	// we chose to display risk using a log scale and such a formula d = (1/1-log(r)) to accentuate week values of probability
-	// (as a probability of 0.1 may be something risky)
-	if risk.RiskLevel > 0 {
-		risk.DisplayedRisk = 1 / (1. - (math.Log10(risk.RiskLevel)))
+
+	return nil
+}
+
+// we chose to display the risk in gauge using a continuous function piecewise linear from (0;0) to (1;1)
+// It allows to represent different risk level that better (?) represent the "perceived" risk versus effective risk
+// (as a probability of 0.1 may be something risky)
+func (j *RiskJob) computeDisplayedRisk(risk *covidtracker.Risk) error {
+	switch {
+	case risk.RiskLevel <= 0:
+		risk.DisplayedRisk = 0
+	case risk.RiskLevel < 0.01:
+		risk.DisplayedRisk = yOnLine(risk.RiskLevel, 0, 0, 0.01, 0.2)
+	case risk.RiskLevel < 0.05:
+		risk.DisplayedRisk = yOnLine(risk.RiskLevel, 0.01, 0.2, 0.05, 0.4)
+	case risk.RiskLevel < 0.1:
+		risk.DisplayedRisk = yOnLine(risk.RiskLevel, 0.05, 0.4, 0.1, 0.6)
+	case risk.RiskLevel < 0.3:
+		risk.DisplayedRisk = yOnLine(risk.RiskLevel, 0.1, 0.6, 0.3, 0.8)
+	case risk.RiskLevel <= 1:
+		risk.DisplayedRisk = yOnLine(risk.RiskLevel, 0.3, 0.8, 1, 1)
 	}
 	return nil
 }
@@ -347,4 +366,21 @@ func probaUnionIndepSlice(fromIndex int, probas []float64) float64 {
 		return probas[fromIndex]
 	}
 	return probaUnionIndep(probas[fromIndex], probaUnionIndepSlice(fromIndex+1, probas))
+}
+
+// Compute the Y value on a line passing through (x1;y1) (x2;y2)
+func yOnLine(x, x1, y1, x2, y2 float64) float64 {
+	a := slope(x1, y1, x2, y2)
+	b := intercept(a, x1, y1)
+	return a*x + b
+}
+
+// Compute the slope of a line passing through (x1;y1) (x2;y2)
+func slope(x1, y1, x2, y2 float64) float64 {
+	return (y2 - y1) / (x2 - x1)
+}
+
+// Compute the y-intercept of a line passing through (x1;y1) (x2;y2)
+func intercept(slope, x, y float64) float64 {
+	return y - slope*x
 }
