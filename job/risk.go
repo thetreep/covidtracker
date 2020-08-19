@@ -89,10 +89,10 @@ func (j *RiskJob) computeSegmentRisk(seg covidtracker.Segment, protects []covidt
 		switch prot.Type {
 		case covidtracker.MaskSewn:
 			maskProtect = math.Max(maskProtect, parameters.SewnMaskProtect)
-		case covidtracker.MaskSurgical:
-			maskProtect = math.Max(maskProtect, parameters.SurgicalMaskProtect)
 		case covidtracker.MaskFFPX:
 			maskProtect = math.Max(maskProtect, parameters.FFPXMaskProtect)
+		case covidtracker.MaskSurgical:
+			maskProtect = math.Max(maskProtect, parameters.SurgicalMaskProtect)
 		case covidtracker.Gel:
 			gelProtect = parameters.HydroAlcoholicGelProtect
 		}
