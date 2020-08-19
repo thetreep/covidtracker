@@ -58,7 +58,7 @@
 		"mime": "text/csv",
 		"preview_url": "/tabular/preview/?url=https%3A%2F%2Fstatic.data.gouv.fr%2Fresources%2Fdonnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19%2F20200608-190026%2Fsursaud-covid19-quotidien-2020-06-08-19h00-departement.csv",
 		"published": "2020-03-20T18:56:25.178000",
-		"title": "sursaud-covid19-quotidien-2020-06-08-19h00-departement.csv",
+		"title": "`sursaud-corona-quot-dep-2020-06-08-19h00.csv",
 		"type": "main",
 		"url": "https://static.data.gouv.fr/resources/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/20200608-190026/sursaud-covid19-quotidien-2020-06-08-19h00-departement.csv"
 	  },

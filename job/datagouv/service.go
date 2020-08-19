@@ -55,27 +55,26 @@ const (
 
 var (
 	caseRegex      = regexp.MustCompile(`donnees-hospitalieres-etablissements-covid19-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}.csv`)
-	emerRegex      = regexp.MustCompile(`sursaud-covid19-quotidien-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}-departement.csv`)
+	emerRegex      = regexp.MustCompile(`sursaud-corona-quot-dep-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}.csv`)
 	hospRegex      = regexp.MustCompile(`donnees-hospitalieres-covid19-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}.csv`)
 	indicRegex     = regexp.MustCompile(`donnees-carte-synthese-tricolore.csv`)
 	screeningRegex = regexp.MustCompile(`donnees-tests-covid19-labo-quotidien-\d{4}-\d{2}-\d{2}-\d{2}h\d{2}.csv`)
 )
 
 type Dataset struct {
-	Acronym     interface{}   `json:"acronym"`
-	Archived    interface{}   `json:"archived"`
-	Badges      []interface{} `json:"badges"`
-	CreatedAt   string        `json:"created_at"`
-	Deleted     interface{}   `json:"deleted"`
-	Description string        `json:"description"`
-	Extras      struct {
-	} `json:"extras"`
-	Frequency     string      `json:"frequency"`
-	FrequencyDate interface{} `json:"frequency_date"`
-	ID            string      `json:"id"`
-	LastModified  string      `json:"last_modified"`
-	LastUpdate    string      `json:"last_update"`
-	License       string      `json:"license"`
+	Acronym       interface{}   `json:"acronym"`
+	Archived      interface{}   `json:"archived"`
+	Badges        []interface{} `json:"badges"`
+	CreatedAt     string        `json:"created_at"`
+	Deleted       interface{}   `json:"deleted"`
+	Description   string        `json:"description"`
+	Extras        struct{}      `json:"extras"`
+	Frequency     string        `json:"frequency"`
+	FrequencyDate interface{}   `json:"frequency_date"`
+	ID            string        `json:"id"`
+	LastModified  string        `json:"last_modified"`
+	LastUpdate    string        `json:"last_update"`
+	License       string        `json:"license"`
 	Metrics       struct {
 		Discussions int `json:"discussions"`
 		Followers   int `json:"followers"`
@@ -219,9 +218,9 @@ func (s *Service) newReader(r io.Reader, res ResourceID) (*csv.Reader, error) {
 
 	reader := csv.NewReader(r)
 	switch res {
-	case EmergencyID, IndicatorID:
+	case IndicatorID:
 		reader.Comma = ','
-	case CaseID, HospitalizationID, ScreeningID:
+	case CaseID, HospitalizationID, ScreeningID, EmergencyID:
 		reader.Comma = ';'
 	default:
 		return nil, fmt.Errorf("unsupported dataset %s", res)

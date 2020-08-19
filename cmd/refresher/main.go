@@ -56,6 +56,7 @@ func main() {
 	c.AddFunc("@midnight", func() {
 		fmt.Print(j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening()))
 	})
+
 	// launch it once to update data at first launch
 	err = j.RefreshJob.Refresh(mongo.Case(), mongo.Emergency(), mongo.Hospitalization(), mongo.Indicator(), mongo.Screening())
 	log.HasErr(context.Background(), err)

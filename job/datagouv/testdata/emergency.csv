@@ -1,5 +1,5 @@
-dep,date_de_passage,sursaud_cl_age_corona,nbre_pass_corona,nbre_pass_tot,nbre_hospit_corona,nbre_pass_corona_h,nbre_pass_corona_f,nbre_pass_tot_h,nbre_pass_tot_f,nbre_hospit_corona_h,nbre_hospit_corona_f,nbre_acte_corona,nbre_acte_tot,nbre_acte_corona_h,nbre_acte_corona_f,nbre_acte_tot_h,nbre_acte_tot_f
-01,2020-02-24,0,0,357,0,0,0,202,155,0,0,,,,,,
-62,2020-05-25,B,1,113,0,,,,,,,,,,,,
-72,2020-05-25,A,0,67,0,,,,,,,,,,,,
-976,2020-05-25,E,0,2,0,,,,,,,,,,,,
+dep;date_de_passage;sursaud_cl_age_corona;nbre_pass_corona;nbre_pass_tot;nbre_hospit_corona;nbre_pass_corona_h;nbre_pass_corona_f;nbre_pass_tot_h;nbre_pass_tot_f;nbre_hospit_corona_h;nbre_hospit_corona_f;nbre_acte_corona;nbre_acte_tot;nbre_acte_corona_h;nbre_acte_corona_f;nbre_acte_tot_h;nbre_acte_tot_f
+01;2020-02-24;0;0;357;0;0;0;202;155;0;0;;;;;;
+62;2020-05-25;B;1;113;0;;;;;;;;;;;;
+72;2020-05-25;A;0;67;0;;;;;;;;;;;;
+976;2020-05-25;E;0;2;0;;;;;;;;;;;;

@@ -86,8 +86,12 @@ func (s *Service) RefreshHospitalization() ([]*covidtracker.Hospitalization, err
 			continue
 		}
 		entry.Date, err = time.Parse("2006-01-02", line[jour])
-		if s.handleParsingErr(err, "hospitalization", "jour") != nil {
-			continue
+		if err != nil {
+			//there are two format possible in this file...
+			entry.Date, err = time.Parse("02/01/2006", line[jour])
+			if s.handleParsingErr(err, "hospitalization", "jour") != nil {
+				continue
+			}
 		}
 
 		k := line[jour] + "_" + line[dep]

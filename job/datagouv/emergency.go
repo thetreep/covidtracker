@@ -20,6 +20,7 @@
 package datagouv
 
 import (
+	"fmt"
 	"io"
 	"sort"
 	"strconv"
@@ -74,6 +75,7 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 	)
 
 	reader.Read() //ignore first line (columns names)
+	count := 0
 	for {
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -81,6 +83,12 @@ func (s *Service) RefreshEmergency() ([]*covidtracker.Emergency, error) {
 		} else if err != nil {
 			return nil, err
 		}
+
+		if len(line) < nbreActeTotF {
+			s.log.Error(s.Ctx, "emergency : cannot parse %q line (%v)\n (check the column separator)", count, line)
+			return nil, fmt.Errorf("emergency : cannot parse %q line (%v)\n (check the column separator)", count, line)
+		}
+		count++
 
 		entry := &covidtracker.Emergency{
 			Department: line[dep],
