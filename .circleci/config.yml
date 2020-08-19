@@ -60,9 +60,6 @@ jobs:
       - run:
           name: Does docker exist
           command: docker -v
-
-
-
       - run:
           name: Build service for runtime docker image (create volume, copy the sources, build executable, copy the executable locally)
           command: |
