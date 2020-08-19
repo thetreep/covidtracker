@@ -188,7 +188,6 @@ func (h *RiskHandler) Estimate() *graphql.Field {
 						if err := convert(m, &hin); err != nil {
 							return nil, err
 						}
-
 						segs = append(segs, covidtracker.Segment{
 							Departure: hin.Arrival,
 							Arrival:   hin.Arrival.AddDate(0, 0, hin.NbNights),
